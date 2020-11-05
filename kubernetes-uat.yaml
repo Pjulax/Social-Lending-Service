@@ -26,6 +26,7 @@ spec:
         - name: metis-social-lending-service
           image: metis-team-docker-registry.fintechchallenge.pl/metis-team/metis-social-lending-service:latest
           imagePullPolicy: Always
+          args: ["--spring.profiles.active=uat"]
           ports:
             - name: api
               containerPort: 8080
