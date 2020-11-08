@@ -15,9 +15,7 @@ public class Auction{
     private final BigDecimal loanAmount;
     private final Date beginDate;
     private final Date endDate;
-    private final Date beginLoanDate;
-    private final Date endLoanDate;
-    private final Double installmentsFrequencyInYear;
+    private final Integer numberOfInstallments;
 
 //    public Auction(BorrowerService.Command.CreateNewAuctionSinceNow createNewAuctionSinceNowCommand){
 //        this(createNewAuctionSinceNowCommand.getLoanAmount(), createNewAuctionSinceNowCommand.getBeginLoanDate(),

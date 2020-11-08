@@ -25,7 +25,7 @@ public class BorrowerController {
         return borrowerService.createBorrower(() -> name);
     }
 
-    @PostMapping("/new-auction")
+    @PostMapping("/my-new-auction")
     public Auction createNewAuctionSinceNow(@RequestBody AuctionDTO auctionDTO){
         return borrowerService.createNewAuctionSinceNow(new BorrowerService.Command.CreateNewAuctionSinceNow() {
             @Override
@@ -37,7 +37,7 @@ public class BorrowerController {
             public Date getEndDate() {
                 Date date = new Date();
                 try {
-                    date = new SimpleDateFormat("dd/MM/yyyy").parse(auctionDTO.getEndDate());
+                    date = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(auctionDTO.getEndDate());
                 }catch (ParseException e){
                     System.out.println(e);
                 }
@@ -45,40 +45,18 @@ public class BorrowerController {
             }
 
             @Override
-            public Date getBeginLoanDate() {
-                Date date = new Date();
-                try {
-                    date = new SimpleDateFormat("dd/MM/yyyy").parse(auctionDTO.getBeginLoanDate());
-                }catch (ParseException e){
-                    System.out.println(e);
-                }
-                return date;
+            public Integer getNumberOfInstallments() {
+                return auctionDTO.getNumberOfInstallments();
             }
 
             @Override
-            public Date getEndLoanDate() {
-                Date date = new Date();
-                try {
-                    date = new SimpleDateFormat("dd/MM/yyyy").parse(auctionDTO.getEndLoanDate());
-                }catch (ParseException e){
-                    System.out.println(e);
-                }
-                return date;
-            }
-
-            @Override
-            public Double getInstallmentsFrequencyInYear() {
-                return auctionDTO.getInstallmentsFrequencyInYears();
-            }
-
-            @Override
-            public Long getBorrowerId() {
-                return auctionDTO.getBorrowerId();
+            public Long getUserId() {
+                return auctionDTO.getUserId();
             }
         });
     }
 
-    @GetMapping("/all-auctions")
+    @GetMapping("/all-my-auctions")
     public List<Auction> getAllAuctions(@RequestParam Long borrower_id){ // change to return Auction DTO
         return borrowerService.getAllAuctions(()->borrower_id);
     }

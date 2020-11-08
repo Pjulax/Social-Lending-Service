@@ -8,8 +8,6 @@ import lombok.Setter;
 public class AuctionDTO {
     private Double loanAmount;
     private String endDate;
-    private String beginLoanDate;
-    private String endLoanDate;
-    private Double installmentsFrequencyInYears;
-    private Long borrowerId;
+    private Integer numberOfInstallments;
+    private Long userId;
 }

@@ -13,10 +13,8 @@ public interface BorrowerService {
         interface CreateNewAuctionSinceNow extends  Command{
             BigDecimal getLoanAmount();
             Date getEndDate();
-            Date getBeginLoanDate();
-            Date getEndLoanDate();
-            Double getInstallmentsFrequencyInYear();
-            Long getBorrowerId();
+            Integer getNumberOfInstallments();
+            Long getUserId();
         }
         interface CreateBorrower extends Command{
              String getName();

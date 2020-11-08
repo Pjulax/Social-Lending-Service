@@ -24,14 +24,10 @@ public class AuctionTuple {
     private Date beginDate;
     @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date beginLoanDate;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date endLoanDate;
-    private Double installmentsFrequencyInYear;
+    private Integer numberOfInstallments;
 
     static AuctionTuple from(Auction auction) {
-        return new AuctionTuple(auction.getId(),auction.getLoanAmount(),auction.getBeginDate(),auction.getEndDate(),auction.getBeginLoanDate(), auction.getEndLoanDate(), auction.getInstallmentsFrequencyInYear());
+        return new AuctionTuple(auction.getId(),auction.getLoanAmount(),auction.getBeginDate(),auction.getEndDate(),auction.getNumberOfInstallments());
     }
     Auction toDomain(){
         return Auction.builder()
@@ -39,9 +35,7 @@ public class AuctionTuple {
                 .id(id)
                 .loanAmount(loanAmount)
                 .endDate(endDate)
-                .beginLoanDate(beginLoanDate)
-                .endLoanDate(endLoanDate)
-                .installmentsFrequencyInYear(installmentsFrequencyInYear)
+                .numberOfInstallments(numberOfInstallments)
                 .build();
     }
 
