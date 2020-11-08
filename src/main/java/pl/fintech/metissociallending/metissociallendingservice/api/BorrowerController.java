@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.AuctionDTO;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.Auction;
-import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.Borrower;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.BorrowerService;
 
 import java.math.BigDecimal;
@@ -20,10 +19,6 @@ public class BorrowerController {
 
    private final BorrowerService borrowerService;
 
-    @PostMapping("/new-user")
-    public Borrower createBorrower(@RequestParam String name){
-        return borrowerService.createBorrower(() -> name);
-    }
 
     @PostMapping("/my-new-auction")
     public Auction createNewAuctionSinceNow(@RequestBody AuctionDTO auctionDTO){

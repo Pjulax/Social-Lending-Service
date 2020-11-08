@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 public interface BorrowerService {
-    Borrower createBorrower(Command.CreateBorrower createBorrowerCommand);
     Auction createNewAuctionSinceNow(Command.CreateNewAuctionSinceNow createNewAuctionSinceNowCommand);
     List<Auction> getAllAuctions(Query.GetBorrowersAllAuctions getBorrowersAllAuctionsQuery);
 
@@ -16,14 +15,11 @@ public interface BorrowerService {
             Integer getNumberOfInstallments();
             Long getUserId();
         }
-        interface CreateBorrower extends Command{
-             String getName();
-             //TODO add user
-        }
+
     }
     interface Query {
         interface GetBorrowersAllAuctions extends Query{
-            Long getBorrowerId();
+            Long getUserId();
         }
     }
 }

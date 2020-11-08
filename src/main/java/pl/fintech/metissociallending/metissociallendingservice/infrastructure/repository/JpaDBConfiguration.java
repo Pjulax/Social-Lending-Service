@@ -5,8 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
-@EnableJpaRepositories(basePackageClasses = {JpaBorrowerRepositoryImpl.class, JpaAuctionRepositoryImpl.class}, considerNestedRepositories = true)
-@EntityScan(basePackageClasses = {JpaBorrowerRepositoryImpl.class, JpaAuctionRepositoryImpl.class})
+@EnableJpaRepositories(basePackageClasses = {JpaUserRepositoryImpl.class, JpaAuctionRepositoryImpl.class}, considerNestedRepositories = true)
+@EntityScan(basePackageClasses = {JpaUserRepositoryImpl.class, JpaAuctionRepositoryImpl.class})
 public class JpaDBConfiguration {
 
     @Bean
@@ -14,7 +14,7 @@ public class JpaDBConfiguration {
         return new JpaAuctionRepositoryImpl(jpaAuctionRepo);
     }
     @Bean
-    JpaBorrowerRepositoryImpl borrowerRepository(JpaBorrowerRepositoryImpl.JpaBorrowerRepo jpaBorrowerRepo){
-        return  new JpaBorrowerRepositoryImpl(jpaBorrowerRepo);
+    JpaUserRepositoryImpl borrowerRepository(JpaUserRepositoryImpl.JpaUserRepo jpaUserRepo){
+        return new JpaUserRepositoryImpl(jpaUserRepo);
     }
 }
