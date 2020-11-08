@@ -22,7 +22,7 @@ public class BorrowerServiceImpl implements BorrowerService {
 
     @Override
     public Auction createNewAuctionSinceNow(Command.CreateNewAuctionSinceNow createNewAuctionSinceNowCommand) {
-        Optional<Borrower> borrowerOptional = borrowerRepository.findById(createNewAuctionSinceNowCommand.getBorrowerId());
+        Optional<Borrower> borrowerOptional = borrowerRepository.findById(createNewAuctionSinceNowCommand.getUserId());
         if(borrowerOptional.isEmpty())
             return null; // throw borrower not found
         Borrower borrower = borrowerOptional.get();
@@ -30,9 +30,7 @@ public class BorrowerServiceImpl implements BorrowerService {
                 .loanAmount(createNewAuctionSinceNowCommand.getLoanAmount())
                 .beginDate(Calendar.getInstance().getTime())
                 .endDate( createNewAuctionSinceNowCommand.getEndDate())
-                .beginLoanDate(createNewAuctionSinceNowCommand.getBeginLoanDate())
-                .endLoanDate(createNewAuctionSinceNowCommand.getEndLoanDate())
-                .installmentsFrequencyInYear(createNewAuctionSinceNowCommand.getInstallmentsFrequencyInYear())
+                .numberOfInstallments(createNewAuctionSinceNowCommand.getNumberOfInstallments())
                 .build();
         List<Auction> auctionList = borrower.getAuctions();
         auction = auctionRepository.save(auction);
