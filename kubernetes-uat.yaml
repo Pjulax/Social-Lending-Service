@@ -57,6 +57,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: metis-social-lending-service
+  namespace: fintech-uat-metis-team
   labels:
     app: metis-social-lending-service
     visualize: "true"
