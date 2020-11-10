@@ -22,33 +22,7 @@ public class BorrowerController {
 
     @PostMapping("/my-new-auction")
     public Auction createNewAuctionSinceNow(@RequestBody AuctionDTO auctionDTO){
-        return borrowerService.createNewAuctionSinceNow(new BorrowerService.Command.CreateNewAuctionSinceNow() {
-            @Override
-            public BigDecimal getLoanAmount() {
-                return BigDecimal.valueOf(auctionDTO.getLoanAmount());
-            }
-
-            @Override
-            public Date getEndDate() {
-                Date date = new Date();
-                try {
-                    date = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(auctionDTO.getEndDate());
-                }catch (ParseException e){
-                    System.out.println(e);
-                }
-                return date;
-            }
-
-            @Override
-            public Integer getNumberOfInstallments() {
-                return auctionDTO.getNumberOfInstallments();
-            }
-
-            @Override
-            public Long getUserId() {
-                return auctionDTO.getUserId();
-            }
-        });
+        return borrowerService.createNewAuctionSinceNow(auctionDTO);
     }
 
     @GetMapping("/all-my-auctions")

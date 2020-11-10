@@ -9,7 +9,7 @@ public interface BorrowerService {
     List<Auction> getAllAuctions(Query.GetBorrowersAllAuctions getBorrowersAllAuctionsQuery);
 
     interface Command {
-        interface CreateNewAuctionSinceNow extends  Command{
+        interface CreateNewAuctionSinceNow extends Command{
             BigDecimal getLoanAmount();
             Date getEndDate();
             Integer getNumberOfInstallments();

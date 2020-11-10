@@ -1,5 +1,6 @@
 package pl.fintech.metissociallending.metissociallendingservice.domain.lender;
 
+import javax.xml.bind.ValidationException;
 import java.util.List;
 
 public interface LenderService {
@@ -9,7 +10,7 @@ public interface LenderService {
 
      interface Command  {
           interface SubmitOffer {
-               Long getOfferId();
+               Long getAuctionId();
                Double getProposedAnnualPercentageRate();
           }
           interface  CancelOffer {
