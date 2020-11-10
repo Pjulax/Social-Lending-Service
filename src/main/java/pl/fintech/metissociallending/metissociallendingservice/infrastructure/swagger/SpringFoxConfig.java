@@ -1,4 +1,4 @@
-package pl.fintech.metissociallending.metissociallendingservice.infrastructure.repository.swagger;
+package pl.fintech.metissociallending.metissociallendingservice.infrastructure.swagger;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
