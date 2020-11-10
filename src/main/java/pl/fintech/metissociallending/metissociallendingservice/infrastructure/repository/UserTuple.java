@@ -1,8 +1,8 @@
 package pl.fintech.metissociallending.metissociallendingservice.infrastructure.repository;
 
 import lombok.*;
-import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.Auction;
-import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.Borrower;
+
+import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
 
 import javax.persistence.*;
 import java.util.List;
@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name="BORROWER")
-public class BorrowerTuple {
+@Table(name="MYUSER")
+public class UserTuple {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -22,13 +22,13 @@ public class BorrowerTuple {
     @OneToMany
     List<AuctionTuple> auctions;
 
-    static BorrowerTuple from(Borrower borrower){
-        return new BorrowerTuple(borrower.getId(),
+    static UserTuple from(User borrower){
+        return new UserTuple(borrower.getId(),
                 borrower.getAuctions()==null?List.of():
                 borrower.getAuctions().stream().map(AuctionTuple::from).collect(Collectors.toList()));
     }
-    Borrower toDomain(){
-        return Borrower.builder()
+    User toDomain(){
+        return User.builder()
                 .id(id)
                 .auctions(auctions.stream().map(AuctionTuple::toDomain).collect(Collectors.toList()))
                 .build();
