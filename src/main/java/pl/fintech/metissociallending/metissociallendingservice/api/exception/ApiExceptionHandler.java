@@ -7,15 +7,17 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.NoSuchElementException;
 import io.micrometer.core.instrument.config.validate.ValidationException;
+import pl.fintech.metissociallending.metissociallendingservice.api.BorrowerController;
+import pl.fintech.metissociallending.metissociallendingservice.api.LenderController;
 
-@ControllerAdvice
+@ControllerAdvice(basePackageClasses = {LenderController.class, BorrowerController.class})
 public class ApiExceptionHandler {
-    @ExceptionHandler(value = {NoSuchElementException.class})
+    @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<Object> handleNoSuchElementException(NoSuchElementException e){
-        return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
-    @ExceptionHandler(value = {ValidationException.class})
+    @ExceptionHandler(ValidationException.class)
     public ResponseEntity<Object> handleValidationException(ValidationException e){
-        return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(e.getValidation(), HttpStatus.BAD_REQUEST);
     }
 }

@@ -17,7 +17,6 @@ public class LenderController {
     private final LenderService lenderService;
 
     @PostMapping("/submit-offer")
-    @ExceptionHandler(value = {ValidationException.class, NoSuchElementException.class})
     public Offer submitOffer(@RequestBody OfferDTO offerDTO){
         return lenderService.submitOffer(offerDTO);
     }
