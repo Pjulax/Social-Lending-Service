@@ -5,8 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import javax.xml.bind.ValidationException;
 import java.util.NoSuchElementException;
+import io.micrometer.core.instrument.config.validate.ValidationException;
 
 @ControllerAdvice
 public class ApiExceptionHandler {
