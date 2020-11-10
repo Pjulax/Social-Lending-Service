@@ -21,4 +21,5 @@ public class JpaDBConfiguration {
     JpaOfferRepositoryImpl jpaOfferRepository(JpaOfferRepositoryImpl.JpaOfferRepo jpaOfferRepo){
         return new JpaOfferRepositoryImpl(jpaOfferRepo);
     }
+
 }

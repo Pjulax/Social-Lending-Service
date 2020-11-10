@@ -24,6 +24,15 @@ public class JpaUserRepositoryImpl implements UserRepository {
         return Optional.of(borrowerTupleOptional.get().toDomain());
     }
 
+    @Override
+    public Optional<User> findByUsername(String username) {
+        Optional<UserTuple> borrowerTupleOptional = jpaUserRepo.findByUsername(username);
+        if(borrowerTupleOptional.isEmpty())
+            return Optional.empty();
+        return Optional.of(borrowerTupleOptional.get().toDomain());
+    }
+
     interface JpaUserRepo extends JpaRepository<UserTuple, Long>{
+        Optional<UserTuple> findByUsername(String username);
     }
 }

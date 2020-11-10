@@ -1,10 +1,8 @@
 package pl.fintech.metissociallending.metissociallendingservice.api;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import pl.fintech.metissociallending.metissociallendingservice.api.dto.UserDTO;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserService;
 
@@ -15,9 +13,14 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/new-user")
-    public User createUser(@RequestParam String name){
-        return userService.createUser(() -> name);
+    @PostMapping("/signup")
+    public User createUser(@RequestBody UserDTO userDTO){
+        return userService.createUser(userDTO);
+    }
+
+    @PostMapping("/signin")
+    public String login(@RequestBody UserDTO userDTO){
+        return userService.login(userDTO);
     }
 
 }
