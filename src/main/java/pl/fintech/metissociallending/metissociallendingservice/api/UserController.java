@@ -15,34 +15,12 @@ public class UserController {
 
     @PostMapping("/signup")
     public User createUser(@RequestBody UserDTO userDTO){
-        return userService.createUser(new UserService.Command.CreateUser() {
-
-            @Override
-            public String getUsername() {
-                return userDTO.getUsername();
-            }
-
-            @Override
-            public String getPassword() {
-                return userDTO.getPassword();
-            }
-
-        });
+        return userService.createUser(userDTO);
     }
 
     @PostMapping("/signin")
     public String login(@RequestBody UserDTO userDTO){
-        return userService.login(new UserService.Command.Login() {
-            @Override
-            public String getUsername() {
-                return userDTO.getUsername();
-            }
-
-            @Override
-            public String getPassword() {
-                return userDTO.getPassword();
-            }
-        });
+        return userService.login(userDTO);
     }
 
 }

@@ -5,6 +5,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -35,7 +36,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                     Authentication auth = jwtTokenProvider.getAuthentication(token);
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 }
-            } catch (JwtException ex) {
+            } catch (JwtException | UsernameNotFoundException ex) {
                 //this is very important, since it guarantees the user is not authenticated at all
                 SecurityContextHolder.clearContext();
                 httpServletResponse.setStatus(HttpStatus.FORBIDDEN.value());

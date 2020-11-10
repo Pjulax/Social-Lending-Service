@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import pl.fintech.metissociallending.metissociallendingservice.infrastructure.security.exceptions.ExistingObjectException;
+import pl.fintech.metissociallending.metissociallendingservice.api.exception.ExistingObjectException;
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.security.jwt.JwtTokenProvider;
 
 
@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public User createUser(UserService.Command.CreateUser createUserCommand) {
         if(userRepository.findByUsername(createUserCommand.getUsername()).isPresent())
-            throw new ExistingObjectException();
+            throw new ExistingObjectException("User with that username already exists");
         User user = new User(createUserCommand.getUsername(), passwordEncoder.encode(createUserCommand.getPassword()));
         return userRepository.save(user);
     }

@@ -2,6 +2,8 @@ package pl.fintech.metissociallending.metissociallendingservice.infrastructure.r
 
 import lombok.*;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
 
 import javax.persistence.*;
@@ -26,7 +28,8 @@ public class UserTuple {
     @ElementCollection(fetch = FetchType.EAGER)
     private  List<RoleTuple> roles;
     @OneToMany
-    List<AuctionTuple> auctions;
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<AuctionTuple> auctions;
 
     static UserTuple from(User user){
         return new UserTuple(user.getId(),
@@ -43,7 +46,7 @@ public class UserTuple {
                 .username(username)
                 .password(password)
                 .roles(roles.stream().map(RoleTuple::toDomain).collect(Collectors.toList()))
-                .auctions(auctions.stream().map(AuctionTuple::toDomain).collect(Collectors.toList()))
+                .auctions(auctions==null?List.of():auctions.stream().map(AuctionTuple::toDomain).collect(Collectors.toList()))
                 .build();
     }
 }

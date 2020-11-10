@@ -1,6 +1,5 @@
 package pl.fintech.metissociallending.metissociallendingservice.api;
 
-import io.micrometer.core.instrument.config.validate.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.OfferDTO;
@@ -8,7 +7,6 @@ import pl.fintech.metissociallending.metissociallendingservice.domain.lender.Len
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.Offer;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/lender")
