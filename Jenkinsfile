@@ -76,7 +76,6 @@ pipeline {
                     withCredentials([file(credentialsId: 'kubeconfig-sit', variable: 'KUBECONFIG')]) {
                         sh "kubectl apply -f ./kubernetes-sit.yaml"
                         sh "kubectl rollout restart deployment metis-social-lending-service"
-                        sh "kubectl rollout status deployment metis-social-lending-service --timeout=3m"
                     }
                 }
             }
@@ -94,7 +93,6 @@ pipeline {
                     withCredentials([file(credentialsId: 'kubeconfig-uat', variable: 'KUBECONFIG')]) {
                         sh "kubectl apply -f ./kubernetes-uat.yaml"
                         sh "kubectl rollout restart deployment metis-social-lending-service"
-                        sh "kubectl rollout status deployment metis-social-lending-service --timeout=3m"
                     }
                 }
             }
