@@ -8,7 +8,7 @@ import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserS
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserDTO implements UserService.Command.CreateUser, UserService.Command.Login {
+public class UserDTO implements UserService.Command.CreateUser, UserService.Query.Login {
     private String username;
     private String password;
 
