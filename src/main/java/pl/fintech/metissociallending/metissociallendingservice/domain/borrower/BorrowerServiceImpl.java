@@ -2,8 +2,11 @@ package pl.fintech.metissociallending.metissociallendingservice.domain.borrower;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.fintech.metissociallending.metissociallendingservice.domain.lender.Offer;
+import pl.fintech.metissociallending.metissociallendingservice.domain.lender.OfferRepository;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserRepository;
+import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserService;
 
 import java.util.Calendar;
 import java.util.List;
@@ -15,34 +18,33 @@ public class BorrowerServiceImpl implements BorrowerService {
 
     private final UserRepository userRepository;
     private final AuctionRepository auctionRepository;
-
+    private final OfferRepository offerRepository;
+    private final UserService userService;
 
 
     @Override
     public Auction createNewAuctionSinceNow(Command.CreateNewAuctionSinceNow createNewAuctionSinceNowCommand) {
-        Optional<User> userOptional = userRepository.findById(createNewAuctionSinceNowCommand.getUserId());
-        if(userOptional.isEmpty())
-            return null; // throw borrower not found
-        User borrower = userOptional.get();
+        User borrower = userService.whoami();
         Auction auction = Auction.builder()
                 .loanAmount(createNewAuctionSinceNowCommand.getLoanAmount())
                 .beginDate(Calendar.getInstance().getTime())
                 .endDate( createNewAuctionSinceNowCommand.getEndDate())
                 .numberOfInstallments(createNewAuctionSinceNowCommand.getNumberOfInstallments())
                 .build();
-        List<Auction> auctionList = borrower.getAuctions();
         auction = auctionRepository.save(auction);
-        auctionList.add(auction);
-        User borrower2 = User.builder().id(borrower.getId()).auctions(auctionList).build();
-        userRepository.save(borrower2);
+        borrower.addAuction(auction);
+        userRepository.save(borrower);
         return auction;
     }
 
     @Override
-    public List<Auction> getAllAuctions(Query.GetBorrowersAllAuctions getBorrowersAllAuctionsQuery) {
-        Optional<User> userOptional = userRepository.findById(getBorrowersAllAuctionsQuery.getUserId());
-        if(userOptional.isEmpty())
-            return null; // throw borrower not found
-        return userOptional.get().getAuctions();
+    public List<Auction> getAllAuctions() {
+        return userService.whoami().getAuctions();
+    }
+
+    @Override
+    public List<Offer> getAllOffersToAuction(BorrowerService.Query.GetAllOffersToAuction getAllOffersToAuctionQuery) {
+        Auction auction = auctionRepository.findById(getAllOffersToAuctionQuery.getAuctionId()).orElseThrow();
+        return offerRepository.findAllByAuction(auction);
     }
 }

@@ -45,8 +45,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/swagger-resources").permitAll()
                 .antMatchers("/swagger-resources/configuration/ui").permitAll()
                 .antMatchers("/swagger-resources/configuration/security").permitAll()
-                .antMatchers("/user/signin").permitAll()
-                .antMatchers("/user/signup").permitAll()
+                .antMatchers("/api/user/signin").permitAll()
+                .antMatchers("/api/user/signup").permitAll()
                 .antMatchers("/h2-console").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
                 .requestMatchers(checkPort(managementPort)).permitAll()
@@ -65,7 +65,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         // Allow swagger to be accessed without authentication
-        web.ignoring().antMatchers("/v2/api-docs")//
+        web.ignoring().antMatchers("/api/v2/api-docs")//
                 .antMatchers("/swagger-resources/**")//
                 .antMatchers("/swagger-ui.html")//
                 .antMatchers("/configuration/**")//

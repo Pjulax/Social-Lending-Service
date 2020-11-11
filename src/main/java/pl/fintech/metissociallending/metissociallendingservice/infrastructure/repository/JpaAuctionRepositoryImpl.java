@@ -28,6 +28,11 @@ public class JpaAuctionRepositoryImpl implements AuctionRepository {
         return Optional.of(auction);
     }
 
+    @Override
+    public List<Auction> findAll() {
+        return jpaAuctionRepo.findAll().stream().map(AuctionTuple::toDomain).collect(Collectors.toList());
+    }
+
 
     interface JpaAuctionRepo extends JpaRepository<AuctionTuple, Long>{
     }

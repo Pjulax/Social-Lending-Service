@@ -3,6 +3,7 @@ package pl.fintech.metissociallending.metissociallendingservice.api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.OfferDTO;
+import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.Auction;
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.LenderService;
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.Offer;
 
@@ -14,13 +15,19 @@ import java.util.List;
 public class LenderController {
     private final LenderService lenderService;
 
-    @PostMapping("/submit-offer")
+    @PostMapping("/offers")
     public Offer submitOffer(@RequestBody OfferDTO offerDTO){
         return lenderService.submitOffer(offerDTO);
     }
-    @GetMapping("/my-offers")
+    @GetMapping("/offers")
     public List<Offer> getAllOffers(){
         return lenderService.getAllOffers();
     }
+
+    @GetMapping("/auctions")
+    public List<Auction> getAllAvailableAuctions(){
+        return lenderService.getAllAvailableAuctions();
+    }
+
 
 }
