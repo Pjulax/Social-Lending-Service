@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.*;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.AuctionDTO;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.Auction;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.BorrowerService;
+import pl.fintech.metissociallending.metissociallendingservice.domain.lender.Offer;
+
 import java.util.List;
 
 @RestController
@@ -15,13 +17,18 @@ public class BorrowerController {
    private final BorrowerService borrowerService;
 
 
-    @PostMapping("/my-new-auction")
+    @GetMapping("/offers")
+    public List<Offer> getAllOffersToAuction(@RequestParam Long auction_id){ // change to return Auction DTO
+        return borrowerService.getAllOffersToAuction(()->auction_id);
+    }
+
+    @PostMapping("/auctions")
     public Auction createNewAuctionSinceNow(@RequestBody AuctionDTO auctionDTO){
         return borrowerService.createNewAuctionSinceNow(auctionDTO);
     }
 
-    @GetMapping("/all-my-auctions")
-    public List<Auction> getAllAuctions(@RequestParam Long borrower_id){ // change to return Auction DTO
-        return borrowerService.getAllAuctions(()->borrower_id);
+    @GetMapping("/auctions")
+    public List<Auction> getAllAuctions(){ // change to return Auction DTO
+        return borrowerService.getAllAuctions();
     }
 }

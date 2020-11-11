@@ -17,7 +17,6 @@ public class AuctionDTO implements BorrowerService.Command.CreateNewAuctionSince
     private Double loanAmount;
     private String endDate;
     private Integer numberOfInstallments;
-    private Long userId;
 
     @Override
     public BigDecimal getLoanAmount() {
@@ -38,11 +37,6 @@ public class AuctionDTO implements BorrowerService.Command.CreateNewAuctionSince
     @Override
     public Integer getNumberOfInstallments() {
         return numberOfInstallments;
-    }
-
-    @Override
-    public Long getUserId() {
-        return userId;
     }
 
 }

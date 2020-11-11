@@ -26,7 +26,7 @@ public class OfferTuple {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     private AuctionTuple auction;
 
     @Temporal(TemporalType.TIMESTAMP)

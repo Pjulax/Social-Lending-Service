@@ -30,6 +30,9 @@ public class UserTuple {
     @OneToMany
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<AuctionTuple> auctions;
+    @OneToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<OfferTuple> offers;
 
     static UserTuple from(User user){
         return new UserTuple(user.getId(),
@@ -38,7 +41,10 @@ public class UserTuple {
                 user.getRoles()==null?List.of():
                 user.getRoles().stream().map(RoleTuple::from).collect(Collectors.toList()),
                 user.getAuctions()==null?List.of():
-                user.getAuctions().stream().map(AuctionTuple::from).collect(Collectors.toList()));
+                user.getAuctions().stream().map(AuctionTuple::from).collect(Collectors.toList()),
+                user.getOffers()==null?List.of():
+                user.getOffers().stream().map(OfferTuple::from).collect(Collectors.toList())
+        );
     }
     User toDomain(){
         return User.builder()
@@ -47,6 +53,7 @@ public class UserTuple {
                 .password(password)
                 .roles(roles.stream().map(RoleTuple::toDomain).collect(Collectors.toList()))
                 .auctions(auctions==null?List.of():auctions.stream().map(AuctionTuple::toDomain).collect(Collectors.toList()))
+                .offers(offers==null?List.of():offers.stream().map(OfferTuple::toDomain).collect(Collectors.toList()))
                 .build();
     }
 }

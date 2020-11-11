@@ -2,6 +2,7 @@ package pl.fintech.metissociallending.metissociallendingservice.infrastructure.r
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
+import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.Auction;
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.Offer;
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.OfferRepository;
 
@@ -18,13 +19,21 @@ public class JpaOfferRepositoryImpl implements OfferRepository {
         return jpaOfferRepo.save(OfferTuple.from(offer)).toDomain();
     }
 
+    @Override
+    public List<Offer> findAllByAuction(Auction auction) {
+        return jpaOfferRepo.findAllByAuction(AuctionTuple.from(auction))
+                .stream().map(OfferTuple::toDomain).collect(Collectors.toList());
+    }
+
 
     @Override
     public List<Offer> findAll() {
-        return jpaOfferRepo.findAll().stream().map(OfferTuple::toDomain).collect(Collectors.toList());
+        return jpaOfferRepo.findAll()
+                .stream().map(OfferTuple::toDomain).collect(Collectors.toList());
     }
 
     interface  JpaOfferRepo extends JpaRepository<OfferTuple, Long>{
+        List<OfferTuple> findAllByAuction(AuctionTuple auctionTuple);
     }
 
 }

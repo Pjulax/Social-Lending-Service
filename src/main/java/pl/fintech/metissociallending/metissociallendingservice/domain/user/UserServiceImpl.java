@@ -37,9 +37,12 @@ public class UserServiceImpl implements UserService{
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()));
         return jwtTokenProvider.createToken(login.getUsername(), userRepository.findByUsername(login.getUsername()).get().getRoles());
     }
+
+
     public User search(Query.Search searchQuery) {
         return userRepository.findByUsername(searchQuery.getUsername()).orElseThrow();
     }
+    @Override
     public User whoami(){
         return search(()->SecurityContextHolder.getContext().getAuthentication().getName());
     }
