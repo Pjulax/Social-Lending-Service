@@ -29,6 +29,8 @@ public class LenderServiceImpl implements LenderService {
     public Offer submitOffer(Command.SubmitOffer submitOfferCommand) {
         Auction auction = auctionRepository.findById(submitOfferCommand.getAuctionId()).orElseThrow();
         User user = userService.whoami();
+        if(user.getAuctions().contains(auction))
+            throw new IllegalArgumentException("User cannot create offer for his own auction");
         if(submitOfferCommand.getProposedAnnualPercentageRate()<.0d)
             throw new ValidationException(Validated.invalid("annual proposed percentage rate", submitOfferCommand.getProposedAnnualPercentageRate(), " cannot be below or equal 0", InvalidReason.MALFORMED));
         Offer offer = Offer.builder()

@@ -27,4 +27,9 @@ public class ApiExceptionHandler {
     public ResponseEntity<Object> handleExistingUserException(ExistingObjectException ex) {
         return new ResponseEntity<Object>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Object> handleExistingUserException(IllegalArgumentException ex) {
+        return new ResponseEntity<Object>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
 }
