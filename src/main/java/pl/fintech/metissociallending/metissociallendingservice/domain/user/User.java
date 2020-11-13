@@ -32,8 +32,4 @@ public class User {
         auctions.add(auction);
     }
 
-    User(String username, String password){
-        this.username = username;
-        this.password = password;
-    }
 }
