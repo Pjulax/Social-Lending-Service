@@ -56,6 +56,8 @@ public class LenderServiceImpl implements LenderService {
 
     @Override
     public List<Auction> getAllAvailableAuctions() {
-        return auctionRepository.findAll();
+        List<Auction> auctions = auctionRepository.findAll();
+        auctions.removeAll(userService.whoami().getAuctions());
+        return auctions;
     }
 }
