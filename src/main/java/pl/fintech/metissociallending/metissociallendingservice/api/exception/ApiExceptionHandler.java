@@ -24,11 +24,15 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(e.getValidation(), HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(ExistingObjectException.class)
-    public ResponseEntity<Object> handleExistingUserException(ExistingObjectException ex) {
+    public ResponseEntity<Object> handleExistingUserException(ExistingObjectException ex){
         return new ResponseEntity<Object>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Object> handleExistingUserException(IllegalArgumentException ex) {
+    public ResponseEntity<Object> handleExistingUserException(IllegalArgumentException ex){
+        return new ResponseEntity<Object>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(LengthExceededException.class)
+    public ResponseEntity<Object> handleLengthExceededException(LengthExceededException ex){
         return new ResponseEntity<Object>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 

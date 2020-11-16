@@ -3,6 +3,7 @@ package pl.fintech.metissociallending.metissociallendingservice.api.dto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import pl.fintech.metissociallending.metissociallendingservice.api.exception.LengthExceededException;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.BorrowerService;
 
 import java.math.BigDecimal;
@@ -17,6 +18,7 @@ public class AuctionDTO implements BorrowerService.Command.CreateNewAuctionSince
     private Double loanAmount;
     private String endDate;
     private Integer numberOfInstallments;
+    private String description;
 
     @Override
     public BigDecimal getLoanAmount() {
@@ -30,6 +32,7 @@ public class AuctionDTO implements BorrowerService.Command.CreateNewAuctionSince
             date = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(endDate);
         }catch (ParseException e){
             System.out.println(e);
+            //todo - Create new custom exception for bad parsed data and create exception handler
         }
         return date;
     }
@@ -39,4 +42,11 @@ public class AuctionDTO implements BorrowerService.Command.CreateNewAuctionSince
         return numberOfInstallments;
     }
 
+    @Override
+    public String getDescription() {
+        if(description!=null && description.length() > 255){
+            throw new LengthExceededException("Description is limited to 255 characters");
+        }
+        return description;
+    }
 }

@@ -30,6 +30,7 @@ public class BorrowerServiceImpl implements BorrowerService {
                 .beginDate(Calendar.getInstance().getTime())
                 .endDate( createNewAuctionSinceNowCommand.getEndDate())
                 .numberOfInstallments(createNewAuctionSinceNowCommand.getNumberOfInstallments())
+                .description(createNewAuctionSinceNowCommand.getDescription())
                 .build();
         auction = auctionRepository.save(auction);
         borrower.addAuction(auction);

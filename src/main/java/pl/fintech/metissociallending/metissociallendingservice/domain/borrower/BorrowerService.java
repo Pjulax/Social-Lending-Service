@@ -17,6 +17,7 @@ public interface BorrowerService {
             BigDecimal getLoanAmount();
             Date getEndDate();
             Integer getNumberOfInstallments();
+            String getDescription();
         }
 
     }
