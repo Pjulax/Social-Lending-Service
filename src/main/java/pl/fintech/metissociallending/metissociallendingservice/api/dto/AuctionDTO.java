@@ -3,6 +3,7 @@ package pl.fintech.metissociallending.metissociallendingservice.api.dto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import pl.fintech.metissociallending.metissociallendingservice.api.exception.DateTimeIncorrectFormatException;
 import pl.fintech.metissociallending.metissociallendingservice.api.exception.LengthExceededException;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.BorrowerService;
 
@@ -31,8 +32,7 @@ public class AuctionDTO implements BorrowerService.Command.CreateNewAuctionSince
         try {
             date = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(endDate);
         }catch (ParseException e){
-            System.out.println(e);
-            //todo - Create new custom exception for bad parsed data and create exception handler
+            throw new DateTimeIncorrectFormatException("Date must be in 'dd/MM/yyyy HH:mm' format", e);
         }
         return date;
     }
