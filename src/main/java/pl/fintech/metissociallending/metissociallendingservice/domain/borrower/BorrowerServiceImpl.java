@@ -2,6 +2,7 @@ package pl.fintech.metissociallending.metissociallendingservice.domain.borrower;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.fintech.metissociallending.metissociallendingservice.api.dto.AuctionWithOffersDTO;
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.Offer;
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.OfferRepository;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
@@ -10,6 +11,7 @@ import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserS
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -43,8 +45,14 @@ public class BorrowerServiceImpl implements BorrowerService {
     }
 
     @Override
-    public List<Offer> getAllOffersToAuction(BorrowerService.Query.GetAllOffersToAuction getAllOffersToAuctionQuery) {
-        Auction auction = auctionRepository.findById(getAllOffersToAuctionQuery.getAuctionId()).orElseThrow();
-        return offerRepository.findAllByAuction(auction);
+    public AuctionWithOffersDTO getAuctionById(Long id) {
+        Auction auction = auctionRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Auction with that id doesn't exist"));
+        return AuctionWithOffersDTO.builder()
+                .endDate(auction.getEndDate())
+                .loanAmount(auction.getLoanAmount().doubleValue())
+                .numberOfInstallments(auction.getNumberOfInstallments())
+                .offers(offerRepository.findAllByAuction(auction))
+                .build();
     }
+
 }

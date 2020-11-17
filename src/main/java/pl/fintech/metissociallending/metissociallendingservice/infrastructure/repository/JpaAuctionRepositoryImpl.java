@@ -33,7 +33,6 @@ public class JpaAuctionRepositoryImpl implements AuctionRepository {
         return jpaAuctionRepo.findAll().stream().map(AuctionTuple::toDomain).collect(Collectors.toList());
     }
 
-
     interface JpaAuctionRepo extends JpaRepository<AuctionTuple, Long>{
     }
 }
