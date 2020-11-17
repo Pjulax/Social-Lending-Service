@@ -23,9 +23,9 @@ public class UserTuple {
     private Long id;
     @Column(unique = true, nullable = false)
     private String username;
-    private String account;
     @Size(min = 8)
     private String password;
+    private String account;
     @ElementCollection(fetch = FetchType.EAGER)
     private  List<RoleTuple> roles;
     @OneToMany
