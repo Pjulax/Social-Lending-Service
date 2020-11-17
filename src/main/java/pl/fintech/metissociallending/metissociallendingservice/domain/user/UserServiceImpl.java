@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import pl.fintech.metissociallending.metissociallendingservice.api.dto.UserDetailsDTO;
 import pl.fintech.metissociallending.metissociallendingservice.api.exception.ExistingObjectException;
 import pl.fintech.metissociallending.metissociallendingservice.domain.bank.BankClient;
 import pl.fintech.metissociallending.metissociallendingservice.domain.bank.requestEntity.AccountEntityRequest;
@@ -40,6 +41,7 @@ public class UserServiceImpl implements UserService{
         User user = User.builder()
                 .username(createUserCommand.getUsername())
                 .password(passwordEncoder.encode(createUserCommand.getPassword()))
+                .balance(0.0d)
                 .roles(roles)
                 .account(account).build();
         return userRepository.save(user);
@@ -55,6 +57,12 @@ public class UserServiceImpl implements UserService{
     @Override
     public User whoami(){
         return search(()->SecurityContextHolder.getContext().getAuthentication().getName());
+    }
+
+    @Override
+    public UserDetailsDTO getUserDetails() {
+        User user = whoami();
+        return new UserDetailsDTO(user.getUsername(), user.getAccount(), user.getBalance());
     }
 
 }
