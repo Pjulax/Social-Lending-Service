@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.fintech.metissociallending.metissociallendingservice.api.exception.ExistingObjectException;
+import pl.fintech.metissociallending.metissociallendingservice.domain.bank.BankService;
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.security.jwt.JwtTokenProvider;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,12 +24,14 @@ public class UserServiceImpl implements UserService{
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
+    private final BankService bankService;
 
     @Override
     public User createUser(UserService.Command.CreateUser createUserCommand) {
         if(userRepository.findByUsername(createUserCommand.getUsername()).isPresent())
             throw new ExistingObjectException("User with that username already exists");
-        User user = new User(createUserCommand.getUsername(), passwordEncoder.encode(createUserCommand.getPassword()));
+        String account = bankService.createAccount(createUserCommand.getUsername()+"-account");
+        User user = new User(createUserCommand.getUsername(), passwordEncoder.encode(createUserCommand.getPassword()), account);
         return userRepository.save(user);
     }
 

@@ -18,11 +18,12 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private  Long id;
-    private  String username;
-    private  String password;
-    private  List<Role> roles;
-    private  List<Auction> auctions;
+    private Long id;
+    private String username;
+    private String password;
+    private String account;
+    private List<Role> roles;
+    private List<Auction> auctions;
     private List<Offer> offers;
 
     public void addOffer(Offer offer){
@@ -32,8 +33,9 @@ public class User {
         auctions.add(auction);
     }
 
-    User(String username, String password){
+    User(String username, String password, String account){
         this.username = username;
         this.password = password;
+        this.account = account;
     }
 }
