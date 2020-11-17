@@ -2,6 +2,7 @@ package pl.fintech.metissociallending.metissociallendingservice.domain.borrower;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.fintech.metissociallending.metissociallendingservice.api.exception.ExistingObjectException;
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.Offer;
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.OfferRepository;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
@@ -10,6 +11,7 @@ import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserS
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -20,7 +22,6 @@ public class BorrowerServiceImpl implements BorrowerService {
     private final AuctionRepository auctionRepository;
     private final OfferRepository offerRepository;
     private final UserService userService;
-
 
     @Override
     public Auction createNewAuctionSinceNow(Command.CreateNewAuctionSinceNow createNewAuctionSinceNowCommand) {
@@ -36,6 +37,26 @@ public class BorrowerServiceImpl implements BorrowerService {
         borrower.addAuction(auction);
         userRepository.save(borrower);
         return auction;
+    }
+
+    @Override
+    public Auction addAuctionDescription(Command.AddAuctionDescription addAuctionDescription) {
+        Optional<Auction> auction = auctionRepository.findById(addAuctionDescription.getAuctionId());
+        if(auction.isEmpty()){
+            throw new NoSuchElementException("Auction with that id doesn't exist");
+        }
+        if (auction.get().getDescription() != null) {
+            throw new ExistingObjectException("Description in auction already exists");
+        }
+        Auction modifiedAuction = Auction.builder()
+                .id(auction.get().getId())
+                .loanAmount(auction.get().getLoanAmount())
+                .beginDate(auction.get().getBeginDate())
+                .endDate(auction.get().getEndDate())
+                .numberOfInstallments(auction.get().getNumberOfInstallments())
+                .description(addAuctionDescription.getDescription())
+                .build();
+        return auctionRepository.save(modifiedAuction);
     }
 
     @Override

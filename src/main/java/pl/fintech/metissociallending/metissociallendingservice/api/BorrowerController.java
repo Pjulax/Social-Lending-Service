@@ -3,6 +3,7 @@ package pl.fintech.metissociallending.metissociallendingservice.api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.AuctionDTO;
+import pl.fintech.metissociallending.metissociallendingservice.api.dto.AuctionDescriptionDTO;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.Auction;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.BorrowerService;
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.Offer;
@@ -25,6 +26,11 @@ public class BorrowerController {
     @PostMapping("/auctions")
     public Auction createNewAuctionSinceNow(@RequestBody AuctionDTO auctionDTO){
         return borrowerService.createNewAuctionSinceNow(auctionDTO);
+    }
+
+    @PutMapping("/auctions")
+    public Auction addAuctionDescription(@RequestBody AuctionDescriptionDTO auctionDescriptionDTO){
+        return borrowerService.addAuctionDescription(auctionDescriptionDTO);
     }
 
     @GetMapping("/auctions")
