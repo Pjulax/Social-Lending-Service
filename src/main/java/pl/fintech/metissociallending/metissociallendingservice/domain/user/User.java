@@ -33,9 +33,4 @@ public class User {
         auctions.add(auction);
     }
 
-    User(String username, String password, String account){
-        this.username = username;
-        this.password = password;
-        this.account = account;
-    }
 }

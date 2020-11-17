@@ -2,7 +2,6 @@ package pl.fintech.metissociallending.metissociallendingservice.domain.user;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,9 +11,7 @@ import pl.fintech.metissociallending.metissociallendingservice.api.exception.Exi
 import pl.fintech.metissociallending.metissociallendingservice.domain.bank.BankService;
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.security.jwt.JwtTokenProvider;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.Optional;
-
+import java.util.LinkedList;
 
 @RequiredArgsConstructor
 @Service
@@ -31,17 +28,20 @@ public class UserServiceImpl implements UserService{
         if(userRepository.findByUsername(createUserCommand.getUsername()).isPresent())
             throw new ExistingObjectException("User with that username already exists");
         String account = bankService.createAccount(createUserCommand.getUsername()+"-account");
-        User user = new User(createUserCommand.getUsername(), passwordEncoder.encode(createUserCommand.getPassword()), account);
+        LinkedList<Role> roles = new LinkedList<Role>();
+        roles.add(Role.ROLE_CLIENT);
+        User user = User.builder()
+                .username(createUserCommand.getUsername())
+                .password(passwordEncoder.encode(createUserCommand.getPassword()))
+                .roles(roles)
+                .account(account).build();
         return userRepository.save(user);
     }
-
     @Override
     public String login(Query.Login login) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()));
         return jwtTokenProvider.createToken(login.getUsername(), userRepository.findByUsername(login.getUsername()).get().getRoles());
     }
-
-
     public User search(Query.Search searchQuery) {
         return userRepository.findByUsername(searchQuery.getUsername()).orElseThrow();
     }
