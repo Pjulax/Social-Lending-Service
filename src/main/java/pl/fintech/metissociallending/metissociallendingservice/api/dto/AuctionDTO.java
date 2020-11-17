@@ -1,9 +1,11 @@
 package pl.fintech.metissociallending.metissociallendingservice.api.dto;
 
+import io.micrometer.core.instrument.config.validate.InvalidReason;
+import io.micrometer.core.instrument.config.validate.Validated;
+import io.micrometer.core.instrument.config.validate.ValidationException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import pl.fintech.metissociallending.metissociallendingservice.api.exception.DateTimeIncorrectFormatException;
 import pl.fintech.metissociallending.metissociallendingservice.api.exception.LengthExceededException;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.BorrowerService;
 
@@ -32,7 +34,7 @@ public class AuctionDTO implements BorrowerService.Command.CreateNewAuctionSince
         try {
             date = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(endDate);
         }catch (ParseException e){
-            throw new DateTimeIncorrectFormatException("Date must be in 'dd/MM/yyyy HH:mm' format", e);
+            throw new ValidationException(Validated.invalid("Auction end date", endDate, " must be in format 'dd/MM/yyyy HH:mm'", InvalidReason.MALFORMED));
         }
         return date;
     }

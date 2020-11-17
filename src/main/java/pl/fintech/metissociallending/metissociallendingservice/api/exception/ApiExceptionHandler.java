@@ -47,10 +47,5 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), req.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
-    @ExceptionHandler(DateTimeIncorrectFormatException.class)
-    public ResponseEntity<ExceptionResponse> handleDateTimeIncorrectFormatException(DateTimeIncorrectFormatException ex, WebRequest req){
-        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), req.getDescription(false));
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
-    }
 
 }
