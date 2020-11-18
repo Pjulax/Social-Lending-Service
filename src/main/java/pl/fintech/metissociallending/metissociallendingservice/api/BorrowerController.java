@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.AuctionDTO;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.AuctionWithOffersDTO;
+import pl.fintech.metissociallending.metissociallendingservice.api.dto.LoanDTO;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.Auction;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.BorrowerService;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.Loan;
@@ -36,9 +37,9 @@ public class BorrowerController {
     }
 
     @PostMapping("/auctions/{auction_id}/accept-offer")
-    public Loan acceptOffer(@PathVariable Long auction_id, @RequestParam Long offer_id){ //TODO change Loan to LoanDTO so user details like auctions, offers will be hidden
+    public LoanDTO acceptOffer(@PathVariable Long auction_id, @RequestParam Long offer_id){
 
-        return loanService.acceptOffer(new LoanService.Command.AcceptOffer() {
+        Loan loan = loanService.acceptOffer(new LoanService.Command.AcceptOffer() {
             @Override
             public Long getAuctionId() {
                 return auction_id;
@@ -49,6 +50,15 @@ public class BorrowerController {
                 return offer_id;
             }
         });
+        return LoanDTO.builder()
+                .acceptedInterest(loan.getAcceptedInterest())
+                .borrower(loan.getBorrower().getUsername())
+                .lender(loan.getLender().getUsername())
+                .id(loan.getId())
+                .installments(loan.getInstallments())
+                .startDate(loan.getStartDate())
+                .takenAmount(loan.getTakenAmount())
+                .build();
     }
     @GetMapping("/loans")
     public List<Loan> getMyLoans(){
