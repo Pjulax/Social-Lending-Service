@@ -14,6 +14,7 @@ public class AuctionWithOffersDTO implements BorrowerService.Query.getAuction {
     private Date endDate;
     private Integer numberOfInstallments;
     private List<Offer> offers;
+    private Boolean isClosed;
 
     public Double getLoanAmount() {
         return loanAmount;
@@ -30,6 +31,11 @@ public class AuctionWithOffersDTO implements BorrowerService.Query.getAuction {
     @Override
     public List<Offer> getOffers() {
         return offers;
+    } //TODO OfferDTO instead of Offer
+
+    @Override
+    public Boolean isClosed() {
+        return isClosed;
     }
 
 }

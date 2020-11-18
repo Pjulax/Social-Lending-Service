@@ -5,8 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
-@EnableJpaRepositories(basePackageClasses = {JpaUserRepositoryImpl.class, JpaAuctionRepositoryImpl.class, JpaOfferRepositoryImpl.class}, considerNestedRepositories = true)
-@EntityScan(basePackageClasses = {JpaUserRepositoryImpl.class, JpaAuctionRepositoryImpl.class, JpaOfferRepositoryImpl.class})
+@EnableJpaRepositories(basePackageClasses = {JpaUserRepositoryImpl.class, JpaAuctionRepositoryImpl.class, JpaOfferRepositoryImpl.class, JpaLoanRepositoryImpl.class, JpaInstallmentRepositoryImpl.class}, considerNestedRepositories = true)
+@EntityScan(basePackageClasses = {JpaUserRepositoryImpl.class, JpaAuctionRepositoryImpl.class, JpaOfferRepositoryImpl.class, JpaLoanRepositoryImpl.class, JpaInstallmentRepositoryImpl.class})
 public class JpaDBConfiguration {
 
     @Bean
@@ -20,6 +20,14 @@ public class JpaDBConfiguration {
     @Bean
     JpaOfferRepositoryImpl jpaOfferRepository(JpaOfferRepositoryImpl.JpaOfferRepo jpaOfferRepo){
         return new JpaOfferRepositoryImpl(jpaOfferRepo);
+    }
+    @Bean
+    JpaLoanRepositoryImpl jpaLoanRepository(JpaLoanRepositoryImpl.JpaLoanRepo jpaLoanRepo){
+        return new JpaLoanRepositoryImpl(jpaLoanRepo);
+    }
+    @Bean
+    JpaInstallmentRepositoryImpl jpaInstallmentRepository(JpaInstallmentRepositoryImpl.JpaInstallmentsRepo jpaInstallmentsRepo){
+        return  new JpaInstallmentRepositoryImpl(jpaInstallmentsRepo);
     }
 
 }

@@ -16,11 +16,5 @@ public class Auction{
     private final Date beginDate;
     private final Date endDate;
     private final Integer numberOfInstallments;
-
-//    public Auction(BorrowerService.Command.CreateNewAuctionSinceNow createNewAuctionSinceNowCommand){
-//        this(createNewAuctionSinceNowCommand.getLoanAmount(), createNewAuctionSinceNowCommand.getBeginLoanDate(),
-//                createNewAuctionSinceNowCommand.getEndDate(), createNewAuctionSinceNowCommand.getBeginLoanDate(),
-//                createNewAuctionSinceNowCommand.getEndLoanDate(), createNewAuctionSinceNowCommand.getInstallmentsFrequencyInYear());
-//    }
-
+    private final Boolean isClosed;
 }

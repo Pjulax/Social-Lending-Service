@@ -6,6 +6,8 @@ import pl.fintech.metissociallending.metissociallendingservice.api.dto.AuctionDT
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.AuctionWithOffersDTO;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.Auction;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.BorrowerService;
+import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.Loan;
+import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.LoanService;
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.Offer;
 
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.List;
 public class BorrowerController {
 
    private final BorrowerService borrowerService;
+   private final LoanService loanService;
 
     @PostMapping("/auctions")
     public Auction createNewAuctionSinceNow(@RequestBody AuctionDTO auctionDTO){
@@ -28,7 +31,27 @@ public class BorrowerController {
     }
 
     @GetMapping("/auctions/{id}")
-    public AuctionWithOffersDTO getAuction(@PathVariable Long id){
+    public AuctionWithOffersDTO getAuctionWithOffers(@PathVariable Long id){
         return borrowerService.getAuctionById(id);
+    }
+
+    @PostMapping("/auctions/{auction_id}/accept-offer")
+    public Loan acceptOffer(@PathVariable Long auction_id, @RequestParam Long offer_id){ //TODO change Loan to LoanDTO so user details like auctions, offers will be hidden
+
+        return loanService.acceptOffer(new LoanService.Command.AcceptOffer() {
+            @Override
+            public Long getAuctionId() {
+                return auction_id;
+            }
+
+            @Override
+            public Long getOfferId() {
+                return offer_id;
+            }
+        });
+    }
+    @GetMapping("/loans")
+    public List<Loan> getMyLoans(){
+        return loanService.getLoansByBorrower();
     }
 }
