@@ -32,7 +32,7 @@ public class BorrowerController {
     }
 
     @PostMapping("/auctions")
-    public Auction createNewAuctionSinceNow(@RequestBody AuctionDTO auctionDTO){
+    public Auction createNewAuctionSinceNow( @Valid @RequestBody AuctionDTO auctionDTO){
         return borrowerService.createNewAuctionSinceNow(auctionDTO);
     }
 

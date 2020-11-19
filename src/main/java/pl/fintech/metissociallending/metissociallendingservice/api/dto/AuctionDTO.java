@@ -6,11 +6,9 @@ import io.micrometer.core.instrument.config.validate.ValidationException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import pl.fintech.metissociallending.metissociallendingservice.api.exception.LengthExceededException;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.BorrowerService;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,8 +21,11 @@ public class AuctionDTO implements BorrowerService.Command.CreateNewAuctionSince
     private Double loanAmount;
     private String endDate;
     private Integer numberOfInstallments;
-    @Min(3)
-    @Max(255)
+    @Size(
+            min=3,
+            max=255,
+            message = "The description '${validatedValue}' must be between {min} and {max} characters long"
+    )
     private String description;
 
     @Override
