@@ -1,10 +1,27 @@
 package pl.fintech.metissociallending.metissociallendingservice.api.dto;
 
-import pl.fintech.metissociallending.metissociallendingservice.api.exception.LengthExceededException;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.BorrowerService;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+
+@Getter
+@Setter
+@NoArgsConstructor
 public class AuctionDescriptionDTO implements BorrowerService.Command.AddAuctionDescription {
     private Long auctionId;
+    @Size(
+            min=3,
+            max=255,
+            message = "The description '${validatedValue}' must be between {min} and {max} characters long"
+    )
+    @NotNull(
+            message = "The description must be not null"
+    )
     private String description;
 
     @Override
@@ -14,9 +31,7 @@ public class AuctionDescriptionDTO implements BorrowerService.Command.AddAuction
 
     @Override
     public String getDescription() {
-        if(description!=null && description.length() > 255){
-            throw new LengthExceededException("Description is limited to 255 characters");
-        }
+
         return description;
     }
 }

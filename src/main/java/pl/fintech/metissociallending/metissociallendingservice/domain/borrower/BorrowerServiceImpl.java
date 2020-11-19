@@ -41,22 +41,13 @@ public class BorrowerServiceImpl implements BorrowerService {
 
     @Override
     public Auction addAuctionDescription(Command.AddAuctionDescription addAuctionDescription) {
-        Optional<Auction> auction = auctionRepository.findById(addAuctionDescription.getAuctionId());
-        if(auction.isEmpty()){
-            throw new NoSuchElementException("Auction with that id doesn't exist");
-        }
-        if (auction.get().getDescription() != null) {
-            throw new ExistingObjectException("Description in auction already exists");
-        }
-        Auction modifiedAuction = Auction.builder()
-                .id(auction.get().getId())
-                .loanAmount(auction.get().getLoanAmount())
-                .beginDate(auction.get().getBeginDate())
-                .endDate(auction.get().getEndDate())
-                .numberOfInstallments(auction.get().getNumberOfInstallments())
-                .description(addAuctionDescription.getDescription())
-                .build();
-        return auctionRepository.save(modifiedAuction);
+        Auction auction = auctionRepository
+                .findById(addAuctionDescription.getAuctionId())
+                .orElseThrow(() -> new NoSuchElementException("Auction with that id doesn't exist"));
+
+        auction.changeDescription(addAuctionDescription.getDescription());
+
+        return auctionRepository.save(auction);
     }
 
     @Override

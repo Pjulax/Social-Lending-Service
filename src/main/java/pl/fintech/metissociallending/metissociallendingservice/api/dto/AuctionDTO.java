@@ -9,6 +9,8 @@ import lombok.Setter;
 import pl.fintech.metissociallending.metissociallendingservice.api.exception.LengthExceededException;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.BorrowerService;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,6 +23,8 @@ public class AuctionDTO implements BorrowerService.Command.CreateNewAuctionSince
     private Double loanAmount;
     private String endDate;
     private Integer numberOfInstallments;
+    @Min(3)
+    @Max(255)
     private String description;
 
     @Override
@@ -46,9 +50,6 @@ public class AuctionDTO implements BorrowerService.Command.CreateNewAuctionSince
 
     @Override
     public String getDescription() {
-        if(description!=null && description.length() > 255){
-            throw new LengthExceededException("Description is limited to 255 characters");
-        }
         return description;
     }
 }
