@@ -18,11 +18,13 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private  Long id;
-    private  String username;
-    private  String password;
-    private  List<Role> roles;
-    private  List<Auction> auctions;
+    private Long id;
+    private String username;
+    private String password;
+    private String account;
+    private Double balance;
+    private List<Role> roles;
+    private List<Auction> auctions;
     private List<Offer> offers;
 
     public void addOffer(Offer offer){

@@ -1,5 +1,6 @@
 package pl.fintech.metissociallending.metissociallendingservice.domain.borrower;
 
+import pl.fintech.metissociallending.metissociallendingservice.api.dto.AuctionWithOffersDTO;
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.Offer;
 
 import java.math.BigDecimal;
@@ -11,7 +12,7 @@ public interface BorrowerService {
     Auction addAuctionDescription(Command.AddAuctionDescription addAuctionDescription);
     List<Auction> getAllAuctions();
 
-    List<Offer> getAllOffersToAuction(Query.GetAllOffersToAuction getAllOffersToAuctionQuery);
+    AuctionWithOffersDTO getAuctionById(Long id);
 
     interface Command {
         interface CreateNewAuctionSinceNow extends Command{
@@ -27,8 +28,11 @@ public interface BorrowerService {
 
     }
     interface Query {
-        interface GetAllOffersToAuction extends  Query {
-            Long getAuctionId();
+        interface getAuction extends  Query {
+            Double getLoanAmount();
+            Date getEndDate();
+            Integer getNumberOfInstallments();
+            List<Offer> getOffers();
         }
     }
 }

@@ -25,6 +25,8 @@ public class UserTuple {
     private String username;
     @Size(min = 8)
     private String password;
+    private String account;
+    private Double balance;
     @ElementCollection(fetch = FetchType.EAGER)
     private  List<RoleTuple> roles;
     @OneToMany
@@ -38,6 +40,8 @@ public class UserTuple {
         return new UserTuple(user.getId(),
                 user.getUsername(),
                 user.getPassword(),
+                user.getAccount(),
+                user.getBalance(),
                 user.getRoles()==null?List.of():
                 user.getRoles().stream().map(RoleTuple::from).collect(Collectors.toList()),
                 user.getAuctions()==null?List.of():
@@ -51,6 +55,8 @@ public class UserTuple {
                 .id(id)
                 .username(username)
                 .password(password)
+                .account(account)
+                .balance(balance)
                 .roles(roles==null?List.of():roles.stream().map(RoleTuple::toDomain).collect(Collectors.toList()))
                 .auctions(auctions==null?List.of():auctions.stream().map(AuctionTuple::toDomain).collect(Collectors.toList()))
                 .offers(offers==null?List.of():offers.stream().map(OfferTuple::toDomain).collect(Collectors.toList()))
