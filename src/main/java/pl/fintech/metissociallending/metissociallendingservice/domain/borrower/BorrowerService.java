@@ -32,6 +32,7 @@ public interface BorrowerService {
             Double getLoanAmount();
             Date getEndDate();
             Integer getNumberOfInstallments();
+            String getDescription();
             List<Offer> getOffers();
         }
     }

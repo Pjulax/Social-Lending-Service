@@ -33,6 +33,10 @@ public class AuctionWithOffersDTO implements BorrowerService.Query.getAuction {
         return numberOfInstallments;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     @Override
     public List<Offer> getOffers() {
         return offers;

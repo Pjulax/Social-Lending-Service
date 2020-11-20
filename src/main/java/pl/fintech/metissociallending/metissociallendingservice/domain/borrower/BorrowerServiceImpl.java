@@ -39,9 +39,13 @@ public class BorrowerServiceImpl implements BorrowerService {
 
     @Override
     public Auction addAuctionDescription(Command.AddAuctionDescription addAuctionDescription) {
+        User borrower = userService.whoami();
+        // todo - change getAuctionId to getAuctionByIdAndUser - resource disabling
         Auction auction = auctionRepository
                 .findById(addAuctionDescription.getAuctionId())
                 .orElseThrow(() -> new NoSuchElementException("Auction with that id doesn't exist"));
+        if(!borrower.getAuctions().contains(auction))
+            throw new NoSuchElementException("Auction with that id doesn't exist");
         auction.changeDescription(addAuctionDescription.getDescription());
         return auctionRepository.save(auction);
     }
