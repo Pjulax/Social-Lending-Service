@@ -14,14 +14,10 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class AuctionDescriptionDTO implements BorrowerService.Command.AddAuctionDescription {
     private Long auctionId;
-    @Size(
-            min=3,
+    @Size(  min=3,
             max=255,
-            message = "The description '${validatedValue}' must be between {min} and {max} characters long"
-    )
-    @NotNull(
-            message = "The description must be not null"
-    )
+            message = "The description '${validatedValue}' must be between {min} and {max} characters long")
+    @NotNull(message = "The description must not be null")
     private String description;
 
     @Override

@@ -42,9 +42,7 @@ public class BorrowerServiceImpl implements BorrowerService {
         Auction auction = auctionRepository
                 .findById(addAuctionDescription.getAuctionId())
                 .orElseThrow(() -> new NoSuchElementException("Auction with that id doesn't exist"));
-
         auction.changeDescription(addAuctionDescription.getDescription());
-
         return auctionRepository.save(auction);
     }
 
@@ -60,6 +58,7 @@ public class BorrowerServiceImpl implements BorrowerService {
                 .endDate(auction.getEndDate())
                 .loanAmount(auction.getLoanAmount().doubleValue())
                 .numberOfInstallments(auction.getNumberOfInstallments())
+                .description(auction.getDescription())
                 .offers(offerRepository.findAllByAuction(auction))
                 .build();
     }

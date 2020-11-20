@@ -21,11 +21,9 @@ public class AuctionDTO implements BorrowerService.Command.CreateNewAuctionSince
     private Double loanAmount;
     private String endDate;
     private Integer numberOfInstallments;
-    @Size(
-            min=3,
+    @Size(  min=3,
             max=255,
-            message = "The description '${validatedValue}' must be between {min} and {max} characters long"
-    )
+            message = "The description '${validatedValue}' must be between {min} and {max} characters long")
     private String description;
 
     @Override
