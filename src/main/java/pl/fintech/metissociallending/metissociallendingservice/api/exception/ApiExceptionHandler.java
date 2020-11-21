@@ -14,12 +14,13 @@ import java.util.NoSuchElementException;
 
 import io.micrometer.core.instrument.config.validate.ValidationException;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import pl.fintech.metissociallending.metissociallendingservice.api.BorrowerController;
 import pl.fintech.metissociallending.metissociallendingservice.api.LenderController;
 import pl.fintech.metissociallending.metissociallendingservice.api.UserController;
 
 @ControllerAdvice(basePackageClasses = {UserController.class, LenderController.class, BorrowerController.class})
-public class ApiExceptionHandler {
+public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
     @ExceptionHandler(AuthenticationException.class)
@@ -50,20 +51,6 @@ public class ApiExceptionHandler {
         log.error("Unexpected error!", ex);
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), req.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
-    }
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ExceptionResponse> handleValidationExceptions(MethodArgumentNotValidException ex, WebRequest req) {
-        log.error("Unexpected error!", ex);
-        // Temporary solution
-        List<String> errors = new ArrayList<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String errorMessage = error.getDefaultMessage();
-            errors.add(errorMessage);
-        });
-        StringBuilder errorsStrBuilder = new StringBuilder();
-        errors.forEach(errorsStrBuilder::append);
-        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), errorsStrBuilder.toString(), req.getDescription(false));
-        return  new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ExceptionResponse> handleRuntimeExceptions(RuntimeException ex, WebRequest req) {
