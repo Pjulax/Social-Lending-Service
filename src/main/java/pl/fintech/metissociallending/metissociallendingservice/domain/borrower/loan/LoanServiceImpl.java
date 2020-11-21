@@ -42,7 +42,7 @@ public class LoanServiceImpl implements LoanService {
                 .acceptedInterest(offer.getAnnualPercentageRate())
                 .startDate(new Date(clock.millis()))//TODO later we can chose date, right now it is set since now
                 .takenAmount(auction.getLoanAmount().doubleValue())
-                .installments(createInstallments(new Date(clock.millis()), auction.getLoanAmount().doubleValue(), offer.getAnnualPercentageRate(), auction.getNumberOfInstallments()))
+                .installments(createInstallmentsSchedule(new Date(clock.millis()), auction.getLoanAmount().doubleValue(), offer.getAnnualPercentageRate(), auction.getNumberOfInstallments()))
                 .build();
        return loanRepository.save(loan);
     }
@@ -52,38 +52,49 @@ public class LoanServiceImpl implements LoanService {
         return loanRepository.findAllByBorrower(userService.whoami());
     }
 
-    private List<Installment> createInstallments(Date startDate, Double takenAmount, Double acceptedInterest, Integer numberOfInstallments) {
+    private List<Installment> createInstallmentsSchedule(Date startDate, Double takenAmount, Double acceptedInterest, Integer numberOfInstallments) {
         if(numberOfInstallments < 1)
             return List.of();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(startDate);
-        BigDecimal amountToPay = BigDecimal.valueOf(takenAmount);
-        BigDecimal amountToPayMonthly = amountToPay.divide(BigDecimal.valueOf(numberOfInstallments),2, RoundingMode.HALF_UP);
-        BigDecimal interestAmount = amountToPayMonthly.multiply(BigDecimal.valueOf(acceptedInterest)).setScale(2,RoundingMode.HALF_UP);
-        BigDecimal totalAmount = amountToPayMonthly.add(interestAmount).setScale(2,RoundingMode.HALF_UP);
-        amountToPay = amountToPay.multiply(BigDecimal.ONE.add(BigDecimal.valueOf(acceptedInterest)));
-        List<Installment> installments = getInstallments(numberOfInstallments, calendar, amountToPay, amountToPayMonthly, interestAmount, totalAmount);
-        return installments;
+        Calendar loanStartDate = Calendar.getInstance();
+        loanStartDate.setTime(startDate);
+        BigDecimal totalAmountToPayForLoan = BigDecimal.valueOf(takenAmount);
+        BigDecimal baseAmount = totalAmountToPayForLoan.divide(BigDecimal.valueOf(numberOfInstallments),2, RoundingMode.HALF_UP);
+        BigDecimal interestAmount = baseAmount.multiply(BigDecimal.valueOf(acceptedInterest)).setScale(2,RoundingMode.HALF_UP);
+        BigDecimal totalAmount = baseAmount.add(interestAmount).setScale(2,RoundingMode.HALF_UP);
+        totalAmountToPayForLoan = BigDecimal.ONE.add(BigDecimal.valueOf(acceptedInterest)).multiply(totalAmountToPayForLoan);
+        return calculateInstallmentsSchedule(numberOfInstallments, loanStartDate, totalAmountToPayForLoan, baseAmount, interestAmount, totalAmount);
     }
 
-    private List<Installment> getInstallments(Integer numberOfInstallments, Calendar calendar, BigDecimal amountToPay, BigDecimal amountToPayMonthly, BigDecimal interestAmount, BigDecimal totalAmount) {
-        List<Installment> installments = new LinkedList<Installment>();
+    private List<Installment> calculateInstallmentsSchedule(Integer numberOfInstallments, Calendar paymentDate, BigDecimal totalAmountToPayForLoan, BigDecimal baseAmount, BigDecimal interestAmount, BigDecimal totalAmount) {
+        List<Installment> installments = new LinkedList<>();
+        BigDecimal leftAmountToPayForLoan = totalAmountToPayForLoan;
         for(long index = 0; index < numberOfInstallments; index++){
-            calendar.add(Calendar.MONTH, 1);
-            Installment installment = Installment.builder()
-                    .index(index)
-                    .due(calendar.getTime())
-                    .amount(amountToPayMonthly)
-                    .interest(interestAmount)
-                    .fine(BigDecimal.ZERO)
-                    .total(totalAmount)
-                    .left(amountToPay.subtract(amountToPayMonthly.add(interestAmount).multiply(BigDecimal.valueOf(index+1))))
-                    .status(InstallmentStatus.NOT_PAID)
-                    .build();
-            installment = installmentRepository.save(installment);
+            paymentDate.add(Calendar.MONTH, 1);
+            leftAmountToPayForLoan = leftAmountToPayForLoan.subtract(totalAmount);
+            if(index == numberOfInstallments-1){
+                baseAmount = baseAmount.add(leftAmountToPayForLoan);
+                totalAmount = totalAmount.add(leftAmountToPayForLoan);
+                leftAmountToPayForLoan = BigDecimal.ZERO;
+            }
+            Installment installment = createInstallment(index, paymentDate.getTime(), leftAmountToPayForLoan, baseAmount, interestAmount, totalAmount);
             installments.add(installment);
         }
         return installments;
+    }
+
+    private Installment createInstallment(long index, Date paymentDate, BigDecimal leftAmountToPayForLoan, BigDecimal baseAmount, BigDecimal interestAmount, BigDecimal totalAmount) {
+        Installment installment = Installment.builder()
+                .index(index)
+                .due(paymentDate)
+                .amount(baseAmount)
+                .interest(interestAmount)
+                .fine(BigDecimal.ZERO)
+                .total(totalAmount)
+                .left(leftAmountToPayForLoan)
+                .status(InstallmentStatus.WAITING)
+                .build();
+        installment = installmentRepository.save(installment);
+        return installment;
     }
 
 }
