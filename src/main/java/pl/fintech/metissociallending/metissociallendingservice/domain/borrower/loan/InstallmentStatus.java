@@ -1,5 +1,5 @@
 package pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan;
 
-public interface InstallmentRepository {
-    Installment save(Installment installment);
+public enum InstallmentStatus {
+    NOT_PAID, PAID, AFTER_TERM;
 }

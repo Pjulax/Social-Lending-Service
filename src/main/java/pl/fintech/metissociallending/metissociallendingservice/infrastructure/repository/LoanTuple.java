@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name="TUPLE")
+@Table(name="LOAN")
 public class LoanTuple {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

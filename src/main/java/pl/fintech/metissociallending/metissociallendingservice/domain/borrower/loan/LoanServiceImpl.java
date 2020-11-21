@@ -10,10 +10,10 @@ import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserRepository;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserService;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Clock;
-import java.util.Date;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -23,6 +23,7 @@ public class LoanServiceImpl implements LoanService {
     private final UserService userService;
     private final OfferRepository offerRepository;
     private final LoanRepository loanRepository;
+    private final InstallmentRepository installmentRepository;
     private final UserRepository userRepository;
     private final Clock clock;
 
@@ -52,7 +53,37 @@ public class LoanServiceImpl implements LoanService {
     }
 
     private List<Installment> createInstallments(Date startDate, Double takenAmount, Double acceptedInterest, Integer numberOfInstallments) {
-        return List.of(); // TODO
+        if(numberOfInstallments < 1)
+            return List.of();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+        BigDecimal amountToPay = BigDecimal.valueOf(takenAmount);
+        BigDecimal amountToPayMonthly = amountToPay.divide(BigDecimal.valueOf(numberOfInstallments),2, RoundingMode.HALF_UP);
+        BigDecimal interestAmount = amountToPayMonthly.multiply(BigDecimal.valueOf(acceptedInterest)).setScale(2,RoundingMode.HALF_UP);
+        BigDecimal totalAmount = amountToPayMonthly.add(interestAmount).setScale(2,RoundingMode.HALF_UP);
+        amountToPay = amountToPay.multiply(BigDecimal.ONE.add(BigDecimal.valueOf(acceptedInterest)));
+        List<Installment> installments = getInstallments(numberOfInstallments, calendar, amountToPay, amountToPayMonthly, interestAmount, totalAmount);
+        return installments;
+    }
+
+    private List<Installment> getInstallments(Integer numberOfInstallments, Calendar calendar, BigDecimal amountToPay, BigDecimal amountToPayMonthly, BigDecimal interestAmount, BigDecimal totalAmount) {
+        List<Installment> installments = new LinkedList<Installment>();
+        for(long index = 0; index < numberOfInstallments; index++){
+            calendar.add(Calendar.MONTH, 1);
+            Installment installment = Installment.builder()
+                    .index(index)
+                    .due(calendar.getTime())
+                    .amount(amountToPayMonthly)
+                    .interest(interestAmount)
+                    .fine(BigDecimal.ZERO)
+                    .total(totalAmount)
+                    .left(amountToPay.subtract(amountToPayMonthly.add(interestAmount).multiply(BigDecimal.valueOf(index+1))))
+                    .status(InstallmentStatus.NOT_PAID)
+                    .build();
+            installment = installmentRepository.save(installment);
+            installments.add(installment);
+        }
+        return installments;
     }
 
 }

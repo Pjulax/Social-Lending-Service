@@ -26,8 +26,8 @@ public class JpaDBConfiguration {
         return new JpaLoanRepositoryImpl(jpaLoanRepo);
     }
     @Bean
-    JpaInstallmentRepositoryImpl jpaInstallmentRepository(JpaInstallmentRepositoryImpl.JpaInstallmentsRepo jpaInstallmentsRepo){
-        return  new JpaInstallmentRepositoryImpl(jpaInstallmentsRepo);
+    JpaInstallmentRepositoryImpl jpaInstallmentRepository(JpaInstallmentRepositoryImpl.JpaInstallmentRepo jpaInstallmentRepo){
+        return  new JpaInstallmentRepositoryImpl(jpaInstallmentRepo);
     }
 
 }
