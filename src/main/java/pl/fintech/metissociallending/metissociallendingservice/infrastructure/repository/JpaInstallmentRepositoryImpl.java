@@ -2,13 +2,20 @@ package pl.fintech.metissociallending.metissociallendingservice.infrastructure.r
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
+import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.Installment;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.InstallmentRepository;
+import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.Loan;
 
 @RequiredArgsConstructor
 public class JpaInstallmentRepositoryImpl implements InstallmentRepository {
-    private final JpaInstallmentRepositoryImpl.JpaInstallmentsRepo jpaInstallmentsRepo;
+    private final JpaInstallmentRepositoryImpl.JpaInstallmentRepo jpaInstallmentRepo;
+
+    @Override
+    public Installment save(Installment installment) {
+        return jpaInstallmentRepo.save(InstallmentTuple.from(installment)).toDomain();
+    }
 
 
-    interface JpaInstallmentsRepo extends JpaRepository<LoanTuple, Long> {
+    interface JpaInstallmentRepo extends JpaRepository<InstallmentTuple, Long> {
     }
 }
