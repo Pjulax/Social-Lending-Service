@@ -1,6 +1,7 @@
 package pl.fintech.metissociallending.metissociallendingservice.domain.borrower;
 
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.AuctionWithOffersDTO;
+import pl.fintech.metissociallending.metissociallendingservice.api.dto.OfferDTO;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.Loan;
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.Offer;
 
@@ -34,7 +35,7 @@ public interface BorrowerService {
             Date getEndDate();
             Integer getNumberOfInstallments();
             String getDescription();
-            List<Offer> getOffers();
+            List<OfferDTO> getOffers();
             Boolean isClosed();
         }
     }

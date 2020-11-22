@@ -8,6 +8,7 @@ import pl.fintech.metissociallending.metissociallendingservice.domain.lender.Off
 import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Setter
@@ -49,9 +50,11 @@ public class AuctionWithOffersDTO implements BorrowerService.Query.getAuction {
     }
 
     @Override
-    public List<Offer> getOffers() {
-        return offers;
-    } //TODO OfferDTO instead of Offer
+    public List<OfferDTO> getOffers() {
+        if(offers.isEmpty())
+            return List.of();
+        return offers.stream().map(OfferDTO::from).collect(Collectors.toList());
+    }
 
     @Override
     public Boolean isClosed() {
