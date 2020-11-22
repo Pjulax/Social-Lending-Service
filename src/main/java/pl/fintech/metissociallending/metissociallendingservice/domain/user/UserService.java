@@ -7,11 +7,15 @@ public interface UserService {
     String login(Query.Login login);
     User whoami();
     UserDetailsDTO getUserDetails();
+    String deleteUser(Command.DeleteUser deleteUser);
 
     interface Command {
         interface CreateUser extends Command{
              String getUsername();
              String getPassword();
+        }
+        interface DeleteUser extends Command{
+            String getUsername();
         }
 
     }

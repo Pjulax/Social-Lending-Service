@@ -23,12 +23,12 @@ import pl.fintech.metissociallending.metissociallendingservice.api.UserControlle
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
-    @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ExceptionResponse> handleAuthenticationException(AuthenticationException ex, WebRequest req){
-        log.error("Authentication error", ex);
-        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), req.getDescription(false));
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
-    }
+//    @ExceptionHandler(AuthenticationException.class)
+//    public ResponseEntity<ExceptionResponse> handleAuthenticationException(AuthenticationException ex, WebRequest req){
+//        log.error("Authentication error", ex);
+//        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), req.getDescription(false));
+//        return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
+//    }
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<ExceptionResponse> handleNoSuchElementException(NoSuchElementException ex, WebRequest req){
         log.error("Unexpected error!", ex);
