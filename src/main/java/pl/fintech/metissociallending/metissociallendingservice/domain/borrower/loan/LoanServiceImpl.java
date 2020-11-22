@@ -1,5 +1,6 @@
 package pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.Auction;
@@ -7,7 +8,6 @@ import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.A
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.Offer;
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.OfferRepository;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
-import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserRepository;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserService;
 
 import java.math.BigDecimal;
@@ -28,13 +28,12 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public Loan acceptOffer(LoanService.Command.AcceptOffer acceptOffer) {
-        Auction auction = auctionRepository.findById(acceptOffer.getAuctionId()).orElseThrow(() -> new NoSuchElementException("Auction with that id doesn't exist"));
+        Auction auction = findAuction(acceptOffer);
+        Offer offer = findOffer(acceptOffer, auction);
+        return createLoan(auction, offer);
+    }
 
-        if(auctionRepository.findByIdAndBorrower(auction.getId(), userService.whoami()).isEmpty())
-            throw new IllegalArgumentException("Auction doesn't belong to logged user");
-        Offer offer = offerRepository.findById(acceptOffer.getOfferId()).orElseThrow(() -> new NoSuchElementException("Offer with that id doesn't exist"));
-        if(!offer.getAuction().getId().equals(auction.getId()))
-            throw new IllegalArgumentException("Offer wasn't placed to provided auction");
+    private Loan createLoan(Auction auction, Offer offer) {
         User lender = offer.getLender();
         Loan loan = Loan.builder()
                 .borrower(userService.whoami())
@@ -44,7 +43,22 @@ public class LoanServiceImpl implements LoanService {
                 .takenAmount(auction.getLoanAmount().doubleValue())
                 .installments(createInstallmentsSchedule(new Date(clock.millis()), auction.getLoanAmount().doubleValue(), offer.getAnnualPercentageRate(), auction.getNumberOfInstallments()))
                 .build();
-       return loanRepository.save(loan);
+        return loanRepository.save(loan);
+    }
+
+    private Offer findOffer(Command.AcceptOffer acceptOffer, Auction auction) {
+        Offer offer = offerRepository.findById(acceptOffer.getOfferId()).orElseThrow(() -> new NoSuchElementException("Offer with that id doesn't exist"));
+        if(!offer.getAuction().getId().equals(auction.getId()))
+            throw new IllegalArgumentException("Offer wasn't placed to provided auction");
+        return offer;
+    }
+
+    private Auction findAuction(@NonNull Command.AcceptOffer acceptOffer) {
+        Auction auction = auctionRepository.findById(acceptOffer.getAuctionId()).orElseThrow(() -> new NoSuchElementException("Auction with that id doesn't exist"));
+
+        if(auctionRepository.findByIdAndBorrower(auction.getId(), userService.whoami()).isEmpty())
+            throw new IllegalArgumentException("Auction doesn't belong to logged user");
+        return auction;
     }
 
     @Override
