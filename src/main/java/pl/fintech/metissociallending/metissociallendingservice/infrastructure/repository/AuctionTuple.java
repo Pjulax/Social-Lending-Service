@@ -5,6 +5,7 @@ import lombok.*;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.Auction;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -26,9 +27,11 @@ public class AuctionTuple {
     private Date endDate;
     private Integer numberOfInstallments;
     private Boolean isClosed;
+    @Size(min=3, max=255)
+    private String description;
 
     static AuctionTuple from(Auction auction) {
-        return new AuctionTuple(auction.getId(),auction.getLoanAmount(),auction.getBeginDate(),auction.getEndDate(),auction.getNumberOfInstallments(),auction.getIsClosed());
+        return new AuctionTuple(auction.getId(),auction.getLoanAmount(),auction.getBeginDate(),auction.getEndDate(),auction.getNumberOfInstallments(), auction.getIsClosed(), auction.getDescription());
     }
     Auction toDomain(){
         return Auction.builder()
@@ -38,6 +41,7 @@ public class AuctionTuple {
                 .endDate(endDate)
                 .numberOfInstallments(numberOfInstallments)
                 .isClosed(isClosed)
+                .description(description)
                 .build();
     }
 

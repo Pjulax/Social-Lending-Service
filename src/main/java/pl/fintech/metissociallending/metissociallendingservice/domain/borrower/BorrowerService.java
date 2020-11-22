@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface BorrowerService {
     Auction createNewAuctionSinceNow(Command.CreateNewAuctionSinceNow createNewAuctionSinceNowCommand);
+    Auction addAuctionDescription(Command.AddAuctionDescription addAuctionDescription);
     List<Auction> getAllAuctions();
 
     AuctionWithOffersDTO getAuctionById(Long id);
@@ -19,6 +20,11 @@ public interface BorrowerService {
             BigDecimal getLoanAmount();
             Date getEndDate();
             Integer getNumberOfInstallments();
+            String getDescription();
+        }
+        interface AddAuctionDescription extends Command{
+            Long getAuctionId();
+            String getDescription();
         }
 
     }
@@ -27,6 +33,7 @@ public interface BorrowerService {
             Double getLoanAmount();
             Date getEndDate();
             Integer getNumberOfInstallments();
+            String getDescription();
             List<Offer> getOffers();
             Boolean isClosed();
         }

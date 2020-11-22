@@ -57,7 +57,7 @@ public class UserTuple {
                 .password(password)
                 .account(account)
                 .balance(balance)
-                .roles(roles.stream().map(RoleTuple::toDomain).collect(Collectors.toList()))
+                .roles(roles==null?List.of():roles.stream().map(RoleTuple::toDomain).collect(Collectors.toList()))
                 .auctions(auctions==null?List.of():auctions.stream().map(AuctionTuple::toDomain).collect(Collectors.toList()))
                 .offers(offers==null?List.of():offers.stream().map(OfferTuple::toDomain).collect(Collectors.toList()))
                 .build();

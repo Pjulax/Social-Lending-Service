@@ -1,10 +1,14 @@
 package pl.fintech.metissociallending.metissociallendingservice.api.dto;
 
+import io.micrometer.core.instrument.config.validate.InvalidReason;
+import io.micrometer.core.instrument.config.validate.Validated;
+import io.micrometer.core.instrument.config.validate.ValidationException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.BorrowerService;
 
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,6 +21,10 @@ public class AuctionDTO implements BorrowerService.Command.CreateNewAuctionSince
     private Double loanAmount;
     private String endDate;
     private Integer numberOfInstallments;
+    @Size(  min=3,
+            max=255,
+            message = "The description '${validatedValue}' must be between {min} and {max} characters long")
+    private String description;
 
     @Override
     public BigDecimal getLoanAmount() {
@@ -29,7 +37,7 @@ public class AuctionDTO implements BorrowerService.Command.CreateNewAuctionSince
         try {
             date = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(endDate);
         }catch (ParseException e){
-            System.out.println(e);
+            throw new ValidationException(Validated.invalid("Auction end date", endDate, " must be in format 'dd/MM/yyyy HH:mm'", InvalidReason.MALFORMED));
         }
         return date;
     }
@@ -39,4 +47,8 @@ public class AuctionDTO implements BorrowerService.Command.CreateNewAuctionSince
         return numberOfInstallments;
     }
 
+    @Override
+    public String getDescription() {
+        return description;
+    }
 }
