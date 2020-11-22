@@ -47,6 +47,14 @@ public class UserServiceImpl implements UserService{
         return userRepository.save(user);
     }
     @Override
+    public String deleteUser(Command.DeleteUser deleteUser){
+        if(userRepository.findByUsername(deleteUser.getUsername()).isPresent()) {
+            userRepository.deleteByUsername(deleteUser.getUsername());
+            return "User deleted successfully";
+        }
+        return "User doesn't exists";
+    }
+    @Override
     public String login(Query.Login login) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()));
         return jwtTokenProvider.createToken(login.getUsername(), userRepository.findByUsername(login.getUsername()).get().getRoles());
