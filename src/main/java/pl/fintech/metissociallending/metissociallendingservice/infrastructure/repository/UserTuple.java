@@ -1,11 +1,7 @@
 package pl.fintech.metissociallending.metissociallendingservice.infrastructure.repository;
 
 import lombok.*;
-
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
-
 import javax.persistence.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,12 +25,7 @@ public class UserTuple {
     private Double balance;
     @ElementCollection(fetch = FetchType.EAGER)
     private  List<RoleTuple> roles;
-    @OneToMany
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private List<AuctionTuple> auctions;
-    @OneToMany
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private List<OfferTuple> offers;
+
 
     static UserTuple from(User user){
         return new UserTuple(user.getId(),
@@ -43,11 +34,7 @@ public class UserTuple {
                 user.getAccount(),
                 user.getBalance(),
                 user.getRoles()==null?List.of():
-                user.getRoles().stream().map(RoleTuple::from).collect(Collectors.toList()),
-                user.getAuctions()==null?List.of():
-                user.getAuctions().stream().map(AuctionTuple::from).collect(Collectors.toList()),
-                user.getOffers()==null?List.of():
-                user.getOffers().stream().map(OfferTuple::from).collect(Collectors.toList())
+                user.getRoles().stream().map(RoleTuple::from).collect(Collectors.toList())
         );
     }
     User toDomain(){
@@ -58,8 +45,6 @@ public class UserTuple {
                 .account(account)
                 .balance(balance)
                 .roles(roles==null?List.of():roles.stream().map(RoleTuple::toDomain).collect(Collectors.toList()))
-                .auctions(auctions==null?List.of():auctions.stream().map(AuctionTuple::toDomain).collect(Collectors.toList()))
-                .offers(offers==null?List.of():offers.stream().map(OfferTuple::toDomain).collect(Collectors.toList()))
                 .build();
     }
 }

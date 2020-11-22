@@ -12,9 +12,13 @@ import org.springframework.web.context.request.WebRequest;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.AuctionDTO;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.AuctionDescriptionDTO;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.AuctionWithOffersDTO;
-import pl.fintech.metissociallending.metissociallendingservice.api.exception.ExceptionResponse;
+import pl.fintech.metissociallending.metissociallendingservice.api.dto.LoanDTO;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.Auction;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.BorrowerService;
+import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.Loan;
+import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.LoanService;
+import pl.fintech.metissociallending.metissociallendingservice.api.exception.ExceptionResponse;
+
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -27,8 +31,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BorrowerController {
 
-    private static final Logger log = LoggerFactory.getLogger(BorrowerController.class);
-    private final BorrowerService borrowerService;
+   private final BorrowerService borrowerService;
+   private final LoanService loanService;
+   private static final Logger log = LoggerFactory.getLogger(BorrowerController.class);
 
     @PostMapping("/auctions")
     public Auction createNewAuctionSinceNow( @Valid @RequestBody AuctionDTO auctionDTO){
@@ -46,8 +51,37 @@ public class BorrowerController {
     }
 
     @GetMapping("/auctions/{id}")
-    public AuctionWithOffersDTO getAuction(@PathVariable Long id){
+    public AuctionWithOffersDTO getAuctionWithOffers(@PathVariable Long id){
         return borrowerService.getAuctionById(id);
+    }
+
+    @PostMapping("/auctions/{auction_id}/accept-offer")
+    public LoanDTO acceptOffer(@PathVariable Long auction_id, @RequestParam Long offer_id){
+
+        Loan loan = loanService.acceptOffer(new LoanService.Command.AcceptOffer() {
+            @Override
+            public Long getAuctionId() {
+                return auction_id;
+            }
+
+            @Override
+            public Long getOfferId() {
+                return offer_id;
+            }
+        });
+        return LoanDTO.builder()
+                .acceptedInterest(loan.getAcceptedInterest())
+                .borrower(loan.getBorrower().getUsername())
+                .lender(loan.getLender().getUsername())
+                .id(loan.getId())
+                .installments(loan.getInstallments())
+                .startDate(loan.getStartDate())
+                .takenAmount(loan.getTakenAmount())
+                .build();
+    }
+    @GetMapping("/loans")
+    public List<Loan> getMyLoans(){
+        return loanService.getLoansByBorrower();
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -64,5 +98,4 @@ public class BorrowerController {
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), errorsStrBuilder.toString(), req.getDescription(false));
         return  new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
-
 }

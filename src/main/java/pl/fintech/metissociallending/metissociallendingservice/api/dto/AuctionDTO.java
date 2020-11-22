@@ -33,7 +33,7 @@ public class AuctionDTO implements BorrowerService.Command.CreateNewAuctionSince
 
     @Override
     public Date getEndDate() {
-        Date date = new Date();
+        Date date;
         try {
             date = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(endDate);
         }catch (ParseException e){
