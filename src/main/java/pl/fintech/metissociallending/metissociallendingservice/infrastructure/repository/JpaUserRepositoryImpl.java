@@ -33,16 +33,8 @@ public class JpaUserRepositoryImpl implements UserRepository {
         return Optional.of(borrowerTupleOptional.get().toDomain());
     }
 
-    @Override
-    public Optional<User> findByOffer(Offer offer) {
-        Optional<UserTuple> borrowerTupleOptional = jpaUserRepo.findByOffersContaining(OfferTuple.from(offer));
-        if(borrowerTupleOptional.isEmpty())
-            return Optional.empty();
-        return Optional.of(borrowerTupleOptional.get().toDomain());
-    }
 
     interface JpaUserRepo extends JpaRepository<UserTuple, Long>{
         Optional<UserTuple> findByUsername(String username);
-        Optional<UserTuple> findByOffersContaining(OfferTuple offerTuple);
     }
 }

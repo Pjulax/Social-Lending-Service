@@ -2,9 +2,7 @@ package pl.fintech.metissociallending.metissociallendingservice.api.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.Installment;
-import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
 
 import java.util.Date;
 import java.util.List;
