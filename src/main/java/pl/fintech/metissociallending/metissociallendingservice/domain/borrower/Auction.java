@@ -19,9 +19,7 @@ public class Auction{
     private final Date beginDate;
     private final Date endDate;
     private final Integer numberOfInstallments;
-<<<<<<< HEAD
     private final Boolean isClosed;
-=======
     private String description;
 
     public void changeDescription(String description) {
@@ -30,12 +28,4 @@ public class Auction{
          }
          this.description = description;
     }
-
-//    public Auction(BorrowerService.Command.CreateNewAuctionSinceNow createNewAuctionSinceNowCommand){
-//        this(createNewAuctionSinceNowCommand.getLoanAmount(), createNewAuctionSinceNowCommand.getBeginLoanDate(),
-//                createNewAuctionSinceNowCommand.getEndDate(), createNewAuctionSinceNowCommand.getBeginLoanDate(),
-//                createNewAuctionSinceNowCommand.getEndLoanDate(), createNewAuctionSinceNowCommand.getInstallmentsFrequencyInYear());
-//    }
-
->>>>>>> d6c70d0ec0455dccecc8fa2cdfbddbc12c8b6190
 }

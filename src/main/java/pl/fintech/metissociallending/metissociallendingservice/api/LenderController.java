@@ -29,5 +29,4 @@ public class LenderController {
         return lenderService.getAllAvailableAuctions();
     }
 
-
 }
