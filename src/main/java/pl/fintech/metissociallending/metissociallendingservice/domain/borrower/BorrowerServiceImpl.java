@@ -56,7 +56,7 @@ public class BorrowerServiceImpl implements BorrowerService {
         Auction auction = auctionRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Auction with that id doesn't exist"));
         if(checkIfAuctionIsClosed(auction)) {
             auction.close();
-            auctionRepository.save(auction);
+            auction = auctionRepository.save(auction);
         }
         return AuctionWithOffersDTO.fromDomain(auction, offerRepository.findAllByAuction(auction));
     }
