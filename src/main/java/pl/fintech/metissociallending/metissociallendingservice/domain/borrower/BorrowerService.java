@@ -1,6 +1,8 @@
 package pl.fintech.metissociallending.metissociallendingservice.domain.borrower;
 
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.AuctionWithOffersDTO;
+import pl.fintech.metissociallending.metissociallendingservice.api.dto.OfferDTO;
+import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.Loan;
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.Offer;
 
 import java.math.BigDecimal;
@@ -28,12 +30,13 @@ public interface BorrowerService {
 
     }
     interface Query {
-        interface getAuction extends  Query {
+        interface getAuction extends Query {
             Double getLoanAmount();
             Date getEndDate();
             Integer getNumberOfInstallments();
             String getDescription();
-            List<Offer> getOffers();
+            List<OfferDTO> getOffers();
+            Boolean isClosed();
         }
     }
 }

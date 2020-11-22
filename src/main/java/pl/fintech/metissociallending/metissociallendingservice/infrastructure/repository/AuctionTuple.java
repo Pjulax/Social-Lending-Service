@@ -19,26 +19,30 @@ public class AuctionTuple {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
+    @ManyToOne
+    private UserTuple borrower;
     private BigDecimal loanAmount;
     @Temporal(TemporalType.TIMESTAMP)
     private Date beginDate;
     @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
     private Integer numberOfInstallments;
+    private Boolean isClosed;
     @Size(min=3, max=255)
     private String description;
 
     static AuctionTuple from(Auction auction) {
-        return new AuctionTuple(auction.getId(),auction.getLoanAmount(),auction.getBeginDate(),auction.getEndDate(),auction.getNumberOfInstallments(), auction.getDescription());
+        return new AuctionTuple(auction.getId(),UserTuple.from(auction.getBorrower()),auction.getLoanAmount(),auction.getBeginDate(),auction.getEndDate(),auction.getNumberOfInstallments(), auction.getIsClosed(), auction.getDescription());
     }
     Auction toDomain(){
         return Auction.builder()
                 .beginDate(beginDate)
                 .id(id)
+                .borrower(borrower.toDomain())
                 .loanAmount(loanAmount)
                 .endDate(endDate)
                 .numberOfInstallments(numberOfInstallments)
+                .isClosed(isClosed)
                 .description(description)
                 .build();
     }
