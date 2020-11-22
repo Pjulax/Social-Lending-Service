@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.Auction;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.AuctionRepository;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
-import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserRepository;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserService;
 
 import java.time.Clock;
@@ -23,13 +22,12 @@ public class LenderServiceImpl implements LenderService {
     private final OfferRepository offerRepository;
     private final Clock clock;
     private final UserService userService;
-    private final UserRepository userRepository;
 
     @Override
     public Offer submitOffer(Command.SubmitOffer submitOfferCommand) {
         Auction auction = auctionRepository.findById(submitOfferCommand.getAuctionId()).orElseThrow();
         User user = userService.whoami();
-        if(user.getAuctions().contains(auction))
+        if(auctionRepository.findByIdAndBorrower(auction.getId(), user).isPresent())
             throw new IllegalArgumentException("User cannot create offer for his own auction");
         if(submitOfferCommand.getProposedAnnualPercentageRate()<.0d)
             throw new ValidationException(Validated.invalid("annual proposed percentage rate", submitOfferCommand.getProposedAnnualPercentageRate(), " cannot be below or equal 0", InvalidReason.MALFORMED));
@@ -37,11 +35,9 @@ public class LenderServiceImpl implements LenderService {
                 .auction(auction)
                 .annualPercentageRate(submitOfferCommand.getProposedAnnualPercentageRate())
                 .date(new Date(clock.millis()))
+                .lender(user)
                 .build();
-        offer = offerRepository.save(offer);
-        user.addOffer(offer);
-        userRepository.save(user);
-        return offer;
+        return offerRepository.save(offer);
     }
 
     @Override
@@ -51,13 +47,13 @@ public class LenderServiceImpl implements LenderService {
 
     @Override
     public List<Offer> getAllOffers() {
-        return userService.whoami().getOffers();
+        return offerRepository.findAllByLender(userService.whoami());
     }
 
     @Override
     public List<Auction> getAllAvailableAuctions() {
         List<Auction> auctions = auctionRepository.findAll();
-        auctions.removeAll(userService.whoami().getAuctions());
+        auctions.removeAll(auctionRepository.findAllByBorrower(userService.whoami()));
         return auctions;
     }
 }

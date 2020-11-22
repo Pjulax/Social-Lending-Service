@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.Auction;
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.Offer;
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.OfferRepository;
+import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +35,14 @@ public class JpaOfferRepositoryImpl implements OfferRepository {
         return Optional.of(offerTuple.get().toDomain());
     }
 
+    @Override
+    public List<Offer> findAllByLender(User lender) {
+        List<OfferTuple> offerTuples = jpaOfferRepo.findAllByLender(UserTuple.from(lender));
+        if(offerTuples.isEmpty())
+            return List.of();
+        return offerTuples.stream().map(OfferTuple::toDomain).collect(Collectors.toList());
+    }
+
 
     @Override
     public List<Offer> findAll() {
@@ -43,6 +52,7 @@ public class JpaOfferRepositoryImpl implements OfferRepository {
 
     interface  JpaOfferRepo extends JpaRepository<OfferTuple, Long>{
         List<OfferTuple> findAllByAuction(AuctionTuple auctionTuple);
+        List<OfferTuple> findAllByLender(UserTuple lender);
     }
 
 }

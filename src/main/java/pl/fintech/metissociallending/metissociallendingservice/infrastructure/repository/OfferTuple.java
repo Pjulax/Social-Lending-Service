@@ -1,6 +1,7 @@
 package pl.fintech.metissociallending.metissociallendingservice.infrastructure.repository;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,6 +30,9 @@ public class OfferTuple {
     @ManyToOne
     private AuctionTuple auction;
 
+    @ManyToOne
+    private UserTuple lender;
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
@@ -38,12 +42,14 @@ public class OfferTuple {
     static OfferTuple from(Offer offer){
         return new OfferTuple(offer.getId(),
                 AuctionTuple.from(offer.getAuction()),
+                UserTuple.from(offer.getLender()),
                 offer.getDate(),
                 offer.getAnnualPercentageRate());
     }
     Offer toDomain() {
         return Offer.builder().date(date)
                 .annualPercentageRate(annualPercentageRate)
+                .lender(lender.toDomain())
                 .auction(auction.toDomain())
                 .id(id)
                 .build();

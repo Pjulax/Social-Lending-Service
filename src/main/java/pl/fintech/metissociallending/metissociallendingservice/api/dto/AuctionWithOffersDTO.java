@@ -1,6 +1,7 @@
 package pl.fintech.metissociallending.metissociallendingservice.api.dto;
 import lombok.Builder;
 import lombok.Setter;
+import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.Auction;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.BorrowerService;
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.Offer;
 
@@ -21,6 +22,15 @@ public class AuctionWithOffersDTO implements BorrowerService.Query.getAuction {
     private String description;
     private List<Offer> offers;
     private Boolean isClosed;
+
+    public static AuctionWithOffersDTO fromDomain(Auction auction, List<Offer> offers) {
+        return new AuctionWithOffersDTO(auction.getLoanAmount().doubleValue(),
+                auction.getEndDate(),
+                auction.getNumberOfInstallments(),
+                auction.getDescription(),
+                offers,
+                auction.getIsClosed());
+    }
 
     public Double getLoanAmount() {
         return loanAmount;

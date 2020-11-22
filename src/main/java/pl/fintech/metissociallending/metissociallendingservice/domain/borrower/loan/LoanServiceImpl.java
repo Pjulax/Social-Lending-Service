@@ -24,18 +24,18 @@ public class LoanServiceImpl implements LoanService {
     private final OfferRepository offerRepository;
     private final LoanRepository loanRepository;
     private final InstallmentRepository installmentRepository;
-    private final UserRepository userRepository;
     private final Clock clock;
 
     @Override
     public Loan acceptOffer(LoanService.Command.AcceptOffer acceptOffer) {
         Auction auction = auctionRepository.findById(acceptOffer.getAuctionId()).orElseThrow(() -> new NoSuchElementException("Auction with that id doesn't exist"));
-        if(!userService.whoami().getAuctions().contains(auction))
+
+        if(auctionRepository.findByIdAndBorrower(auction.getId(), userService.whoami()).isEmpty())
             throw new IllegalArgumentException("Auction doesn't belong to logged user");
         Offer offer = offerRepository.findById(acceptOffer.getOfferId()).orElseThrow(() -> new NoSuchElementException("Offer with that id doesn't exist"));
         if(!offer.getAuction().getId().equals(auction.getId()))
             throw new IllegalArgumentException("Offer wasn't placed to provided auction");
-        User lender = userRepository.findByOffer(offer).orElseThrow();
+        User lender = offer.getLender();
         Loan loan = Loan.builder()
                 .borrower(userService.whoami())
                 .lender(lender)
