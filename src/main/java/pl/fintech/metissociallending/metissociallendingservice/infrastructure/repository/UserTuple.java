@@ -19,7 +19,7 @@ import javax.validation.constraints.Size;
 @Table(name="MYUSER")
 public class UserTuple {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(unique = true, nullable = false)
     private String username;
