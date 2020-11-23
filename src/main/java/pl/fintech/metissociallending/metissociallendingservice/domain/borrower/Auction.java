@@ -4,7 +4,6 @@ package pl.fintech.metissociallending.metissociallendingservice.domain.borrower;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.micrometer.core.instrument.util.StringUtils;
 import lombok.*;
-import pl.fintech.metissociallending.metissociallendingservice.api.exception.ExistingObjectException;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
 
 import java.math.BigDecimal;
@@ -35,7 +34,7 @@ public class Auction{
 
     public void changeDescription(String description) {
          if (!StringUtils.isEmpty(this.description)) {
-          throw new ExistingObjectException("Description in auction already exists");
+          throw new IllegalArgumentException("Description in auction already exists");
          }
          this.description = description;
     }

@@ -3,13 +3,9 @@ package pl.fintech.metissociallending.metissociallendingservice.api;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.AuctionDTO;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.AuctionDescriptionDTO;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.AuctionWithOffersDTO;
@@ -18,12 +14,8 @@ import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.A
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.BorrowerService;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.Loan;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.LoanService;
-import pl.fintech.metissociallending.metissociallendingservice.api.exception.ExceptionResponse;
-
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Validated
@@ -90,18 +82,4 @@ public class BorrowerController {
         return loanService.getLoansByBorrower();
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ExceptionResponse> handleValidationExceptions(MethodArgumentNotValidException ex, WebRequest req) {
-        log.error("Unexpected error!", ex);
-        // Temporary solution
-        List<String> errors = new ArrayList<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String errorMessage = error.getDefaultMessage();
-            errors.add(errorMessage);
-        });
-        StringBuilder errorsStrBuilder = new StringBuilder();
-        errors.forEach(errorsStrBuilder::append);
-        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), errorsStrBuilder.toString(), req.getDescription(false));
-        return  new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
-    }
 }

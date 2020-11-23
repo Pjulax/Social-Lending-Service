@@ -8,7 +8,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.UserDetailsDTO;
-import pl.fintech.metissociallending.metissociallendingservice.api.exception.ExistingObjectException;
 import pl.fintech.metissociallending.metissociallendingservice.domain.bank.BankClient;
 import pl.fintech.metissociallending.metissociallendingservice.domain.bank.requestEntity.AccountEntityRequest;
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.security.jwt.JwtTokenProvider;
@@ -30,7 +29,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public User createUser(UserService.Command.CreateUser createUserCommand) {
         if(userRepository.findByUsername(createUserCommand.getUsername()).isPresent())
-            throw new ExistingObjectException("User with that username already exists");
+            throw new IllegalArgumentException("User with that username already exists");
         //String account = bankService.createAccount(createUserCommand.getUsername()+"-account");
         String account = bankClient
                 .accounts(basicAuthHeader,AccountEntityRequest.builder().name(createUserCommand.getUsername()+"-account").build())
