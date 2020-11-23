@@ -22,15 +22,7 @@ public class User {
     private String username;
     private String password;
     private String account;
+    private Double balance;
     private List<Role> roles;
-    private List<Auction> auctions;
-    private List<Offer> offers;
-
-    public void addOffer(Offer offer){
-        offers.add(offer);
-    }
-    public void addAuction(Auction auction){
-        auctions.add(auction);
-    }
 
 }

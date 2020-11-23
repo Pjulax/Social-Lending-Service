@@ -24,5 +24,4 @@ public class SubmitOfferDTO implements LenderService.Command.SubmitOffer {
         return proposedAnnualPercentageRate;
     }
 
-
 }

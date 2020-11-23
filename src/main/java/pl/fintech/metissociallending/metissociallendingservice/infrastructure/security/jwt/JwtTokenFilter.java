@@ -4,6 +4,7 @@ import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -27,10 +28,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        if( token == null ){
-            SecurityContextHolder.clearContext();
-        }
-        else {
+        if(token!=null) {
             try {
                 if (jwtTokenProvider.validateToken(token)) {
                     Authentication auth = jwtTokenProvider.getAuthentication(token);
@@ -39,6 +37,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             } catch (JwtException | UsernameNotFoundException ex) {
                 //this is very important, since it guarantees the user is not authenticated at all
                 SecurityContextHolder.clearContext();
+                //todo - create model to provide JSON as in controller exceptions
                 httpServletResponse.setStatus(HttpStatus.FORBIDDEN.value());
                 httpServletResponse.setContentType("text/plain");
                 httpServletResponse.setCharacterEncoding("UTF-8");
@@ -46,7 +45,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 return;
             }
         }
-
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 

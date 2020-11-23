@@ -3,6 +3,7 @@ package pl.fintech.metissociallending.metissociallendingservice.api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.UserDTO;
+import pl.fintech.metissociallending.metissociallendingservice.api.dto.UserDetailsDTO;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserService;
 
@@ -23,4 +24,13 @@ public class UserController {
         return userService.login(userDTO);
     }
 
+    @GetMapping("/me")
+    public UserDetailsDTO getUserDetails(){
+        return userService.getUserDetails();
+    }
+
+    @DeleteMapping("/{username}")
+    public String deleteUser(@PathVariable String username){
+        return userService.deleteUser(()->username);
+    }
 }
