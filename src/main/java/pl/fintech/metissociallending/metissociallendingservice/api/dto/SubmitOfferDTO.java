@@ -12,17 +12,16 @@ import pl.fintech.metissociallending.metissociallendingservice.domain.lender.Len
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class SubmitOfferDTO implements LenderService.Command.SubmitOffer {
-    private Long id;
+    private Long auctionId;
     private Double proposedAnnualPercentageRate;
 
     @Override
     public Long getAuctionId() {
-        return id;
+        return auctionId;
     }
     @Override
     public Double getProposedAnnualPercentageRate(){
         return proposedAnnualPercentageRate;
     }
-
 
 }
