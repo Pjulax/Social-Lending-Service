@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +41,11 @@ public class BorrowerController {
         return borrowerService.createNewAuctionSinceNow(auctionDTO);
     }
 
+    @GetMapping("/hello")
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
+    public String hello(){
+        return "Welcome!";
+    }
     @PutMapping("/auctions")
     public Auction addAuctionDescription( @Valid @RequestBody AuctionDescriptionDTO auctionDescriptionDTO){
         return borrowerService.addAuctionDescription(auctionDescriptionDTO);
