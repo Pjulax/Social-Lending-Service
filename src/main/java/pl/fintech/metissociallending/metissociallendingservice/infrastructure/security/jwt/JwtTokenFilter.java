@@ -4,6 +4,7 @@ import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -27,10 +28,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
-        if( token == null ){
-            SecurityContextHolder.clearContext();
-        }
-        else {
+        if(token!=null) {
             try {
                 if (jwtTokenProvider.validateToken(token)) {
                     Authentication auth = jwtTokenProvider.getAuthentication(token);
@@ -47,7 +45,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 return;
             }
         }
-
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 
