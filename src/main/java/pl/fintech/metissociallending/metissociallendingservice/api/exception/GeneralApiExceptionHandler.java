@@ -19,15 +19,15 @@ import pl.fintech.metissociallending.metissociallendingservice.api.LenderControl
 import pl.fintech.metissociallending.metissociallendingservice.api.UserController;
 
 @ControllerAdvice(basePackageClasses = {UserController.class, LenderController.class, BorrowerController.class})
-public class ApiExceptionHandler
+public class GeneralApiExceptionHandler
         extends ResponseEntityExceptionHandler {
-    private static final Logger log = LoggerFactory.getLogger(ApiExceptionHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(GeneralApiExceptionHandler.class);
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ExceptionResponse> handleAuthenticationException(AuthenticationException ex, WebRequest req){
 //        log.error("Unexpected error!", ex);
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), req.getDescription(false));
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
     }
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<ExceptionResponse> handleNoSuchElementException(NoSuchElementException ex, WebRequest req){
@@ -35,31 +35,20 @@ public class ApiExceptionHandler
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), req.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
-    @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<Object> handleValidationException(ValidationException ex){
-//        log.error("Unexpected error!", ex);
-        return new ResponseEntity<>(ex.getValidation(), HttpStatus.BAD_REQUEST);
-    }
-    @ExceptionHandler(ExistingObjectException.class)
-    public ResponseEntity<ExceptionResponse> handleExistingUserException(ExistingObjectException ex, WebRequest req){
-//        log.error("Unexpected error!", ex);
-        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), req.getDescription(false));
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
-    }
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ExceptionResponse> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest req){
 //        log.error("Unexpected error!", ex);
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), req.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ExceptionResponse> handleRuntimeExceptions(RuntimeException ex, WebRequest req) {
-        log.error("Unexpected error!", ex);
-        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), req.getDescription(false));
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<Object> handleValidationException(ValidationException ex){
+//        log.error("Unexpected error!", ex);
+        return new ResponseEntity<>(ex.getValidation(), HttpStatus.BAD_REQUEST);
     }
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ExceptionResponse> handleExceptions(Exception ex, WebRequest req) {
+    @ExceptionHandler({ RuntimeException.class,
+                        Exception.class})
+    public ResponseEntity<ExceptionResponse> handleCaughtNotKnownExceptions(Exception ex, WebRequest req) {
         log.error("Unexpected error!", ex);
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), req.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
