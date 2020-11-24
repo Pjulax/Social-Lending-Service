@@ -1,6 +1,8 @@
 package pl.fintech.metissociallending.metissociallendingservice.api;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.UserDTO;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.UserDetailsDTO;
@@ -30,7 +32,8 @@ public class UserController {
     }
 
     @DeleteMapping("/{username}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable String username){
-        return userService.deleteUser(()->username);
+        userService.deleteUser(()->username);
     }
 }
