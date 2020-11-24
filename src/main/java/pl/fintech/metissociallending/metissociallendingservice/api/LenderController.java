@@ -1,6 +1,7 @@
 package pl.fintech.metissociallending.metissociallendingservice.api;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.SubmitOfferDTO;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.Auction;
@@ -25,6 +26,7 @@ public class LenderController {
     }
 
     @DeleteMapping("/offers/{offer_id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void cancelOffer(@PathVariable Long offer_id){
         lenderService.cancelOffer(()->offer_id);
     }
