@@ -7,7 +7,9 @@ import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserRepository;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class JpaUserRepositoryImpl implements UserRepository {
@@ -35,11 +37,19 @@ public class JpaUserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public List<User> findAll() {
+        List<UserTuple> userTupleList = jpaUserRepo.findAll();
+        if(userTupleList.isEmpty())
+            return List.of();
+        return userTupleList.stream().map(UserTuple::toDomain).collect(Collectors.toList());
+    }
+
+    @Override
     public void deleteByUsername(String username) {
         jpaUserRepo.deleteByUsername(username);
     }
 
-    interface JpaUserRepo extends JpaRepository<UserTuple, Long>{
+    public interface JpaUserRepo extends JpaRepository<UserTuple, Long>{
         Optional<UserTuple> findByUsername(String username);
         @Transactional
         void deleteByUsername(String username);
