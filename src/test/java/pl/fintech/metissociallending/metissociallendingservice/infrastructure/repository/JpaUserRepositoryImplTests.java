@@ -99,7 +99,7 @@ public class JpaUserRepositoryImplTests {
     }
 
     @Test
-    @Order(4)
+    @Order(7)
     public void whenUserSavedAndDeleted_thenDoesNotFindById() {
         LinkedList<Role> roles = new LinkedList<Role>();
         roles.add(Role.ROLE_CLIENT);
