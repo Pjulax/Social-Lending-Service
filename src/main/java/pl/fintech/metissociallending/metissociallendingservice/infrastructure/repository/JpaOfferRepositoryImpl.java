@@ -36,6 +36,14 @@ public class JpaOfferRepositoryImpl implements OfferRepository {
     }
 
     @Override
+    public Optional<Offer> findByIdAndLender(Long id, User lender) {
+        Optional<OfferTuple> offerTuple = jpaOfferRepo.findByIdAndLender(id, UserTuple.from(lender));
+        if(offerTuple.isEmpty())
+            return Optional.empty();
+        return Optional.of(offerTuple.get().toDomain());
+    }
+
+    @Override
     public List<Offer> findAllByLender(User lender) {
         List<OfferTuple> offerTuples = jpaOfferRepo.findAllByLender(UserTuple.from(lender));
         if(offerTuples.isEmpty())
@@ -43,14 +51,19 @@ public class JpaOfferRepositoryImpl implements OfferRepository {
         return offerTuples.stream().map(OfferTuple::toDomain).collect(Collectors.toList());
     }
 
-
     @Override
     public List<Offer> findAll() {
         return jpaOfferRepo.findAll()
                 .stream().map(OfferTuple::toDomain).collect(Collectors.toList());
     }
 
+    @Override
+    public void delete(Offer offer) {
+        jpaOfferRepo.delete(OfferTuple.from(offer));
+    }
+
     interface  JpaOfferRepo extends JpaRepository<OfferTuple, Long>{
+        Optional<OfferTuple> findByIdAndLender(Long id, UserTuple lender);
         List<OfferTuple> findAllByAuction(AuctionTuple auctionTuple);
         List<OfferTuple> findAllByLender(UserTuple lender);
     }

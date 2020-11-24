@@ -13,6 +13,7 @@ import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserS
 import java.time.Clock;
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 
 @RequiredArgsConstructor
@@ -42,7 +43,10 @@ public class LenderServiceImpl implements LenderService {
 
     @Override
     public void cancelOffer(Command.CancelOffer cancelOfferCommand) {
-        //TODO
+        Offer offer = offerRepository.findById(cancelOfferCommand.getOfferId()).orElseThrow(() -> new NoSuchElementException("Offer with that id doesn't exist"));
+        if(offerRepository.findByIdAndLender(cancelOfferCommand.getOfferId(), userService.whoami()).isEmpty())
+            throw new IllegalArgumentException("Offer doesn't belong to logged user");
+        offerRepository.delete(offer);
     }
 
     @Override

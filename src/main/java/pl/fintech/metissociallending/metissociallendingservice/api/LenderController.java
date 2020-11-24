@@ -24,6 +24,11 @@ public class LenderController {
         return lenderService.getAllOffers();
     }
 
+    @DeleteMapping("/offers/{offer_id}")
+    public void cancelOffer(@PathVariable Long offer_id){
+        lenderService.cancelOffer(()->offer_id);
+    }
+
     @GetMapping("/auctions")
     public List<Auction> getAllAvailableAuctions(){
         return lenderService.getAllAvailableAuctions();
