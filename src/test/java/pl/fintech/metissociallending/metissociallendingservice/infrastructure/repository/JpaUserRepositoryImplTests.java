@@ -97,4 +97,27 @@ public class JpaUserRepositoryImplTests {
             assertThat(ex).hasRootCauseExactlyInstanceOf(IllegalArgumentException.class);
         }
     }
+
+    @Test
+    @Order(4)
+    public void whenUserSavedAndDeleted_thenDoesNotFindById() {
+        LinkedList<Role> roles = new LinkedList<Role>();
+        roles.add(Role.ROLE_CLIENT);
+        User userBefore = User.builder()
+                .username("example3")
+                .password("password")
+                .account("aaaa-bbbb-cccc-dddd")
+                .balance(0.0d)
+                .roles(roles)
+                .build();
+        userBefore = jpaUserRepository.save(userBefore);
+        User userAfter = jpaUserRepository.findById(userBefore.getId()).orElseThrow(() -> new IllegalArgumentException("Not found user with name 'example3'"));
+        assertThat(userAfter.getUsername()).isEqualTo("example3");
+        assertThat(userAfter.getPassword()).isEqualTo("password");
+        assertThat(userAfter.getAccount()).isEqualTo("aaaa-bbbb-cccc-dddd");
+        assertThat(userAfter.getBalance()).isEqualTo(0.0d);
+        assertThat(userAfter.getRoles()).isEqualTo(roles);
+        jpaUserRepository.deleteByUsername("example3");
+        assertThat(jpaUserRepository.findById(userBefore.getId())).isEmpty();
+    }
 }
