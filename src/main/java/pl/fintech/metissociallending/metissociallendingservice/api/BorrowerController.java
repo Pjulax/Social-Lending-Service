@@ -1,5 +1,4 @@
 package pl.fintech.metissociallending.metissociallendingservice.api;
-
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,9 +11,7 @@ import pl.fintech.metissociallending.metissociallendingservice.api.dto.AuctionWi
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.LoanDTO;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.Auction;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.BorrowerService;
-import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.Loan;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.LoanService;
-
 import javax.validation.Valid;
 import java.util.List;
 
@@ -56,7 +53,7 @@ public class BorrowerController {
     @PostMapping("/auctions/{auction_id}/accept-offer")
     public LoanDTO acceptOffer(@PathVariable Long auction_id, @RequestParam Long offer_id){
 
-        Loan loan = loanService.acceptOffer(new LoanService.Command.AcceptOffer() {
+        return loanService.acceptOffer(new LoanService.Command.AcceptOffer() {
             @Override
             public Long getAuctionId() {
                 return auction_id;
@@ -67,19 +64,25 @@ public class BorrowerController {
                 return offer_id;
             }
         });
-        return LoanDTO.builder()
-                .acceptedInterest(loan.getAcceptedInterest())
-                .borrower(loan.getBorrower().getUsername())
-                .lender(loan.getLender().getUsername())
-                .id(loan.getId())
-                .installments(loan.getInstallments())
-                .startDate(loan.getStartDate())
-                .takenAmount(loan.getTakenAmount())
-                .build();
+
     }
     @GetMapping("/loans")
-    public List<Loan> getMyLoans(){
+    public List<LoanDTO> getMyLoans(){
         return loanService.getLoansByBorrower();
+    }
+
+    @PostMapping("/loans/{loan_id}/pay-next-installment")
+    public void payNextInstallment(@PathVariable Long loan_id, @RequestParam Double amount){
+        loanService.payNextInstallment(new LoanService.Command.PayNextInstallment() {
+            @Override
+            public Long getLoanId() {
+                return loan_id;
+            }
+            @Override
+            public Double getAmount() {
+                return amount;
+            }
+        });
     }
 
 }

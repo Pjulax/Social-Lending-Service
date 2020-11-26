@@ -10,7 +10,8 @@ import java.time.ZoneId;
 public class ClockConfig {
 
     @Bean
-    public Clock clock(){
-        return Clock.system(ZoneId.of("Europe/Warsaw"));
+    public pl.fintech.metissociallending.metissociallendingservice.infrastructure.clock.Clock clock(){
+        return new ClockImpl(1, Clock.system(ZoneId.of("Europe/Warsaw")).millis());
+        //return Clock.system(ZoneId.of("Europe/Warsaw"));
     }
 }
