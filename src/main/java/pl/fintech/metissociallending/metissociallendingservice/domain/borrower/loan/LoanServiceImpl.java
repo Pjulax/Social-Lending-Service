@@ -137,12 +137,14 @@ public class LoanServiceImpl implements LoanService {
             return List.of();
         Calendar loanStartDate = Calendar.getInstance();
         loanStartDate.setTime(startDate);
-        BigDecimal totalAmountToPayForLoan = BigDecimal.valueOf(takenAmount);
-        BigDecimal baseAmount = totalAmountToPayForLoan.divide(BigDecimal.valueOf(numberOfInstallments),2, RoundingMode.HALF_UP);
+        BigDecimal baseAmountToPayForLoan = BigDecimal.valueOf(takenAmount).setScale(2,RoundingMode.HALF_UP);
         BigDecimal totalAmountRate = calculateTotalAmountRate(acceptedInterest, numberOfInstallments);
-        BigDecimal totalAmount = baseAmount.multiply(totalAmountRate).setScale(2,RoundingMode.HALF_UP);
+        BigDecimal baseAmount = baseAmountToPayForLoan.divide(BigDecimal.valueOf(numberOfInstallments),2, RoundingMode.HALF_UP);
+
+        BigDecimal totalAmountToPayForLoan = baseAmountToPayForLoan.multiply(totalAmountRate).setScale(2,RoundingMode.HALF_UP);
+        BigDecimal totalAmount = totalAmountToPayForLoan.divide(BigDecimal.valueOf(numberOfInstallments),2, RoundingMode.HALF_UP);
         BigDecimal interestAmount = totalAmount.subtract(baseAmount).setScale(2,RoundingMode.HALF_UP);
-        totalAmountToPayForLoan = totalAmountToPayForLoan.multiply(totalAmountRate).setScale(2,RoundingMode.HALF_UP);
+
         return calculateInstallmentsSchedule(numberOfInstallments, loanStartDate, totalAmountToPayForLoan, baseAmount, interestAmount, totalAmount);
     }
 
@@ -150,10 +152,10 @@ public class LoanServiceImpl implements LoanService {
      * This method is calculating rate, which is a multiplicand of base amount to calculate total loan and installment amount.
      * @param acceptedInterest      interest rate for loan
      * @param numberOfInstallments  number of installments for loan
-     * @return BigDecimal multiplicand value with precision up to 12 decimal places
+     * @return                      BigDecimal multiplicand value with precision up to 12 decimal places
      */
     private BigDecimal calculateTotalAmountRate(Double acceptedInterest, int numberOfInstallments) {
-        Double totalAmountDouble = Math.pow((1+acceptedInterest),((double)numberOfInstallments/12));
+        double totalAmountDouble = Math.pow((1+acceptedInterest),((double)numberOfInstallments/12));
         return BigDecimal.valueOf(totalAmountDouble).setScale(12,RoundingMode.HALF_UP);
     }
 
@@ -165,7 +167,7 @@ public class LoanServiceImpl implements LoanService {
      * @param baseAmount                base amount per installment
      * @param interestAmount            interest amount per installment
      * @param totalAmount               sum of base and interest amount per installment
-     * @return List of scheduled installments
+     * @return                          List of scheduled installments
      */
     private List<Installment> calculateInstallmentsSchedule(Integer numberOfInstallments, Calendar paymentDate, BigDecimal totalAmountToPayForLoan, BigDecimal baseAmount, BigDecimal interestAmount, BigDecimal totalAmount) {
         List<Installment> installments = new LinkedList<>();
