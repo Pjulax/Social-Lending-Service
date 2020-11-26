@@ -23,4 +23,9 @@ public class ClockServiceImpl implements ClockService{
     public void restart(int multiplier) {
         clock.restart(java.time.Clock.system(ZoneId.of("Europe/Warsaw")).millis(), multiplier);
     }
+
+    @Override
+    public void addDays(int days) {
+        clock.addDays(days);
+    }
 }

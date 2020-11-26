@@ -3,4 +3,5 @@ package pl.fintech.metissociallending.metissociallendingservice.infrastructure.c
 public interface Clock {
     long millis();
     void restart(long starTime, int multiplier);
+    void addDays(int days);
 }

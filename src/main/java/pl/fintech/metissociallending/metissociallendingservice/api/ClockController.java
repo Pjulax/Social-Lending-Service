@@ -22,4 +22,9 @@ public class ClockController {
     public void restart(@RequestParam int multiplier){
         clockService.restart(multiplier);
     }
+
+    @PostMapping("/add-days")
+    public void addDays(@RequestParam int days){
+        clockService.addDays(days);
+    }
 }
