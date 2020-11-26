@@ -24,5 +24,9 @@ public class User {
     private String account;
     private Double balance;
     private List<Role> roles;
+    private String name;
+    private String cardNumber;
+    private String expiry;
+    private String cvc;
 
 }

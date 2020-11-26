@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.UserDTO;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.UserDetailsDTO;
+import pl.fintech.metissociallending.metissociallendingservice.api.dto.UserLoginDTO;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserService;
 
@@ -21,7 +22,7 @@ public class UserController {
     }
 
     @PostMapping("/signin")
-    public String login(@RequestBody UserDTO userDTO){
+    public String login(@RequestBody UserLoginDTO userDTO){
         return userService.login(userDTO);
     }
 

@@ -13,6 +13,10 @@ public interface UserService {
         interface CreateUser extends Command{
              String getUsername();
              String getPassword();
+             String getCardNumber();
+             String getName();
+             String getExpiry();
+             String getCvc();
         }
         interface DeleteUser extends Command{
             String getUsername();

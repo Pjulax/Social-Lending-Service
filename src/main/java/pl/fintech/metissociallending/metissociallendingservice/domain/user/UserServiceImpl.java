@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.UserDetailsDTO;
 import pl.fintech.metissociallending.metissociallendingservice.domain.bank.BankClient;
 import pl.fintech.metissociallending.metissociallendingservice.domain.bank.requestEntity.AccountEntityRequest;
+import pl.fintech.metissociallending.metissociallendingservice.infrastructure.security.AES;
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.security.jwt.JwtTokenProvider;
 
 import java.util.LinkedList;
@@ -23,6 +24,7 @@ public class UserServiceImpl implements UserService{
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
+    private final AES aes;
     //private final BankService bankService;
     private final BankClient bankClient;
     private final String basicAuthHeader;
@@ -43,6 +45,10 @@ public class UserServiceImpl implements UserService{
                 .password(passwordEncoder.encode(createUserCommand.getPassword()))
                 .balance(0.0d)
                 .roles(roles)
+                .name(createUserCommand.getName())
+                .cardNumber(aes.encrypt(createUserCommand.getCardNumber()))
+                .cvc(aes.encrypt(createUserCommand.getCvc()))
+                .expiry(createUserCommand.getExpiry())
                 .account(account).build();
         return userRepository.save(user);
     }
@@ -69,7 +75,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserDetailsDTO getUserDetails() {
         User user = whoami();
-        return new UserDetailsDTO(user.getUsername(), user.getAccount(), user.getBalance());
+        return new UserDetailsDTO(user.getUsername(), user.getAccount(), aes.decrypt(user.getCardNumber()), user.getName(), aes.decrypt(user.getCvc()), user.getExpiry(), user.getBalance());
     }
 
 }

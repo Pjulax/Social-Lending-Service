@@ -6,7 +6,11 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 public class UserDetailsDTO {
-    String name;
+    String username;
     String account;
+    String cardNumber;
+    String name;
+    String cvc;
+    String expiry;
     Double balance;
 }
