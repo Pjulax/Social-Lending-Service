@@ -5,7 +5,8 @@ import pl.fintech.metissociallending.metissociallendingservice.api.dto.AuctionWi
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.OfferRepository;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserService;
-import java.time.Clock;
+import pl.fintech.metissociallending.metissociallendingservice.infrastructure.clock.Clock;
+
 import java.util.Calendar;
 import java.util.List;
 import java.util.NoSuchElementException;

@@ -1,19 +1,25 @@
 package pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan;
 
+import io.micrometer.core.instrument.config.validate.InvalidReason;
+import io.micrometer.core.instrument.config.validate.Validated;
+import io.micrometer.core.instrument.config.validate.ValidationException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import pl.fintech.metissociallending.metissociallendingservice.api.dto.LoanDTO;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.Auction;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.AuctionRepository;
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.Offer;
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.OfferRepository;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserService;
+import pl.fintech.metissociallending.metissociallendingservice.infrastructure.clock.Clock;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.Clock;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -27,13 +33,34 @@ public class LoanServiceImpl implements LoanService {
     private final Clock clock;
 
     @Override
-    public Loan acceptOffer(LoanService.Command.AcceptOffer acceptOffer) {
+    public LoanDTO acceptOffer(LoanService.Command.AcceptOffer acceptOffer) {
         Auction auction = findAuction(acceptOffer);
         Offer offer = findOffer(acceptOffer, auction);
         return createLoan(auction, offer);
     }
 
-    private Loan createLoan(Auction auction, Offer offer) {
+    @Override
+    public void payNextInstallment(LoanService.Command.PayNextInstallment payNextInstallment) {
+        Optional<Loan> loanOptional = loanRepository.findByIdAndBorrower(payNextInstallment.getLoanId(), userService.whoami());
+        if(loanOptional.isEmpty())
+            throw new IllegalArgumentException("Loan is not found");
+        Loan loan = loanOptional.get();
+        List<Installment> installments = loan.getInstallments();
+        for(int i = 0; i<installments.size(); i++){
+            Installment installment = installments.get(i);
+            if(!installment.getStatus().equals(InstallmentStatus.PAID)){
+                boolean paid = installment.pay(new Date(clock.millis()), loan.getAcceptedInterest(), payNextInstallment.getAmount());
+                if(!paid){
+                    throw new ValidationException(Validated.invalid("Amount", payNextInstallment.getAmount(), (" invalid amount to pay actual is " + installment.getTotal().setScale(2,RoundingMode.HALF_UP).toString()), InvalidReason.MALFORMED));
+                }
+                installmentRepository.save(installment);
+                break;
+            }
+        }
+
+    }
+
+    private LoanDTO createLoan(Auction auction, Offer offer) {
         User lender = offer.getLender();
         Loan loan = Loan.builder()
                 .borrower(userService.whoami())
@@ -43,7 +70,7 @@ public class LoanServiceImpl implements LoanService {
                 .takenAmount(auction.getLoanAmount().doubleValue())
                 .installments(createInstallmentsSchedule(new Date(clock.millis()), auction.getLoanAmount().doubleValue(), offer.getAnnualPercentageRate(), auction.getNumberOfInstallments()))
                 .build();
-        return loanRepository.save(loan);
+        return LoanDTO.fromDomain(loanRepository.save(loan));
     }
 
     private Offer findOffer(Command.AcceptOffer acceptOffer, Auction auction) {
@@ -62,9 +89,48 @@ public class LoanServiceImpl implements LoanService {
     }
 
     @Override
-    public List<Loan> getLoansByBorrower() {
-        return loanRepository.findAllByBorrower(userService.whoami());
+    public List<LoanDTO> getLoansByBorrower() {
+        List<Loan> loans = loanRepository.findAllByBorrower(userService.whoami());
+        if(loans.isEmpty())
+            return List.of();
+        return loans.stream().map(LoanDTO::fromDomain).collect(Collectors.toList());
     }
+
+
+    private void updateLoanStatus(Loan loan){
+        checkStatus(loan);
+        countTotal(loan);
+        loan.calculateLeft();
+        loanRepository.save(loan);
+    }
+
+    private void checkStatus(Loan loan){
+        List<Installment> installments = loan.getInstallments();
+        for (Installment installment : installments) {
+            installment.checkStatus(new Date(clock.millis()));
+            installmentRepository.save(installment);
+        }
+    }
+
+    /**
+     *Executed every time user wants to see his loan installments or pay for installment in order to validate current price
+     */
+    private void countTotal(Loan loan){ // totals = fines and interests
+        List<Installment> installments = loan.getInstallments();
+        for (Installment installment : installments) {
+            installment.countTotal(new Date(clock.millis()), loan.getAcceptedInterest());
+            installmentRepository.save(installment);
+        }
+    }
+
+    @Scheduled(fixedDelay = 1000*10)
+    public void updateLoansStatus(){
+        List<Loan> loans = loanRepository.findAll();
+        for (Loan loan : loans) {
+            updateLoanStatus(loan);
+        }
+    }
+
 
     private List<Installment> createInstallmentsSchedule(Date startDate, Double takenAmount, Double acceptedInterest, Integer numberOfInstallments) {
         if(numberOfInstallments < 1)

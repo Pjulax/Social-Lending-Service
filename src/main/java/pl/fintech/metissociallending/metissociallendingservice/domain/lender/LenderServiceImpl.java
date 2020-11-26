@@ -9,8 +9,8 @@ import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.A
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.AuctionRepository;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserService;
+import pl.fintech.metissociallending.metissociallendingservice.infrastructure.clock.Clock;
 
-import java.time.Clock;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
