@@ -2,18 +2,23 @@ package pl.fintech.metissociallending.metissociallendingservice.domain.user;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import pl.fintech.metissociallending.metissociallendingservice.api.dto.AccountDTO;
+import pl.fintech.metissociallending.metissociallendingservice.api.dto.TransactionDTO;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.UserDetailsDTO;
 import pl.fintech.metissociallending.metissociallendingservice.domain.bank.BankClient;
 import pl.fintech.metissociallending.metissociallendingservice.domain.bank.requestEntity.AccountEntityRequest;
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.security.AES;
+import pl.fintech.metissociallending.metissociallendingservice.domain.bank.requestEntity.MyAccountRequestBody;
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.security.jwt.JwtTokenProvider;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
@@ -58,6 +63,21 @@ public class UserServiceImpl implements UserService{
             userRepository.deleteByUsername(deleteUser.getUsername());
         else
             throw new NoSuchElementException("User doesn't exists");
+    }
+    @Override
+    public AccountDTO getAccountDetailsFromBank() {
+        User user = whoami();
+        return bankClient.myAccount(basicAuthHeader, user.getAccount()).getBody(); //TODO create form with indexes on transactions
+    }
+    @Override
+    public void depositToBank(Command.DepositToBank depositToBank){
+        User user = whoami(); //TODO handle all responses
+        ResponseEntity<Void> response = bankClient.payment(basicAuthHeader, MyAccountRequestBody.builder().accountNumber(user.getAccount()).amount(depositToBank.getAmount()).build());
+    }
+    @Override
+    public void withdrawFromBank(Command.WithdrawFromBank withdrawFromBank) {
+        User user = whoami(); //TODO handle all responses
+        ResponseEntity<Void> response = bankClient.withdraw(basicAuthHeader, MyAccountRequestBody.builder().accountNumber(user.getAccount()).amount(withdrawFromBank.getAmount()).build());
     }
     @Override
     public String login(Query.Login login) {
