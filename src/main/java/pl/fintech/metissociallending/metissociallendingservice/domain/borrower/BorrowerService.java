@@ -13,6 +13,7 @@ public interface BorrowerService {
     Auction createNewAuctionSinceNow(Command.CreateNewAuctionSinceNow createNewAuctionSinceNowCommand);
     Auction addAuctionDescription(Command.AddAuctionDescription addAuctionDescription);
     List<Auction> getAllAuctions();
+    void updateAllAuctionStatus();
 
     AuctionWithOffersDTO getAuctionById(Long id);
 
