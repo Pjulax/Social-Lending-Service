@@ -23,6 +23,10 @@ public class UserTuple {
     private String password;
     private String account;
     private Double balance;
+    private String name;
+    private String cardNumber;
+    private String expiry;
+    private String cvc;
     @ElementCollection(fetch = FetchType.EAGER)
     private  List<RoleTuple> roles;
 
@@ -33,9 +37,13 @@ public class UserTuple {
                 user.getPassword(),
                 user.getAccount(),
                 user.getBalance(),
+                user.getName(),
+                user.getCardNumber(),
+                user.getExpiry(),
+                user.getCvc(),
                 user.getRoles()==null?List.of():
-                user.getRoles().stream().map(RoleTuple::from).collect(Collectors.toList())
-        );
+                        user.getRoles().stream().map(RoleTuple::from).collect(Collectors.toList())
+                );
     }
     User toDomain(){
         return User.builder()
@@ -44,6 +52,10 @@ public class UserTuple {
                 .password(password)
                 .account(account)
                 .balance(balance)
+                .cardNumber(cardNumber)
+                .cvc(cvc)
+                .expiry(expiry)
+                .name(name)
                 .roles(roles==null?List.of():roles.stream().map(RoleTuple::toDomain).collect(Collectors.toList()))
                 .build();
     }
