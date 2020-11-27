@@ -75,7 +75,10 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserDetailsDTO getUserDetails() {
         User user = whoami();
-        return new UserDetailsDTO(user.getUsername(), user.getAccount(), aes.decrypt(user.getCardNumber()), user.getName(), aes.decrypt(user.getCvc()), user.getExpiry(), user.getBalance());
+        return new UserDetailsDTO(user.getUsername(), user.getAccount(), hideCard(aes.decrypt(user.getCardNumber())), user.getName(), "***", user.getExpiry(), user.getBalance());
+    }
+    private String hideCard(String card){
+        return card.substring(0, 3).concat("*".repeat(9)).concat(card.substring(card.length()-4));
     }
 
 }
