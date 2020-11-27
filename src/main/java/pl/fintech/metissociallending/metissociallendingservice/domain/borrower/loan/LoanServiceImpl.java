@@ -16,6 +16,7 @@ import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserService;
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.clock.Clock;
 
+import javax.naming.OperationNotSupportedException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
@@ -46,18 +47,19 @@ public class LoanServiceImpl implements LoanService {
             throw new IllegalArgumentException("Loan is not found");
         Loan loan = loanOptional.get();
         List<Installment> installments = loan.getInstallments();
-        for(int i = 0; i<installments.size(); i++){
-            Installment installment = installments.get(i);
-            if(!installment.getStatus().equals(InstallmentStatus.PAID)){
-                boolean paid = installment.pay(new Date(clock.millis()), loan.getAcceptedInterest(), payNextInstallment.getAmount());
-                if(!paid){
-                    throw new ValidationException(Validated.invalid("Amount", payNextInstallment.getAmount(), (" invalid amount to pay actual is " + installment.getTotal().setScale(2,RoundingMode.HALF_UP).toString()), InvalidReason.MALFORMED));
-                }
-                installmentRepository.save(installment);
-                break;
+        Installment nextInstallment=null;
+        for (Installment installment : installments) {
+            if (!installment.getStatus().equals(InstallmentStatus.PAID)) {
+                nextInstallment = installment;
             }
         }
-
+        if(nextInstallment==null)
+            throw new NoSuchElementException("There is no next installment to pay");
+        boolean paid = nextInstallment.pay(new Date(clock.millis()), loan.getAcceptedInterest(), payNextInstallment.getAmount());
+        if(!paid){
+            throw new ValidationException(Validated.invalid("Amount", payNextInstallment.getAmount(), (" invalid amount to pay actual is " + nextInstallment.getTotal().setScale(2,RoundingMode.HALF_UP).toString()), InvalidReason.MALFORMED));
+        }
+        installmentRepository.save(nextInstallment);
     }
 
     private LoanDTO createLoan(Auction auction, Offer offer) {
