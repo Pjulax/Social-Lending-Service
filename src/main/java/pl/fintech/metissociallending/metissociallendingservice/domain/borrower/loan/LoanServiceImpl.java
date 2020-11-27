@@ -123,7 +123,7 @@ public class LoanServiceImpl implements LoanService {
         }
     }
 
-    @Scheduled(cron="*/10 * * * * ?")
+    @Scheduled(cron="*/10 * * * * *")
     public void updateLoansStatus(){
         List<Loan> loans = loanRepository.findAll();
         for (Loan loan : loans) {
