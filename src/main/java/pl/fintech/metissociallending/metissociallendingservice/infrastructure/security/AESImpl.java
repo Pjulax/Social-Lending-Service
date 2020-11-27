@@ -16,6 +16,8 @@ import javax.crypto.spec.SecretKeySpec;
 public class AESImpl implements AES {
     private  final String ALGO = "AES";
     public String encrypt(String data) {
+        if(data==null)
+            return "";
         Key key = generateKey();
         try {
             Cipher cipher = Cipher.getInstance(ALGO);
@@ -29,6 +31,8 @@ public class AESImpl implements AES {
     }
 
     public String decrypt(String encryptedData)  {
+        if(encryptedData==null)
+            return "";
         Key key = generateKey();
         try {
             Cipher c = Cipher.getInstance(ALGO);
