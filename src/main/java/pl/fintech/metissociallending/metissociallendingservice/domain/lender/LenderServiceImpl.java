@@ -5,8 +5,11 @@ import io.micrometer.core.instrument.config.validate.Validated;
 import io.micrometer.core.instrument.config.validate.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.fintech.metissociallending.metissociallendingservice.api.dto.LoanDTO;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.Auction;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.AuctionRepository;
+import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.Loan;
+import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.LoanRepository;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserService;
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.clock.Clock;
@@ -24,6 +27,7 @@ public class LenderServiceImpl implements LenderService {
     private final OfferRepository offerRepository;
     private final Clock clock;
     private final UserService userService;
+    private final LoanRepository loanRepository;
 
     @Override
     public Offer submitOffer(Command.SubmitOffer submitOfferCommand) {
@@ -61,4 +65,5 @@ public class LenderServiceImpl implements LenderService {
         auctions.removeAll(auctionRepository.findAllByBorrower(userService.whoami()));
         return auctions.stream().filter(a-> !a.getIsClosed()).collect(Collectors.toList());
     }
+
 }

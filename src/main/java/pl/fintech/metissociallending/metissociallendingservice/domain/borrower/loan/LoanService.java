@@ -8,6 +8,7 @@ public interface LoanService {
     LoanDTO acceptOffer(LoanService.Command.AcceptOffer acceptOffer);
     void payNextInstallment(LoanService.Command.PayNextInstallment payNextInstallment);
     List<LoanDTO> getLoansByBorrower();
+    List<LoanDTO> getAllInvestments();
 
     void updateLoansStatus();
 
