@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.provider.CsvFileSource;
 import org.mockito.InjectMocks;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -19,8 +21,8 @@ import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserS
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.clock.Clock;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -47,20 +49,18 @@ class LoanServiceImplTest {
 
 
     @SneakyThrows
-    @Test
+    @ParameterizedTest
+    @CsvFileSource(resources = "/testData/loan-service-test.csv")
     @WithMockUser(username = "user", password = "name")
-    void acceptOffer() {
+    void acceptOffer(BigDecimal loanAmount, Double annualPercentageRate, Integer numberOfInstallments, Long durationOfLoanInDays) {
+        Long baseDate = 2000000000000L;
         Long auctionId = 1L;
         Long offerId = 1L;
-        BigDecimal loanAmount = new BigDecimal(100000);
-        Double annualPercentageRate = 10d;
-        Integer numberOfInstallments = 10;
-        Date beginDate = new Date(2000000000000L);
-        Date endDate = new Date(2001000000000L);
-        Date offerDate = new Date(2000200000000L);
-        Long loanDate = 2000500000000L;
-        Boolean isClosed = true;
         String description = "Sample description";
+        Date beginDate = new Date(baseDate);
+        Date endDate = new Date(baseDate + 86400 * durationOfLoanInDays);
+        Date offerDate = new Date(baseDate + 86400);
+        Long loanDate = baseDate + 86400;
 
         User lender = User.builder()
                 .build();
@@ -75,7 +75,7 @@ class LoanServiceImplTest {
                 .beginDate(beginDate)
                 .endDate(endDate)
                 .numberOfInstallments(numberOfInstallments)
-                .isClosed(isClosed)
+                .isClosed(true)
                 .description(description)
                 .build();
 
@@ -99,10 +99,18 @@ class LoanServiceImplTest {
         when(auctionRepository.save(auction)).thenReturn(auction);
         when(offerRepository.findById(offerId)).thenReturn(Optional.ofNullable(offer));
         Loan fakeLoan = Loan.builder().build();
-        when(loanRepository.save(fakeLoan)).thenAnswer(i -> i.getArguments()[0]);
+
+
+        final Loan[] loan = new Loan[1];
+        when(loanRepository.save(fakeLoan)).thenAnswer(i -> {
+            loan[0] = (Loan) i.getArguments()[0];
+            return loan[0];
+        });
+
         Installment fakeInstallment = Installment.builder().build();
         when(installmentRepository.save(fakeInstallment)).thenAnswer(i -> i.getArguments()[0]);
-        LoanDTO loan = loanService.acceptOffer(new LoanService.Command.AcceptOffer() {
+
+        LoanDTO loanDTO = loanService.acceptOffer(new LoanService.Command.AcceptOffer() {
 
             @Override
             public Long getAuctionId() {
@@ -115,7 +123,17 @@ class LoanServiceImplTest {
             }
         });
 
+        //TODO add amountLeft to not be null. Dunno how
+        when(loanRepository.findAll()).thenReturn(List.of(loan));
+        loanService.updateLoansStatus();
+
+        //TODO for testing purposes
         ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        System.out.println(objectWriter.writeValueAsString(loan));
+        System.out.println(objectWriter.writeValueAsString(loanDTO));
+
+        //TODO check installments data
+        assertEquals(loanAmount.doubleValue(), loanDTO.getTakenAmount());
+        assertEquals(annualPercentageRate, loanDTO.getAcceptedInterest());
+        assertEquals(offerDate, loanDTO.getStartDate());
     }
 }
