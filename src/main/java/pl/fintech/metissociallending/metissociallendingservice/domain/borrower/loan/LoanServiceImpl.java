@@ -35,6 +35,8 @@ public class LoanServiceImpl implements LoanService {
     @Override
     public LoanDTO acceptOffer(LoanService.Command.AcceptOffer acceptOffer) {
         Auction auction = findAuction(acceptOffer);
+        auction.close();
+        auction = auctionRepository.save(auction);
         Offer offer = findOffer(acceptOffer, auction);
         return createLoan(auction, offer);
     }
@@ -61,6 +63,7 @@ public class LoanServiceImpl implements LoanService {
     }
 
     private LoanDTO createLoan(Auction auction, Offer offer) {
+
         User lender = offer.getLender();
         Loan loan = Loan.builder()
                 .borrower(userService.whoami())
