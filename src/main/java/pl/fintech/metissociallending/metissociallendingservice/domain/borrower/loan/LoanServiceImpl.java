@@ -59,7 +59,7 @@ public class LoanServiceImpl implements LoanService {
         }
         if(nextInstallment==null)
             throw new NoSuchElementException("There is no next installment to pay");
-        boolean canBePaid = nextInstallment.canBePaid(new Date(clock.millis()), loan.getAcceptedInterest(), payNextInstallment.getAmount());
+        boolean canBePaid = nextInstallment.isInputAmountEqualToInstallmentAmount(new Date(clock.millis()), loan.getAcceptedInterest(), payNextInstallment.getAmount());
         if(canBePaid) {
             bankService.transfer(TransactionRequestEntity.builder()
                     .sourceAccountNumber(loan.getBorrower().getAccount())

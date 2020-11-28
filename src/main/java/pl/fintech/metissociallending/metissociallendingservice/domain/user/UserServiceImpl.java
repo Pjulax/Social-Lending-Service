@@ -48,13 +48,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
     @Override
-    public void deleteUser(Command.DeleteUser deleteUser) { //TODO delete user must be deleted
-        if(userRepository.findByUsername(deleteUser.getUsername()).isPresent())
-            userRepository.deleteByUsername(deleteUser.getUsername());
-        else
-            throw new NoSuchElementException("User doesn't exists");
-    }
-    @Override
     public void depositToBank(Command.DepositToBank depositToBank) {
         User user = whoami();
         bankService.depositToAccount(MyAccountRequestEntity.builder().accountNumber(user.getAccount())

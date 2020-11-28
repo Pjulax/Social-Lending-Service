@@ -36,11 +36,11 @@ public class Installment {
     }
 
     /**
-     * checks if it can be paid, first counts total and checks if amount is equal to user input. Does nothing when is already PAID
+     * checks if it can be paid, first calculates total and checks if amount is equal to user input. Does nothing when is already PAID
      * @param now - time when we pay
      * @param fineInterest - annual fine interests count in rate ex 0.05 is 5%
      */
-    public boolean canBePaid(Date now, double fineInterest, double amount){
+    public boolean isInputAmountEqualToInstallmentAmount(Date now, double fineInterest, double amount){
         if(!status.equals(InstallmentStatus.PAID)) {
             countTotal(now, fineInterest);
             if(total.setScale(2, RoundingMode.HALF_UP).doubleValue()==amount) {

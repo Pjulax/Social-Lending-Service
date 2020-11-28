@@ -9,6 +9,12 @@ import pl.fintech.metissociallending.metissociallendingservice.infrastructure.ba
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.bankapi.entity.MyAccountRequestEntity;
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.bankapi.entity.TransactionRequestEntity;
 
+/**
+ * Service making operations on bank api provided by FinTech Challenge hosts.
+ * If we had more time we would handle exceptions, messages, codes more fancy,
+ * now handling is raw but working properly, because all is happening
+ * in exception handler.
+ */
 @RequiredArgsConstructor
 @Service
 public class BankServiceImpl implements BankService {

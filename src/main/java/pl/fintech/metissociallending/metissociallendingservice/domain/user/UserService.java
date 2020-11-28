@@ -10,7 +10,6 @@ public interface UserService {
     String login(Query.Login login);
     User whoami();
     UserDetailsDTO getUserDetails();
-    void deleteUser(Command.DeleteUser deleteUser);
     AccountDTO getAccountDetailsFromBank();
     void depositToBank(Command.DepositToBank depositToBank);
     void withdrawFromBank(Command.WithdrawFromBank withdrawFromBank);
@@ -23,9 +22,6 @@ public interface UserService {
              String getName();
              String getExpiry();
              String getCvc();
-        }
-        interface DeleteUser extends Command{
-            String getUsername();
         }
         interface DepositToBank extends Command{
             Double getAmount();

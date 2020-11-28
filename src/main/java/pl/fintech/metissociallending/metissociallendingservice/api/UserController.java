@@ -30,17 +30,6 @@ public class UserController {
         return userService.getUserDetails();
     }
 
-    @DeleteMapping("/{username}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUser(@PathVariable String username){
-        userService.deleteUser(()->username);
-    }
-
-    @GetMapping("/bank/my-account")
-    public AccountDTO getMyAccountDetails() {
-        return userService.getAccountDetailsFromBank();
-    }
-
     @PostMapping("/bank/deposit")
     public void deposit(@RequestParam Double amount) {
         userService.depositToBank(() -> amount);
