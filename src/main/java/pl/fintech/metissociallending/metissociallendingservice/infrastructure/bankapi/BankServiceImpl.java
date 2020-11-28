@@ -47,11 +47,11 @@ public class BankServiceImpl implements BankService {
     }
 
     @Override
-    public void createTransaction(Command.CreateTransaction createTransaction) {
+    public void transfer(Command.Transfer transfer) {
         TransactionRequestEntity transactionRequestEntity = TransactionRequestEntity.builder()
-                .sourceAccountNumber(createTransaction.getSourceAccountNumber())
-                .targetAccountNumber(createTransaction.getTargetAccountNumber())
-                .amount(createTransaction.getAmount()).build();
+                .sourceAccountNumber(transfer.getSourceAccountNumber())
+                .targetAccountNumber(transfer.getTargetAccountNumber())
+                .amount(transfer.getAmount()).build();
         bankClient.createTransaction(basicAuthHeader, transactionRequestEntity);
     }
 }

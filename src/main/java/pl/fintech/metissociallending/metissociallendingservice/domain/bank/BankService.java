@@ -7,7 +7,7 @@ public interface BankService {
     AccountDTO getAccountDetails(Command.GetAccountDetails getAccountDetails);
     void withdrawFromAccount(Command.WithdrawFromAccount withdrawFromAccount);
     void depositToAccount(Command.DepositToAccount depositToAccount);
-    void createTransaction(Command.CreateTransaction createTransaction);
+    void transfer(Command.Transfer transfer);
 
     interface Command {
         interface CreateBankAccount {
@@ -24,7 +24,7 @@ public interface BankService {
             String getAccountNumber();
             Double getAmount();
         }
-        interface CreateTransaction {
+        interface Transfer {
             String getSourceAccountNumber();
             String getTargetAccountNumber();
             Double getAmount();

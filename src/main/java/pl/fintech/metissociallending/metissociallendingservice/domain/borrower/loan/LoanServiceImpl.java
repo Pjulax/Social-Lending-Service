@@ -5,7 +5,6 @@ import io.micrometer.core.instrument.config.validate.Validated;
 import io.micrometer.core.instrument.config.validate.ValidationException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.LoanDTO;
 import pl.fintech.metissociallending.metissociallendingservice.domain.bank.BankService;
@@ -18,7 +17,6 @@ import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserS
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.bankapi.entity.TransactionRequestEntity;
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.clock.Clock;
 
-import javax.naming.OperationNotSupportedException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
@@ -53,22 +51,24 @@ public class LoanServiceImpl implements LoanService {
         Loan loan = loanOptional.get();
         List<Installment> installments = loan.getInstallments();
         Installment nextInstallment=null;
-        for (Installment installment : installments) {
-            if (!installment.getStatus().equals(InstallmentStatus.PAID)) {
-                nextInstallment = installment;
+        installments.sort(Comparator.comparing(Installment::getIndex).reversed());  // TODO change it to normal way of checking, now it is double reversed list checking
+        for (Installment installment : installments) {                              //
+            if (!installment.getStatus().equals(InstallmentStatus.PAID)) {          //
+                nextInstallment = installment;                                      //
             }
         }
         if(nextInstallment==null)
             throw new NoSuchElementException("There is no next installment to pay");
-        boolean paid = nextInstallment.pay(new Date(clock.millis()), loan.getAcceptedInterest(), payNextInstallment.getAmount());
-        // TODO change to use bankService needs logic change to check if can be paid
-        bankService.createTransaction(TransactionRequestEntity.builder()
-                .sourceAccountNumber(loan.getBorrower().getAccount())
-                .targetAccountNumber(loan.getLender().getAccount())
-                .amount(nextInstallment.getTotal().doubleValue()).build());
-        if(!paid){
-            throw new ValidationException(Validated.invalid("Amount", payNextInstallment.getAmount(), (" invalid amount to pay actual is " + nextInstallment.getTotal().setScale(2,RoundingMode.HALF_UP).toString()), InvalidReason.MALFORMED));
+        boolean canBePaid = nextInstallment.canBePaid(new Date(clock.millis()), loan.getAcceptedInterest(), payNextInstallment.getAmount());
+        if(canBePaid) {
+            bankService.transfer(TransactionRequestEntity.builder()
+                    .sourceAccountNumber(loan.getBorrower().getAccount())
+                    .targetAccountNumber(loan.getLender().getAccount())
+                    .amount(nextInstallment.getTotal().doubleValue()).build());
+            nextInstallment.changeToPaid();
         }
+        else
+            throw new ValidationException(Validated.invalid("Amount", payNextInstallment.getAmount(), (" invalid amount to pay actual is " + nextInstallment.getTotal().setScale(2,RoundingMode.HALF_UP).toString()), InvalidReason.MALFORMED));
         installmentRepository.save(nextInstallment);
     }
 

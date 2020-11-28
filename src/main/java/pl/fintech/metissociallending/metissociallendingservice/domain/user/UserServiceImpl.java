@@ -55,22 +55,6 @@ public class UserServiceImpl implements UserService {
             throw new NoSuchElementException("User doesn't exists");
     }
     @Override
-    public AccountDTO getAccountDetailsFromBank() {
-        User user = whoami();
-        AccountDTO accountDetails = bankService.getAccountDetails(user::getAccount);
-        accountDetails.setTransactions(getIndexedTransactions(accountDetails.getTransactions()));
-        return accountDetails; //TODO check indexes on transactions
-    }
-    private List<TransactionDTO> getIndexedTransactions(List<TransactionDTO> transactions) {
-        transactions.sort(Comparator.comparing(TransactionDTO::getTimestamp));
-        long index = 0;
-        for(TransactionDTO transaction : transactions){
-            transaction.setIndex(index);
-            index++;
-        }
-        return transactions;
-    }
-    @Override
     public void depositToBank(Command.DepositToBank depositToBank) {
         User user = whoami();
         bankService.depositToAccount(MyAccountRequestEntity.builder().accountNumber(user.getAccount())
@@ -94,15 +78,31 @@ public class UserServiceImpl implements UserService {
     public User whoami(){
         return search(()->SecurityContextHolder.getContext().getAuthentication().getName());
     }
-
     @Override
     public UserDetailsDTO getUserDetails() {
         User user = whoami();
         AccountDTO account = getAccountDetailsFromBank();
         return new UserDetailsDTO(user.getUsername(), user.getAccount(), hideCard(aes.decrypt(user.getCardNumber())), user.getName(), "***", user.getExpiry(), account.getAccountBalance(), account.getTransactions());
     }
+
     private String hideCard(String card){
         return card.substring(0, 3).concat("*".repeat(9)).concat(card.substring(card.length()-4));
     }
 
+    @Override
+    public AccountDTO getAccountDetailsFromBank() {
+        User user = whoami();
+        AccountDTO accountDetails = bankService.getAccountDetails(user::getAccount);
+        accountDetails.setTransactions(getIndexedTransactions(accountDetails.getTransactions()));
+        return accountDetails; //TODO check indexes on transactions
+    }
+    private List<TransactionDTO> getIndexedTransactions(List<TransactionDTO> transactions) {
+        transactions.sort(Comparator.comparing(TransactionDTO::getTimestamp));
+        long index = 0;
+        for(TransactionDTO transaction : transactions){
+            transaction.setIndex(index);
+            index++;
+        }
+        return transactions;
+    }
 }

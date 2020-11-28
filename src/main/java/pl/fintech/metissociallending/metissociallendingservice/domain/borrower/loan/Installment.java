@@ -36,15 +36,14 @@ public class Installment {
     }
 
     /**
-     * pay first counts total and it changes status to PAID. Does nothing when is already PAID
+     * checks if it can be paid, first counts total and checks if amount is equal to user input. Does nothing when is already PAID
      * @param now - time when we pay
      * @param fineInterest - annual fine interests count in rate ex 0.05 is 5%
      */
-    public boolean pay(Date now, double fineInterest, double amount){
+    public boolean canBePaid(Date now, double fineInterest, double amount){
         if(!status.equals(InstallmentStatus.PAID)) {
             countTotal(now, fineInterest);
             if(total.setScale(2, RoundingMode.HALF_UP).doubleValue()==amount) {
-                status = InstallmentStatus.PAID;
                 return true;
             }
         }
@@ -70,8 +69,8 @@ public class Installment {
         fine = countInterestValue(now, fineInterests);
     }
 
-    //counts value of interests with given interest and difference between now and due
 
+    //counts value of interests with given interest and difference between now and due
     private BigDecimal countInterestValue(Date now, double loaninterest){
         Calendar calNow = Calendar.getInstance();
         calNow.setTime(now);
@@ -85,6 +84,13 @@ public class Installment {
             return amount.multiply(BigDecimal.valueOf(Math.pow((1+loaninterest),timeInYears))).subtract(amount);
         }
         return BigDecimal.ZERO;
+    }
+
+    /**
+     * Modifies installment status to paid.
+     */
+    public void changeToPaid(){
+        status = InstallmentStatus.PAID;
     }
 
 }
