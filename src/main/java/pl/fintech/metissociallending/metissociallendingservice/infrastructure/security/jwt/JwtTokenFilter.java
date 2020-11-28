@@ -37,7 +37,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             } catch (JwtException | UsernameNotFoundException ex) {
                 //this is very important, since it guarantees the user is not authenticated at all
                 SecurityContextHolder.clearContext();
-                //todo - create model to provide JSON as in controller exceptions
                 httpServletResponse.setStatus(HttpStatus.FORBIDDEN.value());
                 httpServletResponse.setContentType("text/plain");
                 httpServletResponse.setCharacterEncoding("UTF-8");

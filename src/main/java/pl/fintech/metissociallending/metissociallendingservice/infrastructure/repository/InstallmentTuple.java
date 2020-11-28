@@ -16,7 +16,7 @@ import java.util.Date;
 @Table(name="INSTALLMENT")
 public class InstallmentTuple {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long index;
     @Temporal(TemporalType.TIMESTAMP)

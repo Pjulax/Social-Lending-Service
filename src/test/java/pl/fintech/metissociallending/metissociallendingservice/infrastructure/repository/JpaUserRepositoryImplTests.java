@@ -48,7 +48,6 @@ public class JpaUserRepositoryImplTests {
                 .username("example")
                 .password("password")
                 .account("aaaa-bbbb-cccc-dddd")
-                .balance(0.0d)
                 .roles(roles)
                 .build();
         jpaUserRepository.save(userBefore);
@@ -56,7 +55,6 @@ public class JpaUserRepositoryImplTests {
         assertThat(userAfter.getUsername()).isEqualTo("example");
         assertThat(userAfter.getPassword()).isEqualTo("password");
         assertThat(userAfter.getAccount()).isEqualTo("aaaa-bbbb-cccc-dddd");
-        assertThat(userAfter.getBalance()).isEqualTo(0.0d);
         assertThat(userAfter.getRoles()).isEqualTo(roles);
     }
 
@@ -69,7 +67,6 @@ public class JpaUserRepositoryImplTests {
                 .username("example2")
                 .password("password")
                 .account("aaaa-bbbb-cccc-dddd")
-                .balance(0.0d)
                 .roles(roles)
                 .build();
         userBefore = jpaUserRepository.save(userBefore);
@@ -77,7 +74,6 @@ public class JpaUserRepositoryImplTests {
         assertThat(userAfter.getUsername()).isEqualTo("example2");
         assertThat(userAfter.getPassword()).isEqualTo("password");
         assertThat(userAfter.getAccount()).isEqualTo("aaaa-bbbb-cccc-dddd");
-        assertThat(userAfter.getBalance()).isEqualTo(0.0d);
         assertThat(userAfter.getRoles()).isEqualTo(roles);
     }
 
@@ -107,7 +103,6 @@ public class JpaUserRepositoryImplTests {
                 .username("example3")
                 .password("password")
                 .account("aaaa-bbbb-cccc-dddd")
-                .balance(0.0d)
                 .roles(roles)
                 .build();
         userBefore = jpaUserRepository.save(userBefore);
@@ -115,7 +110,6 @@ public class JpaUserRepositoryImplTests {
         assertThat(userAfter.getUsername()).isEqualTo("example3");
         assertThat(userAfter.getPassword()).isEqualTo("password");
         assertThat(userAfter.getAccount()).isEqualTo("aaaa-bbbb-cccc-dddd");
-        assertThat(userAfter.getBalance()).isEqualTo(0.0d);
         assertThat(userAfter.getRoles()).isEqualTo(roles);
         jpaUserRepository.deleteByUsername("example3");
         assertThat(jpaUserRepository.findById(userBefore.getId())).isEmpty();

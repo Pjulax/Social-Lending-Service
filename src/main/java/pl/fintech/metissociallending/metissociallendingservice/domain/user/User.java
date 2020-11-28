@@ -16,13 +16,14 @@ import java.util.List;
 @AllArgsConstructor
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String username;
     private String password;
     private String account;
-    private Double balance;
     private List<Role> roles;
+    private String name;
+    private String cardNumber;
+    private String expiry;
+    private String cvc;
 
 }
