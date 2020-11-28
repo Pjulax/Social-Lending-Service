@@ -99,7 +99,10 @@ public class UserServiceImpl implements UserService {
     public UserDetailsDTO getUserDetails() {
         User user = whoami();
         AccountDTO account = getAccountDetailsFromBank();
-        return new UserDetailsDTO(user.getUsername(), user.getAccount(), aes.decrypt(user.getCardNumber()), user.getName(), aes.decrypt(user.getCvc()), user.getExpiry(), account.getAccountBalance(), account.getTransactions());
+        return new UserDetailsDTO(user.getUsername(), user.getAccount(), hideCard(aes.decrypt(user.getCardNumber())), user.getName(), "***", user.getExpiry(), account.getAccountBalance(), account.getTransactions());
+    }
+    private String hideCard(String card){
+        return card.substring(0, 3).concat("*".repeat(9)).concat(card.substring(card.length()-4));
     }
 
 }

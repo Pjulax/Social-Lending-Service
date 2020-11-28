@@ -9,6 +9,8 @@ public interface LoanService {
     void payNextInstallment(LoanService.Command.PayNextInstallment payNextInstallment);
     List<LoanDTO> getLoansByBorrower();
 
+    void updateLoansStatus();
+
     interface Command {
         interface AcceptOffer extends LoanService.Command {
             Long getAuctionId();

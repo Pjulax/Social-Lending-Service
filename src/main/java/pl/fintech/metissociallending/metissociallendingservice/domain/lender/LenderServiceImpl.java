@@ -14,6 +14,7 @@ import pl.fintech.metissociallending.metissociallendingservice.infrastructure.cl
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -58,6 +59,6 @@ public class LenderServiceImpl implements LenderService {
     public List<Auction> getAllAvailableAuctions() {
         List<Auction> auctions = auctionRepository.findAll();
         auctions.removeAll(auctionRepository.findAllByBorrower(userService.whoami()));
-        return auctions;
+        return auctions.stream().filter(a-> !a.getIsClosed()).collect(Collectors.toList());
     }
 }

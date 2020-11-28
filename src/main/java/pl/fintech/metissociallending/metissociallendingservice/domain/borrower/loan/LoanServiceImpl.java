@@ -18,6 +18,7 @@ import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserS
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.bankapi.entity.TransactionRequestEntity;
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.clock.Clock;
 
+import javax.naming.OperationNotSupportedException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
@@ -38,6 +39,8 @@ public class LoanServiceImpl implements LoanService {
     @Override
     public LoanDTO acceptOffer(LoanService.Command.AcceptOffer acceptOffer) {
         Auction auction = findAuction(acceptOffer);
+        auction.close();
+        auction = auctionRepository.save(auction);
         Offer offer = findOffer(acceptOffer, auction);
         return createLoan(auction, offer);
     }
@@ -49,27 +52,28 @@ public class LoanServiceImpl implements LoanService {
             throw new IllegalArgumentException("Loan is not found");
         Loan loan = loanOptional.get();
         List<Installment> installments = loan.getInstallments();
-        for(int i = 0; i<installments.size(); i++){
-            Installment installment = installments.get(i);
-            if(!installment.getStatus().equals(InstallmentStatus.PAID)){
-                // TODO change to use bankService needs logic change to check if can be paid
-
-                boolean paid = installment.pay(new Date(clock.millis()), loan.getAcceptedInterest(), payNextInstallment.getAmount());
-                bankService.createTransaction(TransactionRequestEntity.builder()
-                        .sourceAccountNumber(loan.getBorrower().getAccount())
-                        .targetAccountNumber(loan.getLender().getAccount())
-                        .amount(installment.getTotal().doubleValue()).build());
-                if(!paid){
-                    throw new ValidationException(Validated.invalid("Amount", payNextInstallment.getAmount(), (" invalid amount to pay actual is " + installment.getTotal().setScale(2,RoundingMode.HALF_UP).toString()), InvalidReason.MALFORMED));
-                }
-                installmentRepository.save(installment);
-                break;
+        Installment nextInstallment=null;
+        for (Installment installment : installments) {
+            if (!installment.getStatus().equals(InstallmentStatus.PAID)) {
+                nextInstallment = installment;
             }
         }
-
+        if(nextInstallment==null)
+            throw new NoSuchElementException("There is no next installment to pay");
+        boolean paid = nextInstallment.pay(new Date(clock.millis()), loan.getAcceptedInterest(), payNextInstallment.getAmount());
+        // TODO change to use bankService needs logic change to check if can be paid
+        bankService.createTransaction(TransactionRequestEntity.builder()
+                .sourceAccountNumber(loan.getBorrower().getAccount())
+                .targetAccountNumber(loan.getLender().getAccount())
+                .amount(nextInstallment.getTotal().doubleValue()).build());
+        if(!paid){
+            throw new ValidationException(Validated.invalid("Amount", payNextInstallment.getAmount(), (" invalid amount to pay actual is " + nextInstallment.getTotal().setScale(2,RoundingMode.HALF_UP).toString()), InvalidReason.MALFORMED));
+        }
+        installmentRepository.save(nextInstallment);
     }
 
     private LoanDTO createLoan(Auction auction, Offer offer) {
+
         User lender = offer.getLender();
         Loan loan = Loan.builder()
                 .borrower(userService.whoami())
@@ -132,7 +136,7 @@ public class LoanServiceImpl implements LoanService {
         }
     }
 
-    @Scheduled(fixedDelay = 1000*10)
+    @Override
     public void updateLoansStatus(){
         List<Loan> loans = loanRepository.findAll();
         for (Loan loan : loans) {
