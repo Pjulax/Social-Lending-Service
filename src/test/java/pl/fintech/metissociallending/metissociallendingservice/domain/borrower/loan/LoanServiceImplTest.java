@@ -203,7 +203,7 @@ class LoanServiceImplTest {
     }
     @Test
     @WithMockUser(username = "user", password = "name")
-    public void shouldNotAcceptOfferWhenOfferWantPlacedToProvidedAuction(){
+    public void shouldNotAcceptOfferWhenOfferIsNotPlacedToProvidedAuction(){
         User user = User.builder().username("user").build();
         given(userService.whoami()).willReturn(user);
         given(auctionRepository.findById(any())).willReturn(Optional.of(Auction.builder().id(1L).build()));
