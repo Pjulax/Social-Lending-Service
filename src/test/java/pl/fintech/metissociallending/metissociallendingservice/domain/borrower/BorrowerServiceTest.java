@@ -184,7 +184,6 @@ public class BorrowerServiceTest {
     @CsvFileSource(resources = "/testData/openAuction.csv")
     public void shouldGetAuctionThatIsOpen(long clocktime, long begintime, long endtime, Double amount, String desc, int numberOfInstallment){
         User user = User.builder().username("user").build();
-        when(clock.millis()).thenReturn(clocktime);
 
         Auction auction = Auction.builder()
                 .borrower(user)
