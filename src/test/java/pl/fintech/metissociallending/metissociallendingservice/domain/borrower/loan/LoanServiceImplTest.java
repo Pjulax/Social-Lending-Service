@@ -3,7 +3,6 @@ package pl.fintech.metissociallending.metissociallendingservice.domain.borrower.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.mockito.InjectMocks;
@@ -19,16 +18,13 @@ import pl.fintech.metissociallending.metissociallendingservice.domain.lender.Off
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.OfferRepository;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserService;
-import pl.fintech.metissociallending.metissociallendingservice.infrastructure.bankapi.request.TransactionRequest;
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.clock.Clock;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
