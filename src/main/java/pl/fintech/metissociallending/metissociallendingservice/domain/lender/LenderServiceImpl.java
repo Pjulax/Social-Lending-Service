@@ -5,11 +5,8 @@ import io.micrometer.core.instrument.config.validate.Validated;
 import io.micrometer.core.instrument.config.validate.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.fintech.metissociallending.metissociallendingservice.api.dto.LoanDTO;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.Auction;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.AuctionRepository;
-import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.Loan;
-import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.LoanRepository;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserService;
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.clock.Clock;
@@ -19,7 +16,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-
 @RequiredArgsConstructor
 @Service
 public class LenderServiceImpl implements LenderService {
@@ -27,7 +23,6 @@ public class LenderServiceImpl implements LenderService {
     private final OfferRepository offerRepository;
     private final Clock clock;
     private final UserService userService;
-    private final LoanRepository loanRepository;
 
     @Override
     public Offer submitOffer(Command.SubmitOffer submitOfferCommand) {
@@ -35,7 +30,7 @@ public class LenderServiceImpl implements LenderService {
         User user = userService.whoami();
         if(auctionRepository.findByIdAndBorrower(auction.getId(), user).isPresent())
             throw new IllegalArgumentException("User cannot create offer for his own auction");
-        if(submitOfferCommand.getProposedAnnualPercentageRate()<.0d)
+        if(submitOfferCommand.getProposedAnnualPercentageRate()<=.0d)
             throw new ValidationException(Validated.invalid("annual proposed percentage rate", submitOfferCommand.getProposedAnnualPercentageRate(), " cannot be below or equal 0", InvalidReason.MALFORMED));
         Offer offer = Offer.builder()
                 .auction(auction)
