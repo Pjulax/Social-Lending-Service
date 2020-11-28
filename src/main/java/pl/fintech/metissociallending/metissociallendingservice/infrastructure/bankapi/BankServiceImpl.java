@@ -5,9 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.AccountDTO;
 import pl.fintech.metissociallending.metissociallendingservice.domain.bank.BankService;
-import pl.fintech.metissociallending.metissociallendingservice.infrastructure.bankapi.entity.AccountNameRequestEntity;
-import pl.fintech.metissociallending.metissociallendingservice.infrastructure.bankapi.entity.MyAccountRequestEntity;
-import pl.fintech.metissociallending.metissociallendingservice.infrastructure.bankapi.entity.TransactionRequestEntity;
+import pl.fintech.metissociallending.metissociallendingservice.infrastructure.bankapi.request.AccountNameRequest;
+import pl.fintech.metissociallending.metissociallendingservice.infrastructure.bankapi.request.MyAccountRequest;
+import pl.fintech.metissociallending.metissociallendingservice.infrastructure.bankapi.request.TransactionRequest;
 
 /**
  * Service making operations on bank api provided by FinTech Challenge hosts.
@@ -25,8 +25,8 @@ public class BankServiceImpl implements BankService {
     @Override
     public String createBankAccount(Command.CreateBankAccount createBankAccount) {
         ResponseEntity<Void> response;
-            AccountNameRequestEntity accountNameRequestEntity = AccountNameRequestEntity.builder().name(createBankAccount.getUsername() + "-account").build();
-            response = bankClient.createAccount(basicAuthHeader, accountNameRequestEntity);
+            AccountNameRequest accountNameRequest = AccountNameRequest.builder().name(createBankAccount.getUsername() + "-account").build();
+            response = bankClient.createAccount(basicAuthHeader, accountNameRequest);
         return response.getHeaders().getLocation().getPath().substring("/accounts/".length());
     }
 
@@ -38,26 +38,26 @@ public class BankServiceImpl implements BankService {
 
     @Override
     public void withdrawFromAccount(Command.WithdrawFromAccount withdrawFromAccount) {
-        MyAccountRequestEntity myAccountRequestEntity = MyAccountRequestEntity.builder()
+        MyAccountRequest myAccountRequest = MyAccountRequest.builder()
                 .accountNumber(withdrawFromAccount.getAccountNumber())
                 .amount(withdrawFromAccount.getAmount()).build();
-        bankClient.withdraw(basicAuthHeader, myAccountRequestEntity);
+        bankClient.withdraw(basicAuthHeader, myAccountRequest);
     }
 
     @Override
     public void depositToAccount(Command.DepositToAccount depositToAccount) {
-        MyAccountRequestEntity myAccountRequestEntity = MyAccountRequestEntity.builder()
+        MyAccountRequest myAccountRequest = MyAccountRequest.builder()
                 .accountNumber(depositToAccount.getAccountNumber())
                 .amount(depositToAccount.getAmount()).build();
-        bankClient.deposit(basicAuthHeader, myAccountRequestEntity);
+        bankClient.deposit(basicAuthHeader, myAccountRequest);
     }
 
     @Override
     public void transfer(Command.Transfer transfer) {
-        TransactionRequestEntity transactionRequestEntity = TransactionRequestEntity.builder()
+        TransactionRequest transactionRequest = TransactionRequest.builder()
                 .sourceAccountNumber(transfer.getSourceAccountNumber())
                 .targetAccountNumber(transfer.getTargetAccountNumber())
                 .amount(transfer.getAmount()).build();
-        bankClient.createTransaction(basicAuthHeader, transactionRequestEntity);
+        bankClient.createTransaction(basicAuthHeader, transactionRequest);
     }
 }

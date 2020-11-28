@@ -1,4 +1,4 @@
-package pl.fintech.metissociallending.metissociallendingservice.infrastructure.bankapi.entity;
+package pl.fintech.metissociallending.metissociallendingservice.infrastructure.bankapi.request;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -6,7 +6,7 @@ import pl.fintech.metissociallending.metissociallendingservice.domain.bank.BankS
 
 @Getter
 @Builder
-public class MyAccountRequestEntity implements BankService.Command.WithdrawFromAccount, BankService.Command.DepositToAccount {
+public class MyAccountRequest implements BankService.Command.WithdrawFromAccount, BankService.Command.DepositToAccount {
     private final String accountNumber;
     private final Double amount;
 }

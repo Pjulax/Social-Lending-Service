@@ -11,7 +11,7 @@ import pl.fintech.metissociallending.metissociallendingservice.api.dto.AccountDT
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.TransactionDTO;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.UserDetailsDTO;
 import pl.fintech.metissociallending.metissociallendingservice.domain.bank.BankService;
-import pl.fintech.metissociallending.metissociallendingservice.infrastructure.bankapi.entity.MyAccountRequestEntity;
+import pl.fintech.metissociallending.metissociallendingservice.infrastructure.bankapi.request.MyAccountRequest;
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.security.AES;
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.security.jwt.JwtTokenProvider;
 
@@ -50,13 +50,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public void depositToBank(Command.DepositToBank depositToBank) {
         User user = whoami();
-        bankService.depositToAccount(MyAccountRequestEntity.builder().accountNumber(user.getAccount())
+        bankService.depositToAccount(MyAccountRequest.builder().accountNumber(user.getAccount())
                                                                      .amount(depositToBank.getAmount()).build());
     }
     @Override
     public void withdrawFromBank(Command.WithdrawFromBank withdrawFromBank) {
         User user = whoami();
-        bankService.withdrawFromAccount(MyAccountRequestEntity.builder().accountNumber(user.getAccount())
+        bankService.withdrawFromAccount(MyAccountRequest.builder().accountNumber(user.getAccount())
                                                                         .amount(withdrawFromBank.getAmount()).build());
     }
     @Override

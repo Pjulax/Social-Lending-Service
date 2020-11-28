@@ -14,7 +14,7 @@ import pl.fintech.metissociallending.metissociallendingservice.domain.lender.Off
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.OfferRepository;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserService;
-import pl.fintech.metissociallending.metissociallendingservice.infrastructure.bankapi.entity.TransactionRequestEntity;
+import pl.fintech.metissociallending.metissociallendingservice.infrastructure.bankapi.request.TransactionRequest;
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.clock.Clock;
 
 import java.math.BigDecimal;
@@ -54,9 +54,10 @@ public class LoanServiceImpl implements LoanService {
     @Override
     public LoanDTO acceptOffer(LoanService.Command.AcceptOffer acceptOffer) {
         Auction auction = findAuction(acceptOffer);
+        Offer offer = findOffer(acceptOffer, auction);
+        transferMoneyToBorrower(auction,offer);
         auction.close();
         auction = auctionRepository.save(auction);
-        Offer offer = findOffer(acceptOffer, auction);
         return createLoan(auction, offer);
     }
 
@@ -74,6 +75,13 @@ public class LoanServiceImpl implements LoanService {
         if(!offer.getAuction().getId().equals(auction.getId()))
             throw new IllegalArgumentException("Offer wasn't placed to provided auction");
         return offer;
+    }
+
+    private void transferMoneyToBorrower(Auction auction, Offer offer) {
+        bankService.transfer(TransactionRequest.builder()
+                .sourceAccountNumber(offer.getLender().getAccount())
+                .targetAccountNumber(auction.getBorrower().getAccount())
+                .amount(auction.getLoanAmount().doubleValue()).build());
     }
 
     private LoanDTO createLoan(Auction auction, Offer offer) {
@@ -180,7 +188,7 @@ public class LoanServiceImpl implements LoanService {
             throw new NoSuchElementException("There is no next installment to pay");
         boolean canBePaid = nextInstallment.isInputAmountEqualToInstallmentAmount(new Date(clock.millis()), loan.getAcceptedInterest(), payNextInstallment.getAmount());
         if (canBePaid) {
-            bankService.transfer(TransactionRequestEntity.builder()
+            bankService.transfer(TransactionRequest.builder()
                     .sourceAccountNumber(loan.getBorrower().getAccount())
                     .targetAccountNumber(loan.getLender().getAccount())
                     .amount(nextInstallment.getTotal().doubleValue()).build());
