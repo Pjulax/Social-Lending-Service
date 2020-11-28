@@ -37,14 +37,14 @@ public class LenderServiceImplTests {
     @InjectMocks
     private LenderServiceImpl lenderService;
 
-    @Test
+    @ParameterizedTest
+    @CsvFileSource(resources = "/testData/lender-service-test-positive-annual-rate.csv")
     @WithMockUser(username = "user", password = "name")
-    void shouldSubmitOffer(){
+    void shouldSubmitOffer(Double annualRate){
         Long auctionId = 1L;
         Long offerId = 1L;
-        Double proposedAnnualPercentageRate = 0.05;
 
-        SubmitOfferDTO submitOfferDTO = new SubmitOfferDTO(auctionId, proposedAnnualPercentageRate);
+        SubmitOfferDTO submitOfferDTO = new SubmitOfferDTO(auctionId, annualRate);
 
         User lender = User.builder()
                 .username("lender")
@@ -70,7 +70,7 @@ public class LenderServiceImplTests {
                 .auction(auction)
                 .lender(lender)
                 .date(new Date(154352525L))
-                .annualPercentageRate(proposedAnnualPercentageRate)
+                .annualPercentageRate(annualRate)
                 .build();
 
         when(auctionRepository.findById(auctionId)).thenReturn(java.util.Optional.ofNullable(auction));
@@ -123,7 +123,7 @@ public class LenderServiceImplTests {
 
 
     @ParameterizedTest
-    @CsvFileSource(resources = "/testData/lender-service-test.csv")
+    @CsvFileSource(resources = "/testData/lender-service-test-non-positive-annual-rate.csv")
     @WithMockUser(username = "user", password = "name")
     void shouldNotSubmitOfferWithNonPositiveAnnualRate(Double annualRate){
         Long auctionId = 1L;
@@ -276,7 +276,7 @@ public class LenderServiceImplTests {
     }
 
     @Test
-    //@CsvFileSource(resources = "/testData/lender-service-test.csv")
+    //@CsvFileSource(resources = "/testData/lender-service-test-non-positive-annual-rate.csv")
     @WithMockUser(username = "user", password = "name")
     void shouldNotGetClosedOrLenderAuctions(){
         User lender = User.builder()
