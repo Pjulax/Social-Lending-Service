@@ -9,6 +9,6 @@ public interface LoanRepository {
     Loan save(Loan loan);
     Optional<Loan> findByIdAndBorrower(Long id, User borrower);
     List<Loan> findAllByBorrower(User borrower);
-
+    List<Loan> findAllByLender(User lender);
     List<Loan> findAll();
 }
