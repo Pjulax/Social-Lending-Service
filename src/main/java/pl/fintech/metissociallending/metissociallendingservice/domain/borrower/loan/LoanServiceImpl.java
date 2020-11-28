@@ -170,10 +170,10 @@ public class LoanServiceImpl implements LoanService {
         Loan loan = loanOptional.get();
         List<Installment> installments = loan.getInstallments();
         Installment nextInstallment = null;
-        installments.sort(Comparator.comparing(Installment::getIndex).reversed());  // TODO change it to normal way of checking, now it is double reversed list checking
         for (Installment installment : installments) {                              //
             if (!installment.getStatus().equals(InstallmentStatus.PAID)) {          //
-                nextInstallment = installment;                                      //
+                nextInstallment = installment;
+                break;                                                              //
             }
         }
         if (nextInstallment == null)
@@ -208,7 +208,8 @@ public class LoanServiceImpl implements LoanService {
     private void countTotal(Loan loan){ // totals = fines and interests
         List<Installment> installments = loan.getInstallments();
         for (Installment installment : installments) {
-            installment.countTotal(new Date(clock.millis()), loan.getAcceptedInterest());
+            if(!installment.getStatus().equals(InstallmentStatus.PAID))
+                installment.countTotal(new Date(clock.millis()), loan.getAcceptedInterest());
             installmentRepository.save(installment);
         }
     }
