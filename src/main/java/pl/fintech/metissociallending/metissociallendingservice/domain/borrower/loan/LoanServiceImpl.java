@@ -8,12 +8,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.LoanDTO;
+import pl.fintech.metissociallending.metissociallendingservice.domain.bank.BankService;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.Auction;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.AuctionRepository;
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.Offer;
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.OfferRepository;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserService;
+import pl.fintech.metissociallending.metissociallendingservice.infrastructure.bankapi.entity.TransactionRequestEntity;
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.clock.Clock;
 
 import java.math.BigDecimal;
@@ -31,6 +33,7 @@ public class LoanServiceImpl implements LoanService {
     private final LoanRepository loanRepository;
     private final InstallmentRepository installmentRepository;
     private final Clock clock;
+    private final BankService bankService;
 
     @Override
     public LoanDTO acceptOffer(LoanService.Command.AcceptOffer acceptOffer) {
@@ -49,7 +52,13 @@ public class LoanServiceImpl implements LoanService {
         for(int i = 0; i<installments.size(); i++){
             Installment installment = installments.get(i);
             if(!installment.getStatus().equals(InstallmentStatus.PAID)){
+                // TODO change to use bankService needs logic change to check if can be paid
+
                 boolean paid = installment.pay(new Date(clock.millis()), loan.getAcceptedInterest(), payNextInstallment.getAmount());
+                bankService.createTransaction(TransactionRequestEntity.builder()
+                        .sourceAccountNumber(loan.getBorrower().getAccount())
+                        .targetAccountNumber(loan.getLender().getAccount())
+                        .amount(installment.getTotal().doubleValue()).build());
                 if(!paid){
                     throw new ValidationException(Validated.invalid("Amount", payNextInstallment.getAmount(), (" invalid amount to pay actual is " + installment.getTotal().setScale(2,RoundingMode.HALF_UP).toString()), InvalidReason.MALFORMED));
                 }

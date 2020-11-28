@@ -1,5 +1,6 @@
 package pl.fintech.metissociallending.metissociallendingservice.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,9 +13,12 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TransactionDTO {
+    @JsonIgnore
     private Long id;
+    private Long index;
     private String type;
     private Double amount;
+    @JsonIgnore
     private String referenceId;
     private Date timestamp;
 }

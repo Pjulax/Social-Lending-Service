@@ -2,7 +2,6 @@ package pl.fintech.metissociallending.metissociallendingservice.domain.user;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,44 +10,35 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.AccountDTO;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.TransactionDTO;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.UserDetailsDTO;
-import pl.fintech.metissociallending.metissociallendingservice.domain.bank.BankClient;
-import pl.fintech.metissociallending.metissociallendingservice.domain.bank.requestEntity.AccountEntityRequest;
+import pl.fintech.metissociallending.metissociallendingservice.domain.bank.BankService;
+import pl.fintech.metissociallending.metissociallendingservice.infrastructure.bankapi.entity.MyAccountRequestEntity;
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.security.AES;
-import pl.fintech.metissociallending.metissociallendingservice.domain.bank.requestEntity.MyAccountRequestBody;
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.security.jwt.JwtTokenProvider;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final AES aes;
-    //private final BankService bankService;
-    private final BankClient bankClient;
-    private final String basicAuthHeader;
+    private final BankService bankService;
 
     @Override
     public User createUser(UserService.Command.CreateUser createUserCommand) {
         if(userRepository.findByUsername(createUserCommand.getUsername()).isPresent())
             throw new IllegalArgumentException("User with that username already exists");
-        //String account = bankService.createAccount(createUserCommand.getUsername()+"-account");
-        String account = bankClient
-                .accounts(basicAuthHeader,AccountEntityRequest.builder().name(createUserCommand.getUsername()+"-account").build())
-                .getHeaders().getLocation().getPath().substring("/accounts/".length());
 
+        String account = bankService.createBankAccount(createUserCommand::getUsername);
         LinkedList<Role> roles = new LinkedList<Role>();
         roles.add(Role.ROLE_CLIENT);
         User user = User.builder()
                 .username(createUserCommand.getUsername())
                 .password(passwordEncoder.encode(createUserCommand.getPassword()))
-                .balance(0.0d)
                 .roles(roles)
                 .name(createUserCommand.getName())
                 .cardNumber(aes.encrypt(createUserCommand.getCardNumber()))
@@ -58,7 +48,7 @@ public class UserServiceImpl implements UserService{
         return userRepository.save(user);
     }
     @Override
-    public void deleteUser(Command.DeleteUser deleteUser){
+    public void deleteUser(Command.DeleteUser deleteUser) { //TODO delete user must be deleted
         if(userRepository.findByUsername(deleteUser.getUsername()).isPresent())
             userRepository.deleteByUsername(deleteUser.getUsername());
         else
@@ -67,17 +57,30 @@ public class UserServiceImpl implements UserService{
     @Override
     public AccountDTO getAccountDetailsFromBank() {
         User user = whoami();
-        return bankClient.myAccount(basicAuthHeader, user.getAccount()).getBody(); //TODO create form with indexes on transactions
+        AccountDTO accountDetails = bankService.getAccountDetails(user::getAccount);
+        accountDetails.setTransactions(getIndexedTransactions(accountDetails.getTransactions()));
+        return accountDetails; //TODO check indexes on transactions
+    }
+    private List<TransactionDTO> getIndexedTransactions(List<TransactionDTO> transactions) {
+        transactions.sort(Comparator.comparing(TransactionDTO::getTimestamp));
+        long index = 0;
+        for(TransactionDTO transaction : transactions){
+            transaction.setIndex(index);
+            index++;
+        }
+        return transactions;
     }
     @Override
-    public void depositToBank(Command.DepositToBank depositToBank){
-        User user = whoami(); //TODO handle all responses
-        ResponseEntity<Void> response = bankClient.payment(basicAuthHeader, MyAccountRequestBody.builder().accountNumber(user.getAccount()).amount(depositToBank.getAmount()).build());
+    public void depositToBank(Command.DepositToBank depositToBank) {
+        User user = whoami();
+        bankService.depositToAccount(MyAccountRequestEntity.builder().accountNumber(user.getAccount())
+                                                                     .amount(depositToBank.getAmount()).build());
     }
     @Override
     public void withdrawFromBank(Command.WithdrawFromBank withdrawFromBank) {
-        User user = whoami(); //TODO handle all responses
-        ResponseEntity<Void> response = bankClient.withdraw(basicAuthHeader, MyAccountRequestBody.builder().accountNumber(user.getAccount()).amount(withdrawFromBank.getAmount()).build());
+        User user = whoami();
+        bankService.withdrawFromAccount(MyAccountRequestEntity.builder().accountNumber(user.getAccount())
+                                                                        .amount(withdrawFromBank.getAmount()).build());
     }
     @Override
     public String login(Query.Login login) {
@@ -95,7 +98,8 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserDetailsDTO getUserDetails() {
         User user = whoami();
-        return new UserDetailsDTO(user.getUsername(), user.getAccount(), aes.decrypt(user.getCardNumber()), user.getName(), aes.decrypt(user.getCvc()), user.getExpiry(), user.getBalance());
+        AccountDTO account = getAccountDetailsFromBank();
+        return new UserDetailsDTO(user.getUsername(), user.getAccount(), aes.decrypt(user.getCardNumber()), user.getName(), aes.decrypt(user.getCvc()), user.getExpiry(), account.getAccountBalance(), account.getTransactions());
     }
 
 }

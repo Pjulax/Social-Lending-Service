@@ -22,7 +22,6 @@ public class UserTuple {
     @Size(min = 8)
     private String password;
     private String account;
-    private Double balance;
     private String name;
     private String cardNumber;
     private String expiry;
@@ -36,7 +35,6 @@ public class UserTuple {
                 user.getUsername(),
                 user.getPassword(),
                 user.getAccount(),
-                user.getBalance(),
                 user.getName(),
                 user.getCardNumber(),
                 user.getExpiry(),
@@ -51,7 +49,6 @@ public class UserTuple {
                 .username(username)
                 .password(password)
                 .account(account)
-                .balance(balance)
                 .cardNumber(cardNumber)
                 .cvc(cvc)
                 .expiry(expiry)

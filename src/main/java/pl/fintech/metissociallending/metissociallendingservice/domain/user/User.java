@@ -22,7 +22,6 @@ public class User {
     private String username;
     private String password;
     private String account;
-    private Double balance;
     private List<Role> roles;
     private String name;
     private String cardNumber;

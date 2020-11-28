@@ -1,5 +1,6 @@
 package pl.fintech.metissociallending.metissociallendingservice.api.exception;
 
+import feign.FeignException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -25,26 +26,32 @@ public class GeneralApiExceptionHandler
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ExceptionResponse> handleAuthenticationException(AuthenticationException ex, WebRequest req){
-//        log.error("Unexpected error!", ex);
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), req.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
     }
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<ExceptionResponse> handleNoSuchElementException(NoSuchElementException ex, WebRequest req){
-//        log.error("Unexpected error!", ex);
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), req.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ExceptionResponse> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest req){
-//        log.error("Unexpected error!", ex);
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), req.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<Object> handleValidationException(ValidationException ex){
-//        log.error("Unexpected error!", ex);
         return new ResponseEntity<>(ex.getValidation(), HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(FeignException.FeignClientException.class)
+    public ResponseEntity<ExceptionResponse> handleFeignClientException(FeignException.FeignClientException ex, WebRequest req){
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), req.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(FeignException.FeignServerException.class)
+    public ResponseEntity<ExceptionResponse> handleFeignServerException(FeignException.FeignServerException ex, WebRequest req){
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), req.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
     @ExceptionHandler({ RuntimeException.class,
                         Exception.class})
