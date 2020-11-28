@@ -26,10 +26,10 @@ public class Auction{
     private String description;
 
     public void close(){
-        isClosed = false;
+        isClosed = true;
     }
     public void open(){
-        isClosed = true;
+        isClosed = false;
     }
 
     public void changeDescription(String description) {

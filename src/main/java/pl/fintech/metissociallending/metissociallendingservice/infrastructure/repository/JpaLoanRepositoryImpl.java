@@ -29,8 +29,16 @@ public class JpaLoanRepositoryImpl implements LoanRepository {
     }
 
     @Override
-    public List<Loan> findAllByBorrower(User user) {
-        List<LoanTuple> loanTuples = jpaLoanRepo.findAllByBorrower(UserTuple.from(user));
+    public List<Loan> findAllByBorrower(User borrower) {
+        List<LoanTuple> loanTuples = jpaLoanRepo.findAllByBorrower(UserTuple.from(borrower));
+        if(loanTuples.isEmpty())
+            return List.of();
+        return loanTuples.stream().map(LoanTuple::toDomain).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Loan> findAllByLender(User lender) {
+        List<LoanTuple> loanTuples = jpaLoanRepo.findAllByLender(UserTuple.from(lender));
         if(loanTuples.isEmpty())
             return List.of();
         return loanTuples.stream().map(LoanTuple::toDomain).collect(Collectors.toList());
@@ -46,6 +54,7 @@ public class JpaLoanRepositoryImpl implements LoanRepository {
 
     interface JpaLoanRepo extends JpaRepository<LoanTuple, Long> {
         List<LoanTuple> findAllByBorrower(UserTuple userTuple);
+        List<LoanTuple> findAllByLender(UserTuple userTuple);
         Optional<LoanTuple> findByIdAndBorrower(Long id, UserTuple userTuple);
     }
 }
