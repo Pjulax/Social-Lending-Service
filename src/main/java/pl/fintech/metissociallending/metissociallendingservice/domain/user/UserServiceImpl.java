@@ -7,43 +7,38 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import pl.fintech.metissociallending.metissociallendingservice.api.dto.AccountDTO;
+import pl.fintech.metissociallending.metissociallendingservice.api.dto.TransactionDTO;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.UserDetailsDTO;
-import pl.fintech.metissociallending.metissociallendingservice.domain.bank.BankClient;
-import pl.fintech.metissociallending.metissociallendingservice.domain.bank.requestEntity.AccountEntityRequest;
+import pl.fintech.metissociallending.metissociallendingservice.domain.bank.BankService;
+import pl.fintech.metissociallending.metissociallendingservice.infrastructure.bankapi.request.MyAccountRequest;
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.security.AES;
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.security.jwt.JwtTokenProvider;
 
-import java.util.LinkedList;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final AES aes;
-    //private final BankService bankService;
-    private final BankClient bankClient;
-    private final String basicAuthHeader;
+    private final BankService bankService;
 
     @Override
     public User createUser(UserService.Command.CreateUser createUserCommand) {
         if(userRepository.findByUsername(createUserCommand.getUsername()).isPresent())
             throw new IllegalArgumentException("User with that username already exists");
-        //String account = bankService.createAccount(createUserCommand.getUsername()+"-account");
-        String account = bankClient
-                .accounts(basicAuthHeader,AccountEntityRequest.builder().name(createUserCommand.getUsername()+"-account").build())
-                .getHeaders().getLocation().getPath().substring("/accounts/".length());
 
+        String account = bankService.createBankAccount(createUserCommand::getUsername);
         LinkedList<Role> roles = new LinkedList<Role>();
         roles.add(Role.ROLE_CLIENT);
         User user = User.builder()
                 .username(createUserCommand.getUsername())
                 .password(passwordEncoder.encode(createUserCommand.getPassword()))
-                .balance(0.0d)
                 .roles(roles)
                 .name(createUserCommand.getName())
                 .cardNumber(aes.encrypt(createUserCommand.getCardNumber()))
@@ -53,11 +48,16 @@ public class UserServiceImpl implements UserService{
         return userRepository.save(user);
     }
     @Override
-    public void deleteUser(Command.DeleteUser deleteUser){
-        if(userRepository.findByUsername(deleteUser.getUsername()).isPresent())
-            userRepository.deleteByUsername(deleteUser.getUsername());
-        else
-            throw new NoSuchElementException("User doesn't exists");
+    public void depositToBank(Command.DepositToBank depositToBank) {
+        User user = whoami();
+        bankService.depositToAccount(MyAccountRequest.builder().accountNumber(user.getAccount())
+                                                                     .amount(depositToBank.getAmount()).build());
+    }
+    @Override
+    public void withdrawFromBank(Command.WithdrawFromBank withdrawFromBank) {
+        User user = whoami();
+        bankService.withdrawFromAccount(MyAccountRequest.builder().accountNumber(user.getAccount())
+                                                                        .amount(withdrawFromBank.getAmount()).build());
     }
     @Override
     public String login(Query.Login login) {
@@ -71,14 +71,31 @@ public class UserServiceImpl implements UserService{
     public User whoami(){
         return search(()->SecurityContextHolder.getContext().getAuthentication().getName());
     }
-
     @Override
     public UserDetailsDTO getUserDetails() {
         User user = whoami();
-        return new UserDetailsDTO(user.getUsername(), user.getAccount(), hideCard(aes.decrypt(user.getCardNumber())), user.getName(), "***", user.getExpiry(), user.getBalance());
+        AccountDTO account = getAccountDetailsFromBank();
+        return new UserDetailsDTO(user.getUsername(), user.getAccount(), hideCard(aes.decrypt(user.getCardNumber())), user.getName(), "***", user.getExpiry(), account.getAccountBalance(), account.getTransactions());
     }
+
     private String hideCard(String card){
         return card.substring(0, 3).concat("*".repeat(9)).concat(card.substring(card.length()-4));
     }
 
+    @Override
+    public AccountDTO getAccountDetailsFromBank() {
+        User user = whoami();
+        AccountDTO accountDetails = bankService.getAccountDetails(user::getAccount);
+        accountDetails.setTransactions(getIndexedTransactions(accountDetails.getTransactions()));
+        return accountDetails; //TODO check indexes on transactions
+    }
+    private List<TransactionDTO> getIndexedTransactions(List<TransactionDTO> transactions) {
+        transactions.sort(Comparator.comparing(TransactionDTO::getTimestamp));
+        long index = 0;
+        for(TransactionDTO transaction : transactions){
+            transaction.setIndex(index);
+            index++;
+        }
+        return transactions;
+    }
 }

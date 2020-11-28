@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Table(name="LOAN")
 public class LoanTuple {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
     private UserTuple borrower;

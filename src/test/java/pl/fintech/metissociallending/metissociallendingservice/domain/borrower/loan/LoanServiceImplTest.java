@@ -12,12 +12,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.test.context.support.WithMockUser;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.LoanDTO;
+import pl.fintech.metissociallending.metissociallendingservice.domain.bank.BankService;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.Auction;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.AuctionRepository;
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.Offer;
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.OfferRepository;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserService;
+import pl.fintech.metissociallending.metissociallendingservice.infrastructure.bankapi.request.TransactionRequest;
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.clock.Clock;
 
 import java.math.BigDecimal;
@@ -25,9 +27,12 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 class LoanServiceImplTest {
@@ -36,6 +41,8 @@ class LoanServiceImplTest {
     private AuctionRepository auctionRepository;
     @Mock
     private UserService userService;
+    @Mock
+    private BankService bankService;
     @Mock
     private OfferRepository offerRepository;
     @Mock
@@ -98,6 +105,7 @@ class LoanServiceImplTest {
         when(auctionRepository.findByIdAndBorrower(auctionId, user)).thenReturn(Optional.ofNullable(auction));
         when(auctionRepository.save(auction)).thenReturn(auction);
         when(offerRepository.findById(offerId)).thenReturn(Optional.ofNullable(offer));
+        doNothing().when(bankService).transfer(any());
         Loan fakeLoan = Loan.builder().build();
 
 

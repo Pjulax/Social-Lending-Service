@@ -5,18 +5,18 @@ import io.micrometer.core.instrument.config.validate.Validated;
 import io.micrometer.core.instrument.config.validate.ValidationException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.LoanDTO;
+import pl.fintech.metissociallending.metissociallendingservice.domain.bank.BankService;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.Auction;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.AuctionRepository;
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.Offer;
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.OfferRepository;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserService;
+import pl.fintech.metissociallending.metissociallendingservice.infrastructure.bankapi.request.TransactionRequest;
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.clock.Clock;
 
-import javax.naming.OperationNotSupportedException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
@@ -32,6 +32,7 @@ public class LoanServiceImpl implements LoanService {
     private final LoanRepository loanRepository;
     private final InstallmentRepository installmentRepository;
     private final Clock clock;
+    private final BankService bankService;
 
 
     @Override
@@ -53,12 +54,12 @@ public class LoanServiceImpl implements LoanService {
     @Override
     public LoanDTO acceptOffer(LoanService.Command.AcceptOffer acceptOffer) {
         Auction auction = findAuction(acceptOffer);
+        Offer offer = findOffer(acceptOffer, auction);
+        transferMoneyToBorrower(auction,offer);
         auction.close();
         auction = auctionRepository.save(auction);
-        Offer offer = findOffer(acceptOffer, auction);
         return createLoan(auction, offer);
     }
-
 
     private Auction findAuction(@NonNull Command.AcceptOffer acceptOffer) {
         Auction auction = auctionRepository.findById(acceptOffer.getAuctionId())
@@ -74,6 +75,13 @@ public class LoanServiceImpl implements LoanService {
         if(!offer.getAuction().getId().equals(auction.getId()))
             throw new IllegalArgumentException("Offer wasn't placed to provided auction");
         return offer;
+    }
+
+    private void transferMoneyToBorrower(Auction auction, Offer offer) {
+        bankService.transfer(TransactionRequest.builder()
+                .sourceAccountNumber(offer.getLender().getAccount())
+                .targetAccountNumber(auction.getBorrower().getAccount())
+                .amount(auction.getLoanAmount().doubleValue()).build());
     }
 
     private LoanDTO createLoan(Auction auction, Offer offer) {
@@ -165,36 +173,33 @@ public class LoanServiceImpl implements LoanService {
     @Override
     public void payNextInstallment(LoanService.Command.PayNextInstallment payNextInstallment) {
         Optional<Loan> loanOptional = loanRepository.findByIdAndBorrower(payNextInstallment.getLoanId(), userService.whoami());
-        if(loanOptional.isEmpty())
+        if (loanOptional.isEmpty())
             throw new IllegalArgumentException("Loan is not found");
         Loan loan = loanOptional.get();
         List<Installment> installments = loan.getInstallments();
-        Installment nextInstallment=null;
-        for (Installment installment : installments) {
-            if (!installment.getStatus().equals(InstallmentStatus.PAID)) {
+        Installment nextInstallment = null;
+        for (Installment installment : installments) {                              //
+            if (!installment.getStatus().equals(InstallmentStatus.PAID)) {          //
                 nextInstallment = installment;
+                break;                                                              //
             }
         }
-        if(nextInstallment==null)
+        if (nextInstallment == null)
             throw new NoSuchElementException("There is no next installment to pay");
-        boolean paid = nextInstallment.pay(new Date(clock.millis()), loan.getAcceptedInterest(), payNextInstallment.getAmount());
-        if(!paid){
-            throw new ValidationException(
-                    Validated.invalid(
-                            "Amount",
-                            payNextInstallment.getAmount(),
-                            (" invalid amount to pay actual is " + nextInstallment.getTotal().setScale(2,RoundingMode.HALF_UP).toString()),
-                            InvalidReason.MALFORMED));
-        }
+        boolean canBePaid = nextInstallment.isInputAmountEqualToInstallmentAmount(new Date(clock.millis()), loan.getAcceptedInterest(), payNextInstallment.getAmount());
+        if (canBePaid) {
+            bankService.transfer(TransactionRequest.builder()
+                    .sourceAccountNumber(loan.getBorrower().getAccount())
+                    .targetAccountNumber(loan.getLender().getAccount())
+                    .amount(nextInstallment.getTotal().doubleValue()).build());
+            nextInstallment.changeToPaid();
+        } else
+            throw new ValidationException(Validated.invalid(
+                    "Amount",
+                    payNextInstallment.getAmount(),
+                    (" invalid amount to pay actual is " + nextInstallment.getTotal().setScale(2, RoundingMode.HALF_UP).toString()),
+                    InvalidReason.MALFORMED));
         installmentRepository.save(nextInstallment);
-    }
-
-
-    private void updateLoanStatus(Loan loan){
-        checkStatus(loan);
-        countTotal(loan);
-        loan.calculateLeft();
-        loanRepository.save(loan);
     }
 
     private void checkStatus(Loan loan){
@@ -211,7 +216,8 @@ public class LoanServiceImpl implements LoanService {
     private void countTotal(Loan loan){ // totals = fines and interests
         List<Installment> installments = loan.getInstallments();
         for (Installment installment : installments) {
-            installment.countTotal(new Date(clock.millis()), loan.getAcceptedInterest());
+            if(!installment.getStatus().equals(InstallmentStatus.PAID))
+                installment.countTotal(new Date(clock.millis()), loan.getAcceptedInterest());
             installmentRepository.save(installment);
         }
     }
@@ -222,6 +228,13 @@ public class LoanServiceImpl implements LoanService {
         for (Loan loan : loans) {
             updateLoanStatus(loan);
         }
+    }
+
+    private void updateLoanStatus(Loan loan){
+        checkStatus(loan);
+        countTotal(loan);
+        loan.calculateLeft();
+        loanRepository.save(loan);
     }
 
 }

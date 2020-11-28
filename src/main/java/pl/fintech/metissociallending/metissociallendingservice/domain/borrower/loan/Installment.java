@@ -24,6 +24,32 @@ public class Installment {
 
 
 
+
+    // changes to missed if installment isn't paid before due time
+    public InstallmentStatus checkStatus(Date now){
+        if(!status.equals(InstallmentStatus.PAID)) {
+            if(now.getTime() > due.getTime()) {
+               status = InstallmentStatus.MISSED;
+            }
+        }
+        return status;
+    }
+
+    /**
+     * checks if it can be paid, first calculates total and checks if amount is equal to user input. Does nothing when is already PAID
+     * @param now - time when we pay
+     * @param fineInterest - annual fine interests count in rate ex 0.05 is 5%
+     */
+    public boolean isInputAmountEqualToInstallmentAmount(Date now, double fineInterest, double amount){
+        if(!status.equals(InstallmentStatus.PAID)) {
+            countTotal(now, fineInterest);
+            if(total.setScale(2, RoundingMode.HALF_UP).doubleValue()==amount) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Always is counted anew
      * @param now - difference between now and due is used to count fine
@@ -43,6 +69,7 @@ public class Installment {
         fine = countInterestValue(now, fineInterests);
     }
 
+
     //counts value of interests with given interest and difference between now and due
     private BigDecimal countInterestValue(Date now, double loaninterest){
         Calendar calNow = Calendar.getInstance();
@@ -59,31 +86,11 @@ public class Installment {
         return BigDecimal.ZERO;
     }
 
-
-    // changes to missed if installment isn't paid before due time
-    public InstallmentStatus checkStatus(Date now){
-        if(!status.equals(InstallmentStatus.PAID)) {
-            if(now.getTime() > due.getTime()) {
-               status = InstallmentStatus.MISSED;
-            }
-        }
-        return status;
-    }
-
     /**
-     * pay first counts total and it changes status to PAID. Does nothing when is already PAID
-     * @param now - time when we pay
-     * @param fineInterest - annual fine interests count in rate ex 0.05 is 5%
+     * Modifies installment status to paid.
      */
-    public boolean pay(Date now, double fineInterest, double amount){
-        if(!status.equals(InstallmentStatus.PAID)) {
-            countTotal(now, fineInterest);
-            if(total.setScale(2, RoundingMode.HALF_UP).doubleValue()==amount) {
-                status = InstallmentStatus.PAID;
-                return true;
-            }
-        }
-        return false;
+    public void changeToPaid(){
+        status = InstallmentStatus.PAID;
     }
 
 }
