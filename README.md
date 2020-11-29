@@ -59,7 +59,8 @@ Here are steps how to do this:
     ```
 5. Application will be exposed at localhost:8080.
 
-#### Now you can take a look at API swagger documentation on http://localhost:8080/swagger-ui.html
+#### If service already started you can find API documentation under this link:
+#### http://localhost:8080/swagger-ui.html
   
 ### 3. Technology stack
 #### Technologies used:
