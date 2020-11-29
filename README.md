@@ -76,11 +76,13 @@ Technologies used:
 * Lombok
 
 ### 4. Context diagram
-  Diagram tells us how our API is placed in applications environment.
+Diagram tells us how our API is placed in applications environment.
+  
 ![Context diagram](https://confluence.fintechchallenge.pl/download/attachments/5996556/c4.drawio-Context%20Diagram.png)
   
 ### 5. Component Diagram
-  This shows how 
+This diagram shows 
+
 ![Component diagram](https://confluence.fintechchallenge.pl/download/attachments/5996556/c4.drawio-Container%20Diagram%20%282%29.png)
 
  5. Packages usability description
