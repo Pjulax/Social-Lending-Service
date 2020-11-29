@@ -62,7 +62,7 @@ Here are steps how to do this:
 #### Now you can take a look at API swagger documentation on http://localhost:8080/swagger-ui.html
   
 ### 3. Application architecture
-Technologies used:
+#### Technologies used:
 * The application was written in Hexagonal architecture using the Command and Query interfaces.
 * Authentication and authorization have been resolved using Json Web Token
 * Hibernate
@@ -74,6 +74,13 @@ Technologies used:
 * Maven
 * SpringFox Swagger - api documentation
 * Lombok
+
+#### Application has proper properties profiles for every environment:
+* *Local* - profile that provides basic configuration for H2 database and logs
+* *Sit* - has configured PostgreSQL database connection and logs
+* *Uat* - has configured only PostgreSQL database connection
+* *Prod* - same as Uat
+* *Test* - is empty, but our target was to configure environment for testing like use of PostgreSQL TestContainer in integration testing
 
 ### 4. Context diagram
 Diagram tells us how our API is placed in applications environment.
