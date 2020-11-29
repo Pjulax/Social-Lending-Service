@@ -75,7 +75,7 @@ Here are steps how to do this:
 * SpringFox Swagger - api documentation
 * Lombok
 
-#### Application has proper properties profiles for every environment:
+#### Application has specified properties profiles for every environment:
 * *Local* - profile that provides basic configuration for H2 database and logs
 * *Sit* - has configured PostgreSQL database connection and logs
 * *Uat* - has configured only PostgreSQL database connection
