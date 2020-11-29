@@ -59,9 +59,13 @@ Here are steps how to do this:
 
 Now you can take a look at API swagger documentation on http://localhost:8080/swagger-ui.html
 
-  
-  
-  
+### 3. Application architecture
+* Aplikacja została napisana w Hexagonal architecture z wykorzystaniem interfejsów Command i Query.
+* Autentykacja i autoryzacja zostały rozwiązane za pomocą JWT
+* Baza danych wykorzystana zależy od profili:
+	* At localhost we use H2 in memory database
+  	* At Sit, Uat, Prod we use PostgreSQL database
+* 
   
  ======================== WHAT TO DO ================================
  0. Short description
