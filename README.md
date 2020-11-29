@@ -92,7 +92,7 @@ This diagram shows our application container. Here can be found components with 
 
 ![Component diagram](./readmeResources/container_diagram.png)
 
-### 5. Basic flow of events
+### 6. Basic flow of events
 1. User signs up and sings in.
     1. If it fails system response with forbidden/unauthorized for other requests
 2. Borrower creates auction.
