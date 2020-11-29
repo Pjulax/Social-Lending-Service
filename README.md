@@ -6,48 +6,26 @@ Aplikacja ma służyć do pożyczania pieniędzy pomiędzy użytkownikami serwis
 Użytkownicy muszą stworzyć konto i mieć podpiętą kartę bankową. Każdy użytkownik ma
 funkcjonalności obu ról borrower i lender.
 
-**Funkcjonalności usera:**
+**User functionalities:**
 * User może stworzyć konto z danymi karty.
 * User może zalogować się.
 * User może wpłacić pieniądze na konto w aplikacji.
 * User może wypłacić pieniądze z konta w aplikacji.
 * User może zobaczyć szczegóły o swoim koncie i historię transakcji.
 
-**Funkcjonalności borrowera:**
+**Borrower functionalities:**
 * Borrower może stworzyć aukcję.
 * Borrower może zobaczyć swoje aukcje z ofertami.
 * Borrower może zaakceptować ofertę, która została złożona do jego aukcji.
 * Borrower może zobaczyć swoje pożyczki.
 * Borrower może zapłacić za ratę w pożyczce.
 
-**Funkcjonalności lendera:**
+**Lender functionalities:**
 * Lender może zobaczyć dostępne aukcje.
 * Lender może złożyć ofertę do wybranej aukcji z dodatnią annual percentage rate.
 * Lender może wycofać ofertę z aukcji.
 * Lender może zobaczyć swoje złożone oferty.
 * Lender może zobaczyć udzielone przez siebie pożyczki.
-
-
-
-Social Lending application proceeds loans concluded between users.
-There are two types of users, borrower and lender. User has 
-borrower and lender roles at the same moment. 
-
-Borrower creates auctions for loans
-and choose from list of offers. 
-
-Lender can get other users auctions and submit
-offer to them with specified annual percentage rate. 
-
-When borrower accept offer to auction application connects to bank api and check if lender has money on account,
-if he has borrower gets instant transfer of money so loan starts. 
-
-At this point borrower can get informations about his loans with installments and lender can get
-informations about his investments state (loans with installments at side of lender 
-have been named investments). 
-
-Borrower must pay manually for each installment, 
-every month of delay is charged with fine.
 
 #### API Security for users
 To use our api it is obligatory to create your own user and provide card data.
