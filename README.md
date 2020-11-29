@@ -41,7 +41,7 @@ Here are steps how to do this:
 ```
 docker build . -f Dockerfile.dev -t <image name>
 ```
-For example:
+*For example:*
 ```
 docker build . -f Dockerfile.dev -t metissociallending
 ```
@@ -49,7 +49,7 @@ docker build . -f Dockerfile.dev -t metissociallending
 ```
 docker run --rm -d -p 8080:8080/tcp <image name>:latest
 ```
-For example:
+*For example:*
 ```
 docker run --rm -d -p 8080:8080/tcp sociallending:latest
 ```
