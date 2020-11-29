@@ -74,8 +74,8 @@ Technologies used:
 * JUnit5 with Mockito for tests
 * Maven
 
-  ![Context diagram](https://confluence.fintechchallenge.pl/download/attachments/5996556/c4.drawio-Context%20Diagram.png){width=640 height=480}
-  ![Component diagram](https://confluence.fintechchallenge.pl/download/attachments/5996556/c4.drawio-Container%20Diagram%20%282%29.png){width=640 height=480}
+  ![Context diagram](https://confluence.fintechchallenge.pl/download/attachments/5996556/c4.drawio-Context%20Diagram.png){width=640 height=480} 
+  ![Component diagram](https://confluence.fintechchallenge.pl/download/attachments/5996556/c4.drawio-Container%20Diagram%20%282%29.png){width=640 height=480} 
  ======================== WHAT TO DO ================================
  0. Short description
  1. How to run
