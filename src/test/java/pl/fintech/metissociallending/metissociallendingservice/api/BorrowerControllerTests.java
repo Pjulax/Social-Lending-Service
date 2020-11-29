@@ -2,6 +2,8 @@ package pl.fintech.metissociallending.metissociallendingservice.api;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +61,8 @@ public class BorrowerControllerTests {
 
     @WithMockUser(username = "user", password = "name", roles = {"CLIENT"})
     @Test
-    public void whenRequestHelloBorrowerItAsksWithHello() throws Exception{
+    @SneakyThrows
+    public void whenRequestHelloBorrowerItAsksWithHello() {
         this.mockMvc.perform(get("/api/borrower/hello"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -68,8 +71,9 @@ public class BorrowerControllerTests {
     }
 
     @Test
+    @SneakyThrows
     @WithMockUser(username = "user", password = "name", roles = {"CLIENT"})
-    public void shouldCreateNewAuction() throws Exception {
+    public void shouldCreateNewAuction() {
         AuctionDTO auctionDTO = new AuctionDTO();
         auctionDTO.setNumberOfInstallments(24);
         auctionDTO.setLoanAmount(1200d);
@@ -84,8 +88,9 @@ public class BorrowerControllerTests {
                 .andExpect(status().isOk());
     }
     @Test
+    @SneakyThrows
     @WithMockUser(username = "user", password = "name", roles = {"CLIENT"})
-    public void shouldPayNextInstallment() throws Exception {
+    public void shouldPayNextInstallment()  {
         doNothing().when(loanService).payNextInstallment(any());
         double amount = 100d;
         this.mockMvc.perform(post("/api/borrower/loans/1/pay-next-installment?amount="+amount))
@@ -93,14 +98,14 @@ public class BorrowerControllerTests {
                 .andExpect(status().isOk());
     }
     @Test
+    @SneakyThrows
     @WithMockUser(username = "user", password = "name", roles = {"CLIENT"})
-    public void shouldGetBorrowerLoans() throws Exception {
+    public void shouldGetBorrowerLoans() {
         List<LoanDTO> loanDTO;
         LoanDTO loanDTO1 = LoanDTO.builder().amountLeft(100d).build();
         LoanDTO loanDTO2 = LoanDTO.builder().amountLeft(120d).build();
         loanDTO = List.of(loanDTO1, loanDTO2);
-        when(loanService.getAllInvestments()).thenReturn(loanDTO);
-        ObjectMapper mapper = new ObjectMapper();
+        when(loanService.getLoansByBorrower()).thenReturn(loanDTO);
 
         ResultActions resultActions = this.mockMvc.perform(get("/api/borrower/loans"))
                 .andDo(print())
@@ -108,14 +113,16 @@ public class BorrowerControllerTests {
 
         MvcResult result = resultActions.andReturn();
         String contentAsString = result.getResponse().getContentAsString();
-        LoanDTO[] loanDTOS = mapper.readValue(contentAsString, LoanDTO[].class);
-        for(int i = 0; i<loanDTOS.length;i++){
-            assertEquals(loanDTO.get(i).getAmountLeft(), loanDTOS[i].getAmountLeft());
+        JSONArray loanDTOS = new JSONArray(contentAsString);
+        for(int i = 0; i<loanDTOS.length();i++){
+            JSONObject obj = loanDTOS.getJSONObject(i);
+            assertEquals(loanDTO.get(i).getAmountLeft(), obj.getDouble("amountLeft"));
         }
     }
     @Test
+    @SneakyThrows
     @WithMockUser(username = "user", password = "name", roles = {"CLIENT"})
-    public void shouldAcceptOffer() throws Exception {
+    public void shouldAcceptOffer()  {
         LoanDTO loanDTO = LoanDTO.builder().id(1L).amountLeft(100d).build();
         when(loanService.acceptOffer(any())).thenReturn(loanDTO);
         ObjectMapper mapper = new ObjectMapper();

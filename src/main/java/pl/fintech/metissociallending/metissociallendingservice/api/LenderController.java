@@ -39,7 +39,6 @@ public class LenderController {
         return lenderService.getAllAvailableAuctions();
     }
 
-
     @GetMapping("/investments")
     public List<LoanDTO> getInvestments(){
         return loanService.getAllInvestments();
