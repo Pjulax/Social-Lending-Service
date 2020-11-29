@@ -110,6 +110,7 @@ This diagram shows application container. Here can be found components with thei
 7. Cash with interests and possible fine are transferred to lender
 8. Go to point 6 until all installments are paid
 
+### 7. Initial informations
 This is regular application created via spring.io. Have a look at:
 * `Jenkinsfile` you'll find here how to build, push and deploy you application.
 * `kubernetes.yaml` check IngressRoute to find out how publish your application with DNS name over HTTPS
