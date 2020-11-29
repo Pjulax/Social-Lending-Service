@@ -13,7 +13,6 @@ import java.util.Date;
  * and loans
  * <p><ul>
  *  <li>add days .</li>
- *  <li>reset a clock with given multiplier of a time</li>
  *  <li>get current timer</li>
  * </ul></p>
  * @see ClockService
@@ -28,11 +27,6 @@ public class ClockController {
     @GetMapping("/time")
     public Date getTime(){
         return clockService.getTime();
-    }
-
-    @PostMapping("/restart")
-    public void restart(@RequestParam int multiplier){
-        clockService.restart(multiplier);
     }
 
     @PostMapping("/add-days")

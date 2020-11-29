@@ -18,10 +18,6 @@ public class ClockServiceImpl implements ClockService{
         return new Date(clock.millis());
     }
 
-    @Override
-    public void restart(int multiplier) {
-        clock.restart(java.time.Clock.system(ZoneId.of("Europe/Warsaw")).millis(), multiplier);
-    }
 
     @Override
     public void addDays(int days) {
