@@ -78,12 +78,12 @@ Technologies used:
 ### 4. Context diagram
 Diagram tells us how our API is placed in applications environment.
   
-![Context diagram](https://confluence.fintechchallenge.pl/download/attachments/5996556/c4.drawio-Context%20Diagram.png)
+![Context diagram](./readmeResources/container_diagram.png)
   
 ### 5. Component Diagram
 This diagram shows 
 
-![Component diagram](https://confluence.fintechchallenge.pl/download/attachments/5996556/c4.drawio-Container%20Diagram%20%282%29.png)
+![Component diagram](./readmeResources/container_diagram.png)
 
  5. Packages usability description
  6. Flow diagram
