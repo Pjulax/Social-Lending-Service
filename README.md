@@ -1,17 +1,25 @@
 # Welcome to LendTree - The Social Lending App
 ## DevMountain aka Metis team are authors of this Social Lending backend application.
 
-### Not so long description how our API works
-Social Lending application proceeds loans concluded between users,
-so API is divided to handle two types of users, borrower and lender. User is 
-borrower and lender at the same moment. Borrower creates auctions for loans
-and choose from list of offers. Lender can get other users auctions and submit
-offer to them with specified annual percentage rate. When borrower accept offer
-to auction application connects to bank api and check if lender has money on account,
-if he has borrower gets instant transfer of money so loan starts. At this point
-borrower can get informations about his loans with installments and lender can get
+### Brief description how our API works
+Social Lending application proceeds loans concluded between users.
+There are two types of users, borrower and lender. User has 
+borrower and lender roles at the same moment. 
+
+Borrower creates auctions for loans
+and choose from list of offers. 
+
+Lender can get other users auctions and submit
+offer to them with specified annual percentage rate. 
+
+When borrower accept offer to auction application connects to bank api and check if lender has money on account,
+if he has borrower gets instant transfer of money so loan starts. 
+
+At this point borrower can get informations about his loans with installments and lender can get
 informations about his investments state (loans with installments at side of lender 
-have been named investments). Borrower must pay manually for each installment, 
+have been named investments). 
+
+Borrower must pay manually for each installment, 
 every month of delay is charged with fine.
 
 #### API Security for users
