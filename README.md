@@ -1,3 +1,31 @@
+
+#Welcome to Lend Tree api
+##It is DevMountain aka Metis team Social Lending backend application.
+
+At first step it would be nice to run application on your own docker.
+Here is instruction how to do it:
+1. Git clone our repository
+2. Open command line, git bash or whatever you use in repository folder
+3. Use this command to build image ( "sociallending" can be replaced with any else tag):
+    docker build . -f Dockerfile.dev -t sociallending
+4. This command runs applications image with profile Local
+    docker run --rm -d  -p 8080:8080/tcp sociallending:latest
+
+
+ ======================== WHAT TO DO ================================
+ 0. Short description
+ 1. How to run
+ 1.1. How to test -> link + swaggur
+ 1.2. How to Auth (Enter Bearer + token)
+ 1.3. Have fun :)
+ 2. How architecture of application is made (Hexagonal, Ports-adapters Command/Query communication, PostgreSQL/H2, JWT auth)
+ 3. Context diagram (Components)
+ 4. Container diagram <Optional>
+ 5. Packages usability description
+ 6. Flow diagram
+ 7. What dependencies are need
+
+======================== END TO DO ==================================
 This is regular application created via spring.io. Have a look at:
 * `Jenkinsfile` you'll find here how to build, push and deploy you application.
 * `kubernetes.yaml` check IngressRoute to find out how publish your application with DNS name over HTTPS
