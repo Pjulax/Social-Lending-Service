@@ -38,21 +38,21 @@ Here are steps how to do this:
 1. Git clone our repository
 2. Open command line, git bash or whatever you use in repository folder
 3. Build applications docker image:
-```
-docker build . -f Dockerfile.dev -t <image name>
-```
-*For example:*
-```
-docker build . -f Dockerfile.dev -t metissociallending
-```
+  ```
+  docker build . -f Dockerfile.dev -t <image name>
+  ```
+  *For example:*
+  ```
+  docker build . -f Dockerfile.dev -t metissociallending
+  ```
 4. This command runs applications image (it will run docker image in background and remove image on exit *docker stop <container ID>*)
-```
-docker run --rm -d -p 8080:8080/tcp <image name>:latest
-```
-*For example:*
-```
-docker run --rm -d -p 8080:8080/tcp sociallending:latest
-```
+  ```
+  docker run --rm -d -p 8080:8080/tcp <image name>:latest
+  ```
+  *For example:*
+  ```
+  docker run --rm -d -p 8080:8080/tcp sociallending:latest
+  ```
 
  ======================== WHAT TO DO ================================
  0. Short description
