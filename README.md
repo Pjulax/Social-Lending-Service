@@ -6,21 +6,21 @@ Aplikacja ma służyć do pożyczania pieniędzy pomiędzy użytkownikami serwis
 Użytkownicy muszą stworzyć konto i mieć podpiętą kartę bankową. Każdy użytkownik ma
 funkcjonalności obu ról borrower i lender.
 
-**User functionalities:**
+#### User functionalities:
 * User może stworzyć konto z danymi karty.
 * User może zalogować się.
 * User może wpłacić pieniądze na konto w aplikacji.
 * User może wypłacić pieniądze z konta w aplikacji.
 * User może zobaczyć szczegóły o swoim koncie i historię transakcji.
 
-**Borrower functionalities:**
+#### Borrower functionalities:
 * Borrower może stworzyć aukcję.
 * Borrower może zobaczyć swoje aukcje z ofertami.
 * Borrower może zaakceptować ofertę, która została złożona do jego aukcji.
 * Borrower może zobaczyć swoje pożyczki.
 * Borrower może zapłacić za ratę w pożyczce.
 
-**Lender functionalities:**
+#### Lender functionalities:
 * Lender może zobaczyć dostępne aukcje.
 * Lender może złożyć ofertę do wybranej aukcji z dodatnią annual percentage rate.
 * Lender może wycofać ofertę z aukcji.
