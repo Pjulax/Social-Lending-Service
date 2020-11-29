@@ -84,12 +84,10 @@ Here are steps how to do this:
 
 ### 4. Context diagram
 Diagram tells us how our API is placed in applications environment.
-  
 	![Context diagram](./readmeResources/context_diagram.png)
   
 ### 5. Component Diagram
 This diagram shows components of our application.
-
 	![Component diagram](./readmeResources/container_diagram.png)
 
  5. Packages usability description
