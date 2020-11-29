@@ -24,13 +24,13 @@ Here is instruction how to do it:
 1. Git clone our repository
 2. Open command line, git bash or whatever you use in repository folder
 3. Use this command to build image ( "sociallending" can be replaced with any else tag):
-  ```
-  docker build . -f Dockerfile.dev -t sociallending
-  ```
+```
+docker build . -f Dockerfile.dev -t sociallending
+```
 4. This command runs applications image with profile Local
-  ```
-  docker run --rm -d  -p 8080:8080/tcp sociallending:latest
-  ```
+```
+docker run --rm -d  -p 8080:8080/tcp sociallending:latest
+```
 
  ======================== WHAT TO DO ================================
  0. Short description
