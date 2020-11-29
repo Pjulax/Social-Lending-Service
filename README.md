@@ -4,30 +4,37 @@
 ### Not so long description how our API works
 Social Lending application has to proceed loans concluded between users,
 so API is divided to handle two types of users (of course one user has
-both of them) its borrower and lender. Borrower creates auctions for best loan
-and choose from list of offers. Lender can view other users auctions and submit
+both of them) its borrower and lender. Borrower creates auctions for loans
+and choose from list of offers. Lender can get other users auctions and submit
 offer to them with specified annual percentage rate. When borrower accept offer
 to auction application connects to bank api and check if lender has money on account,
 if he has borrower gets instant transfer of money so loan starts. At this point
-borrower can get his loans with installments informations and lender can get
-informations about his investments state (loan with installments). Borrower must
-pay manually for each installment, every day of delay is charged with fine.
+borrower can get informations about his loans with installments and lender can get
+informations about his investments state (loans with installments at side of lender 
+have been named investments). Borrower must pay manually for each installment, 
+every day of delay is charged with fine.
 
+#### API Security for users
 To use our api it is obligatory to create your own user and provide card data.
 Then at login execution you get JWT Token, which must be placed in Authorization
 header in format of *Bearer <JWT Token>*.
 These two steps are usecured with authentication. All other operations require token.
 
-
 ### How to run application on local machine?
 Here is instruction how to do this:
 1. Git clone our repository
 2. Open command line, git bash or whatever you use in repository folder
-3. Use this command to build image ( "sociallending" can be replaced with any else tag):
+3. Use this command to build image:
 ```
-docker build . -f Dockerfile.dev -t sociallending
+docker build . -f Dockerfile.dev -t <your tag on image>
+```
+```
+docker build . -f Dockerfile.dev -t metissociallending
 ```
 4. This command runs applications image with profile Local
+```
+docker run --rm -d  -p 8080:8080/tcp <your tag on image>:latest
+```
 ```
 docker run --rm -d  -p 8080:8080/tcp sociallending:latest
 ```
