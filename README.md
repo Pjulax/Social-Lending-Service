@@ -29,8 +29,8 @@ funkcjonalności obu ról borrower i lender.
 
 #### API Security for users
 To use our api it is obligatory to create your own user and provide card data.
-Then at login execution you get JWT Token, which must be placed in Authorization
-header in format of *Bearer <JWT Token>*.
+Then at login execution you get JWT Token, which must be placed in ``Authorization``
+header in format of ``Bearer <JWT Token>``.
 These two steps are unsecured with authentication. All other operations require token.
 
 ### 2. How to run application on local machine?
