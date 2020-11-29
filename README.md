@@ -30,11 +30,10 @@ The main purpose of this application is to allow the users to borrow or lend mon
 * Lenders can see the loans they have granted.
 
 #### API Security for users
-To use our api it is obligatory to create your own user and provide cards data.
-In response to login request user receives JWT Token, which must be placed in ``Authorization``
-header in format of ``Bearer <JWT Token>``.
-These two steps are unsecured with authentication. All other operations require token.
-
+To use our api it is obligatory to create your own user profile and provide credit card details. 
+In response to a login request user receives a JWT Token, which must be placed in ``Authorization``
+header in format of ``Bearer <JWT Token>``. These two steps are unsecured with authentication. 
+All other operations require the token.
 
 ### 2. How to run application on local machine?
 If you haven't installed yet you will need Docker, Java-jdk11 and Apache Maven.
@@ -64,18 +63,18 @@ Here are steps how to do this:
   
 ### 3. Application architecture
 Technologies used:
-* Aplikacja została napisana w Hexagonal architecture z wykorzystaniem interfejsów Command i Query.
-* Autentykacja i autoryzacja zostały rozwiązane za pomocą JWT
+* The application was written in Hexagonal architecture using the Command and Query interfaces.
+* Authentication and authorization have been resolved using JWT
 * Hibernate
-* Baza danych wykorzystana zależy od profili:
-	* At localhost we use H2 in memory database
-  	* At Sit, Uat, Prod we use PostgreSQL database
+* The database used depends on the profiles:
+	* At localhost H2 in memory database is used
+  	* At Sit, Uat and Prod PostgreSQL database is used.
 * Feign Client connection to Bank Api
 * 
-* JUnit5 with Mockito to tests
+* JUnit5 with Mockito for tests
 * Maven
-  
-  ![Context diagram](https://confluence.fintechchallenge.pl/display/MET/Context+and+Components+diagrams?preview=/5996556/5996558/c4.drawio-Context%20Diagram.png)
+
+  ![Context diagram](https://confluence.fintechchallenge.pl/download/attachments/5996556/c4.drawio-Context%20Diagram.png)
   ![Component diagram](https://confluence.fintechchallenge.pl/display/MET/Context+and+Components+diagrams?preview=/5996556/5996563/c4.drawio-Container%20Diagram%20(2).png)
  ======================== WHAT TO DO ================================
  0. Short description
