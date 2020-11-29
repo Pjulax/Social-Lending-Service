@@ -1,13 +1,11 @@
 package pl.fintech.metissociallending.metissociallendingservice.api.dto;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserService;
 
 @Getter
 @Setter
-@NoArgsConstructor
+@Builder
 public class UserDTO implements UserService.Command.CreateUser{
     private String username;
     private String password;
