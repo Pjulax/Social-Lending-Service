@@ -2,13 +2,13 @@
 ## DevMountain aka Metis team are authors of this Social Lending service.
 
 ### Table of content
-###### 1. Brief description how API works
-###### 2. How to run application on local machine?
-###### 3. Technology stack
-###### 4. Context diagram
-###### 5. Component Diagram
-###### 6. Basic flow of events
-###### 7. Initial informations
+	1. Brief description how API works
+	2. How to run application on local machine?
+	3. Technology stack
+	4. Context diagram
+	5. Component Diagram
+	6. Basic flow of events
+	7. Initial informations
 
 ### 1. Brief description how API works
 The main purpose of this application is to allow the users to borrow or lend money to each other. The user may create an account and attach a bank card to it. Each user can function both as a borrower and a lender.
