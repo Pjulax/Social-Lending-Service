@@ -1,7 +1,7 @@
 # Welcome to LendTree - The Social Lending App
 ## DevMountain aka Metis team are authors of this Social Lending service.
 
-### 1. Brief description how our API works
+### 1. Brief description how API works
 The main purpose of this application is to allow the users to borrow or lend money to each other. The user may create an account and attach a bank card to it. Each user can function both as a borrower and a lender.
 
 #### User Features:
@@ -30,7 +30,7 @@ The main purpose of this application is to allow the users to borrow or lend mon
 * Lenders can see the loans they have granted.
 
 #### API Security for users
-To use our api it is obligatory to create your own user profile and provide credit card details. 
+To use API it is obligatory to create your own user profile and provide credit card details. 
 In response to a login request user receives a JWT Token, which must be placed in ``Authorization``
 header in format of ``Bearer <JWT Token>``. These two steps are unsecured with authentication. 
 All other operations require the token.
@@ -39,7 +39,7 @@ All other operations require the token.
 If you haven't installed yet you will need Docker, Java-jdk11 and Apache Maven.
 
 Here are steps how to do this:
-1. Git clone our repository
+1. Git clone this repository
 2. Open command line, git bash or whatever you use in repository folder
 3. Build applications docker image:
     ```
@@ -86,12 +86,12 @@ Here are steps how to do this:
 * *Test* - is empty, but our target was to configure environment for testing like use of PostgreSQL TestContainer in integration testing
 
 ### 4. Context diagram
-Diagram tells us how our API is placed in applications environment.
+Diagram tells how API is placed in applications environment.
 
 ![Context diagram](./readmeResources/context_diagram.png)
   
 ### 5. Component Diagram
-This diagram shows our application container. Here can be found components with their responsibility, technologies used and interactions between them.
+This diagram shows application container. Here can be found components with their responsibility, technologies used and interactions between them.
 
 ![Component diagram](./readmeResources/container_diagram.png)
 
