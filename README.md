@@ -2,6 +2,38 @@
 ## DevMountain aka Metis team are authors of this Social Lending backend application.
 
 ### Brief description how our API works
+Aplikacja ma służyć do pożyczania pieniędzy pomiędzy użytkownikami serwisu.
+
+Użytkownicy muszą stworzyć konto i mieć podpiętą kartę. Każdy użytkownik ma
+funkcjonalności obu ról borrower i lender.
+
+**Funkcjonalności usera:**
+User może stworzyć konto z danymi karty.
+User może zalogować się.
+User może wpłacić pieniądze na konto w aplikacji.
+User może wypłacić pieniądze z konta w aplikacji.
+User może zobaczyć szczegóły o swoim koncie i historię transakcji.
+
+**Funkcjonalności borrowera:**
+Borrower może stworzyć aukcję.
+Borrower może zobaczyć swoje aukcje z ofertami.
+Borrower może zaakceptować ofertę, która została złożona do jego aukcji.
+Borrower może zobaczyć swoje pożyczki.
+Borrower może zapłacić za ratę w pożyczce.
+
+**Funkcjonalności borrowera:**
+Lender może zobaczyć dostępne aukcje.
+Lender może złożyć ofertę do wybranej aukcji z dodatnią annual percentage rate.
+Lender może wycofać ofertę z aukcji.
+Lender może zobaczyć swoje złożone oferty.
+Lender może zobaczyć udzielone przez siebie pożyczki.
+
+
+Borrower może zaakceptować jedną z ofert w swojej aukcji.
+
+
+
+
 Social Lending application proceeds loans concluded between users.
 There are two types of users, borrower and lender. User has 
 borrower and lender roles at the same moment. 
