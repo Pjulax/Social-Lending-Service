@@ -3,8 +3,8 @@
 
 ### Not so long description how our API works
 Social Lending application has to proceed loans concluded between users,
-so API is divided to handle two types of users (of course one user has
-both of them) its borrower and lender. Borrower creates auctions for loans
+so API is divided to handle two types of users, borrower and lender. User is 
+borrower and lender at the same moment. Borrower creates auctions for loans
 and choose from list of offers. Lender can get other users auctions and submit
 offer to them with specified annual percentage rate. When borrower accept offer
 to auction application connects to bank api and check if lender has money on account,
