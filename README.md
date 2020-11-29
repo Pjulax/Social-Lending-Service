@@ -49,13 +49,13 @@ Here are steps how to do this:
     ```
     docker build . -f Dockerfile.dev -t metissociallending
     ```
-4. This command runs applications image (it will run docker image in background and remove image on exit *docker stop <container ID>*)
+4. This command runs applications image (with ``--rm`` flag remove image on exit when you pass ``docker stop <container ID>``)
     ```
-    docker run --rm -d -p 8080:8080/tcp <image name>:latest
+    docker run --rm -p 8080:8080/tcp <image name>:latest
     ```
     *For example:*
     ```
-    docker run --rm -d -p 8080:8080/tcp sociallending:latest
+    docker run --rm -p 8080:8080/tcp sociallending:latest
     ```
 5. Application will be exposed at localhost:8080.
 
@@ -82,11 +82,11 @@ Technologies used:
 ### 5. Component Diagram
   This shows how 
 ![Component diagram](https://confluence.fintechchallenge.pl/download/attachments/5996556/c4.drawio-Container%20Diagram%20%282%29.png)
- ======================== WHAT TO DO ================================
+
+ 5. Packages usability description
  6. Flow diagram
  7. What dependencies are need
 
-======================== END TO DO ==================================
 This is regular application created via spring.io. Have a look at:
 * `Jenkinsfile` you'll find here how to build, push and deploy you application.
 * `kubernetes.yaml` check IngressRoute to find out how publish your application with DNS name over HTTPS
