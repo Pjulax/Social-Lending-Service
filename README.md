@@ -1,7 +1,7 @@
-# Welcome to Lend Tree api
-## It is DevMountain aka Metis team Social Lending backend application.
+# Welcome to LendTree - The Social Lending App
+## DevMountain aka Metis team are authors of this Social Lending backend application.
 
-#### Our API goal
+#### Not so long description how our API works
 Social Lending application has to proceed loans concluded between users,
 so API is divided to handle two types of users (of course one user has
 both of them) its borrower and lender. Borrower creates auctions for best loan
@@ -24,10 +24,13 @@ Here is instruction how to do it:
 1. Git clone our repository
 2. Open command line, git bash or whatever you use in repository folder
 3. Use this command to build image ( "sociallending" can be replaced with any else tag):
-    docker build . -f Dockerfile.dev -t sociallending
+  ```
+  docker build . -f Dockerfile.dev -t sociallending
+  ```
 4. This command runs applications image with profile Local
-    docker run --rm -d  -p 8080:8080/tcp sociallending:latest
-
+  ```
+  docker run --rm -d  -p 8080:8080/tcp sociallending:latest
+  ```
 
  ======================== WHAT TO DO ================================
  0. Short description
@@ -57,7 +60,7 @@ This is regular application created via spring.io. Have a look at:
 * protect your ingress with basic auth credentials (using Traefik middleware)
 * in order to deploy application to production - use dedicated Jenkins job
 
-Application is available here: (username: example, password: example)
+Application is available here:
 * SIT - https://metis-social-lending-service.metis-team.sit.fintechchallenge.pl/
 * UAT - https://metis-social-lending-service.metis-team.uat.fintechchallenge.pl/
 * PROD - https://metis-social-lending-service.metis-team.fintechchallenge.pl/
