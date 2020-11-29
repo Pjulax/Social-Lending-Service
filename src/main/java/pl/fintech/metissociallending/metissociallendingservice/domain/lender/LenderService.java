@@ -1,12 +1,19 @@
 package pl.fintech.metissociallending.metissociallendingservice.domain.lender;
 
-import pl.fintech.metissociallending.metissociallendingservice.api.dto.LoanDTO;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.Auction;
-import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.Loan;
-
-import javax.xml.bind.ValidationException;
 import java.util.List;
 
+/**
+ * Allows lender to
+ * <p><ul>
+ *  <li>submit offer to given auction.</li>
+ *  <li>get all offers that lender placed.</li>
+ *  <li>cancel offer of given offer</li>
+ *  <li>get all available auctions that are placed by borrowers except lender</li>
+ *  <li>get all lender investments (borrower loans)</li>
+ * </ul></p>
+ * @see LenderServiceImpl
+ */
 public interface LenderService {
      Offer submitOffer(Command.SubmitOffer submitOfferCommand);
      void cancelOffer(Command.CancelOffer cancelOfferCommand);
@@ -22,6 +29,5 @@ public interface LenderService {
                Long getOfferId();
           }
      }
-     interface Query {
-     }
+
 }

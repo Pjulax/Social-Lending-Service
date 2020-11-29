@@ -3,8 +3,6 @@ package pl.fintech.metissociallending.metissociallendingservice.domain.clock;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.clock.Clock;
-
-import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Date;
 
@@ -28,10 +26,5 @@ public class ClockServiceImpl implements ClockService{
     @Override
     public void addDays(int days) {
         clock.addDays(days);
-    }
-
-    @Override
-    public Instant instant() {
-        return clock.instant();
     }
 }

@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.Auction;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
-
 import java.util.Date;
 
 

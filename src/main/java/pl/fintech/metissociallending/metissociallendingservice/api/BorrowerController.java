@@ -1,7 +1,5 @@
 package pl.fintech.metissociallending.metissociallendingservice.api;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +13,18 @@ import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.l
 import javax.validation.Valid;
 import java.util.List;
 
+/**
+ * Allows borrower to
+ * <p><ul>
+ *  <li>create auction.</li>
+ *  <li>see auctions.</li>
+ *  <li>see offers applied for auctions.</li>
+ *  <li>see taken loans.</li>
+ *  <li>pay next installment of given loan.</li>
+ * </ul></p>
+ * @see BorrowerService
+ * @see LoanService
+ */
 @Validated
 @RestController
 @RequestMapping("/api/borrower")
@@ -23,7 +33,6 @@ public class BorrowerController {
 
    private final BorrowerService borrowerService;
    private final LoanService loanService;
-   private static final Logger log = LoggerFactory.getLogger(BorrowerController.class);
 
     @PostMapping("/auctions")
     public Auction createNewAuctionSinceNow( @Valid @RequestBody AuctionDTO auctionDTO){
@@ -41,7 +50,7 @@ public class BorrowerController {
     }
 
     @GetMapping("/auctions")
-    public List<Auction> getAllAuctions(){ // change to return Auction DTO
+    public List<Auction> getAllAuctions(){
         return borrowerService.getAllAuctions();
     }
 
@@ -58,7 +67,6 @@ public class BorrowerController {
             public Long getAuctionId() {
                 return auction_id;
             }
-
             @Override
             public Long getOfferId() {
                 return offer_id;

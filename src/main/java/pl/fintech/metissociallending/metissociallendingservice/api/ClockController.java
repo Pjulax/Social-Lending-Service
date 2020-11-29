@@ -1,11 +1,23 @@
 package pl.fintech.metissociallending.metissociallendingservice.api;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import pl.fintech.metissociallending.metissociallendingservice.domain.clock.ClockService;
-
 import java.util.Date;
 
+/**
+ * ONLY FOR TESTING AND DEMONSTRATION PURPOSES
+ * Clock controller that implements own
+ * implementation of clock that can be speed up
+ * or slow down. Administrator can also add days
+ * in order to check changing state of installments
+ * and loans
+ * <p><ul>
+ *  <li>add days .</li>
+ *  <li>reset a clock with given multiplier of a time</li>
+ *  <li>get current timer</li>
+ * </ul></p>
+ * @see ClockService
+ */
 @RestController
 @RequestMapping("/api/clock")
 @RequiredArgsConstructor

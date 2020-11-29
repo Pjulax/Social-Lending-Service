@@ -1,7 +1,16 @@
 package pl.fintech.metissociallending.metissociallendingservice.domain.bank;
-
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.AccountDTO;
 
+/**
+ * to get accounts balance or to make transfers bank service is used
+ * <p><ul>
+ *  <li>get account balance</li>
+ *  <li>withdraw cash</li>
+ *  <li>deposit cash</li>
+ *  <li>make transfer</li>
+ * </ul></p>
+ * @see pl.fintech.metissociallending.metissociallendingservice.infrastructure.bankapi.BankServiceImpl
+ */
 public interface BankService {
     String createBankAccount(Command.CreateBankAccount createBankAccount);
     AccountDTO getAccountDetails(Command.GetAccountDetails getAccountDetails);

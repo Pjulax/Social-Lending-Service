@@ -1,5 +1,4 @@
 package pl.fintech.metissociallending.metissociallendingservice.infrastructure.bankapi;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.Base64Utils;

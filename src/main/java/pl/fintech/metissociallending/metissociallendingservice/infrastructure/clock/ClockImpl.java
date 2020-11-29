@@ -1,6 +1,5 @@
 package pl.fintech.metissociallending.metissociallendingservice.infrastructure.clock;
 
-import java.time.Instant;
 import java.time.ZoneId;
 
 /**
@@ -33,11 +32,4 @@ public class ClockImpl implements Clock {
     public void addDays(int days) {
         this.days+=days;
     }
-
-    @Override
-    public Instant instant() {
-        return internalClock.instant();
-    }
-
-
 }

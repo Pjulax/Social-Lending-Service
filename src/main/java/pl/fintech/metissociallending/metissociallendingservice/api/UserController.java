@@ -1,13 +1,23 @@
 package pl.fintech.metissociallending.metissociallendingservice.api;
-
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.*;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserService;
 
+
+/**
+ * Holds all user operations such as
+ * <p><ul>
+ *  <li>sing up</li>
+ *  <li>sing in - returns JWT</li>
+ *  <li>get user details</li>
+ *  <li>deposit money to external bank</li>
+ *  <li>withdraw money from external bank</li>
+ * </ul></p>
+ * @see pl.fintech.metissociallending.metissociallendingservice.infrastructure.bankapi.BankClient
+ * @see UserDetailsDTO
+ */
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
