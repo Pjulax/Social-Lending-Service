@@ -34,6 +34,8 @@ header in format of *Bearer <JWT Token>*.
 These two steps are unsecured with authentication. All other operations require token.
 
 ### 2. How to run application on local machine?
+You will need to have installed Docker, Java-jdk11 and Apache Maven.
+  
 Here are steps how to do this:
 1. Git clone our repository
 2. Open command line, git bash or whatever you use in repository folder
