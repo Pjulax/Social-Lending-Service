@@ -76,7 +76,7 @@ Technologies used:
 * Maven
   
   ![Context diagram](https://confluence.fintechchallenge.pl/download/attachments/5996556/c4.drawio-Context%20Diagram.png?version=1&modificationDate=1606686369501&api=v2)
-  ![Component diagram]()
+  ![Component diagram](https://confluence.fintechchallenge.pl/download/attachments/5996556/c4.drawio-Container%20Diagram%20%282%29.png?version=1&modificationDate=1606686723583&api=v2)
  ======================== WHAT TO DO ================================
  0. Short description
  1. How to run
