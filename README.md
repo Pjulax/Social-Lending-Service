@@ -8,29 +8,25 @@ Użytkownicy muszą stworzyć konto i mieć podpiętą kartę. Każdy użytkowni
 funkcjonalności obu ról borrower i lender.
 
 **Funkcjonalności usera:**
-User może stworzyć konto z danymi karty.
-User może zalogować się.
-User może wpłacić pieniądze na konto w aplikacji.
-User może wypłacić pieniądze z konta w aplikacji.
-User może zobaczyć szczegóły o swoim koncie i historię transakcji.
+* User może stworzyć konto z danymi karty.
+* User może zalogować się.
+* User może wpłacić pieniądze na konto w aplikacji.
+* User może wypłacić pieniądze z konta w aplikacji.
+* User może zobaczyć szczegóły o swoim koncie i historię transakcji.
 
 **Funkcjonalności borrowera:**
-Borrower może stworzyć aukcję.
-Borrower może zobaczyć swoje aukcje z ofertami.
-Borrower może zaakceptować ofertę, która została złożona do jego aukcji.
-Borrower może zobaczyć swoje pożyczki.
-Borrower może zapłacić za ratę w pożyczce.
+* Borrower może stworzyć aukcję.
+* Borrower może zobaczyć swoje aukcje z ofertami.
+* Borrower może zaakceptować ofertę, która została złożona do jego aukcji.
+* Borrower może zobaczyć swoje pożyczki.
+* Borrower może zapłacić za ratę w pożyczce.
 
 **Funkcjonalności borrowera:**
-Lender może zobaczyć dostępne aukcje.
-Lender może złożyć ofertę do wybranej aukcji z dodatnią annual percentage rate.
-Lender może wycofać ofertę z aukcji.
-Lender może zobaczyć swoje złożone oferty.
-Lender może zobaczyć udzielone przez siebie pożyczki.
-
-
-Borrower może zaakceptować jedną z ofert w swojej aukcji.
-
+* Lender może zobaczyć dostępne aukcje.
+* Lender może złożyć ofertę do wybranej aukcji z dodatnią annual percentage rate.
+* Lender może wycofać ofertę z aukcji.
+* Lender może zobaczyć swoje złożone oferty.
+* Lender może zobaczyć udzielone przez siebie pożyczki.
 
 
 
