@@ -56,7 +56,7 @@ class LoanServiceImplTest {
 
     @SneakyThrows
     @ParameterizedTest
-    @CsvFileSource(resources = "/testData/loan-service-test.csv")
+    @CsvFileSource(resources = "/testData/loanServiceTest.csv")
     @WithMockUser(username = "user", password = "name")
     void acceptOffer(BigDecimal loanAmount, Double annualPercentageRate, Integer numberOfInstallments, Long durationOfLoanInDays) {
         Long baseDate = 2000000000000L;

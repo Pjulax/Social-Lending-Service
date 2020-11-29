@@ -77,17 +77,14 @@ public class UserServiceImpl implements UserService {
         AccountDTO account = getAccountDetailsFromBank();
         return new UserDetailsDTO(user.getUsername(), user.getAccount(), hideCard(aes.decrypt(user.getCardNumber())), user.getName(), "***", user.getExpiry(), account.getAccountBalance(), account.getTransactions());
     }
-
     private String hideCard(String card){
         return card.substring(0, 3).concat("*".repeat(9)).concat(card.substring(card.length()-4));
     }
-
-    @Override
-    public AccountDTO getAccountDetailsFromBank() {
+    private AccountDTO getAccountDetailsFromBank() {
         User user = whoami();
         AccountDTO accountDetails = bankService.getAccountDetails(user::getAccount);
         accountDetails.setTransactions(getIndexedTransactions(accountDetails.getTransactions()));
-        return accountDetails; //TODO check indexes on transactions
+        return accountDetails;
     }
     private List<TransactionDTO> getIndexedTransactions(List<TransactionDTO> transactions) {
         transactions.sort(Comparator.comparing(TransactionDTO::getTimestamp));
