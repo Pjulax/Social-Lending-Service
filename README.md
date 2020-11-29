@@ -78,7 +78,7 @@ Technologies used:
 ### 4. Context diagram
 Diagram tells us how our API is placed in applications environment.
   
-![Context diagram](./readmeResources/container_diagram.png)
+![Context diagram](./readmeResources/context_diagram.png){width=450 height=600}
   
 ### 5. Component Diagram
 This diagram shows 
