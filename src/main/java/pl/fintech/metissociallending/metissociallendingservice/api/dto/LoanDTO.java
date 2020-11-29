@@ -1,15 +1,22 @@
 package pl.fintech.metissociallending.metissociallendingservice.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.Installment;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.Loan;
 
 import java.util.Date;
 import java.util.List;
 
+
 @Getter
+@Setter
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class LoanDTO {
     private final Long id;
     private final String borrower;
