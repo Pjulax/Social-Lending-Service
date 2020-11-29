@@ -3,7 +3,6 @@ package pl.fintech.metissociallending.metissociallendingservice.infrastructure.r
 import lombok.*;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.Installment;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.InstallmentStatus;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;

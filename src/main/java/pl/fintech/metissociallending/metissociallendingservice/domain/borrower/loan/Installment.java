@@ -1,7 +1,8 @@
 package pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan;
-
-import lombok.*;
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Calendar;
@@ -21,9 +22,6 @@ public class Installment {
     private BigDecimal total; // amount + interest + fine
     private BigDecimal left; // every month how much left from loan to payback
     private InstallmentStatus status;
-
-
-
 
     // changes to missed if installment isn't paid before due time
     public InstallmentStatus checkStatus(Date now){

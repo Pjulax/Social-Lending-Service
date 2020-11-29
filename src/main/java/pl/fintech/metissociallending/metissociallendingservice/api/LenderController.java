@@ -1,5 +1,4 @@
 package pl.fintech.metissociallending.metissociallendingservice.api;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -9,9 +8,19 @@ import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.A
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.LoanService;
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.LenderService;
 import pl.fintech.metissociallending.metissociallendingservice.domain.lender.Offer;
-
 import java.util.List;
-
+/**
+ * Allows lender to
+ * <p><ul>
+ *  <li>submit offer to given auction.</li>
+ *  <li>get all offers that lender placed.</li>
+ *  <li>cancel offer of given offer</li>
+ *  <li>get all available auctions that are placed by borrowers except lender</li>
+ *  <li>get all lender investments (borrower loans)</li>
+ * </ul></p>
+ * @see LenderService
+ * @see LoanService
+ */
 @RestController
 @RequestMapping("/api/lender")
 @RequiredArgsConstructor
@@ -38,7 +47,6 @@ public class LenderController {
     public List<Auction> getAllAvailableAuctions(){
         return lenderService.getAllAvailableAuctions();
     }
-
 
     @GetMapping("/investments")
     public List<LoanDTO> getInvestments(){

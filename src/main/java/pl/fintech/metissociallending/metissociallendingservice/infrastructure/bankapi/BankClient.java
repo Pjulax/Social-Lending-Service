@@ -1,10 +1,8 @@
 package pl.fintech.metissociallending.metissociallendingservice.infrastructure.bankapi;
 
-
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.AccountDTO;
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.bankapi.request.*;
 

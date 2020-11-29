@@ -1,9 +1,7 @@
 package pl.fintech.metissociallending.metissociallendingservice.infrastructure.repository;
 
-
 import lombok.*;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.Auction;
-
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;

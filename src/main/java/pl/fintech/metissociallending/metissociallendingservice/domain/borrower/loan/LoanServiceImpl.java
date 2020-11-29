@@ -1,5 +1,4 @@
 package pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan;
-
 import io.micrometer.core.instrument.config.validate.InvalidReason;
 import io.micrometer.core.instrument.config.validate.Validated;
 import io.micrometer.core.instrument.config.validate.ValidationException;
@@ -16,12 +15,15 @@ import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserService;
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.bankapi.request.TransactionRequest;
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.clock.Clock;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of
+ * @see LoanService
+ */
 @RequiredArgsConstructor
 @Service
 public class LoanServiceImpl implements LoanService {

@@ -2,13 +2,22 @@ package pl.fintech.metissociallending.metissociallendingservice.domain.borrower;
 
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.AuctionWithOffersDTO;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.OfferDTO;
-import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.Loan;
-import pl.fintech.metissociallending.metissociallendingservice.domain.lender.Offer;
-
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+
+/**
+ * Allows borrower to
+ * <p><ul>
+ *  <li>create auction.</li>
+ *  <li>see auctions.</li>
+ *  <li>see offers applied for auctions.</li>
+ *  <li>see taken loans.</li>
+ *  <li>pay next installment of given loan.</li>
+ * </ul></p>
+ * @see BorrowerServiceImpl
+ */
 public interface BorrowerService {
     Auction createNewAuctionSinceNow(Command.CreateNewAuctionSinceNow createNewAuctionSinceNowCommand);
     Auction addAuctionDescription(Command.AddAuctionDescription addAuctionDescription);

@@ -1,22 +1,17 @@
 package pl.fintech.metissociallending.metissociallendingservice.infrastructure.security.jwt;
 
 import io.jsonwebtoken.JwtException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import javax.servlet.FilterChain;
-import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-// We should use OncePerRequestFilter since we are doing a database call, there is no point in doing this more than once
 public class JwtTokenFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
@@ -35,7 +30,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 }
             } catch (JwtException | UsernameNotFoundException ex) {
-                //this is very important, since it guarantees the user is not authenticated at all
                 SecurityContextHolder.clearContext();
                 httpServletResponse.setStatus(HttpStatus.FORBIDDEN.value());
                 httpServletResponse.setContentType("text/plain");
