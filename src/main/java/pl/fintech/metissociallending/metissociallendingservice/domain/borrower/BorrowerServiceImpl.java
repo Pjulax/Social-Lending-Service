@@ -55,6 +55,10 @@ public class BorrowerServiceImpl implements BorrowerService {
     @Override
     public AuctionWithOffersDTO getAuctionById(Long id) {
         Auction auction = auctionRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Auction with that id doesn't exist"));
+        if (checkIfAuctionIsClosed(auction)) {
+            auction.close();
+            auction = auctionRepository.save(auction);
+        }
         return AuctionWithOffersDTO.fromDomain(auction, offerRepository.findAllByAuction(auction));
     }
     public boolean checkIfAuctionIsClosed(Auction auction){
