@@ -3,8 +3,7 @@
 
 ### Brief description how our API works
 Aplikacja ma służyć do pożyczania pieniędzy pomiędzy użytkownikami serwisu.
-
-Użytkownicy muszą stworzyć konto i mieć podpiętą kartę. Każdy użytkownik ma
+Użytkownicy muszą stworzyć konto i mieć podpiętą kartę bankową. Każdy użytkownik ma
 funkcjonalności obu ról borrower i lender.
 
 **Funkcjonalności usera:**
