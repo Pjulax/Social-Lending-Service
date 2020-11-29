@@ -34,8 +34,8 @@ header in format of *Bearer <JWT Token>*.
 These two steps are unsecured with authentication. All other operations require token.
 
 ### 2. How to run application on local machine?
-You will need to have installed Docker, Java-jdk11 and Apache Maven.
-  
+If you haven't installed yet you will need Docker, Java-jdk11 and Apache Maven.
+
 Here are steps how to do this:
 1. Git clone our repository
 2. Open command line, git bash or whatever you use in repository folder
@@ -55,7 +55,9 @@ Here are steps how to do this:
     ```
     docker run --rm -d -p 8080:8080/tcp sociallending:latest
     ```
+5. Application will be exposed at localhost:8080.
 
+Now you can take a look at API swagger documentation on localhost:8080/swagger-ui.html
  ======================== WHAT TO DO ================================
  0. Short description
  1. How to run
