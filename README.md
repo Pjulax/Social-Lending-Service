@@ -59,16 +59,21 @@ Here are steps how to do this:
 5. Application will be exposed at localhost:8080.
 
 #### Now you can take a look at API swagger documentation on http://localhost:8080/swagger-ui.html
-
   
 ### 3. Application architecture
+Technologies used:
 * Aplikacja została napisana w Hexagonal architecture z wykorzystaniem interfejsów Command i Query.
 * Autentykacja i autoryzacja zostały rozwiązane za pomocą JWT
+* Hibernate
 * Baza danych wykorzystana zależy od profili:
 	* At localhost we use H2 in memory database
   	* At Sit, Uat, Prod we use PostgreSQL database
+* Feign Client connection to Bank Api
 * 
+* JUnit5 with Mockito to tests
+* Maven
   
+  ![idkwhatisthis](https://confluence.fintechchallenge.pl/download/attachments/918397/image2020-11-7_16-31-53.png?version=1&modificationDate=1604763121002&api=v2)
  ======================== WHAT TO DO ================================
  0. Short description
  1. How to run
