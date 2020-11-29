@@ -21,7 +21,7 @@ funkcjonalności obu ról borrower i lender.
 * Borrower może zobaczyć swoje pożyczki.
 * Borrower może zapłacić za ratę w pożyczce.
 
-**Funkcjonalności borrowera:**
+**Funkcjonalności lendera:**
 * Lender może zobaczyć dostępne aukcje.
 * Lender może złożyć ofertę do wybranej aukcji z dodatnią annual percentage rate.
 * Lender może wycofać ofertę z aukcji.
