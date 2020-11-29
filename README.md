@@ -1,7 +1,7 @@
 # Welcome to LendTree - The Social Lending App
 ## DevMountain aka Metis team are authors of this Social Lending service.
 
-### Table of content
+### 1. Table of content
 	1. Brief description how API works
 	2. How to run application on local machine?
 	3. Technology stack
