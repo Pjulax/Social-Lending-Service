@@ -1,5 +1,5 @@
 # Welcome to LendTree - The Social Lending App
-## DevMountain aka Metis team are authors of this Social Lending backend application.
+## DevMountain aka Metis team are authors of this Social Lending service.
 
 ### 1. Brief description how our API works
 The main purpose of this application is to allow the users to borrow or lend money to each other. The user may create an account and attach a bank card to it. Each user can function both as a borrower and a lender.
@@ -67,8 +67,8 @@ Here are steps how to do this:
 * Authentication and authorization have been resolved using Json Web Token
 * Hibernate
 * The database used depends on the profiles:
-	* At localhost H2 in memory database is used
-  	* At Sit, Uat and Prod PostgreSQL database is used.
+  * At localhost H2 in memory database is used
+  * At Sit, Uat and Prod PostgreSQL database is used.
 * Feign Client connection to Bank Api
 * JUnit5 with Mockito for tests
 * Maven
@@ -94,15 +94,15 @@ This diagram shows our application container. Here can be found components with 
 
 ### 6. Basic flow of events
 1. User signs up and sings in.
-    1. If it fails system response with forbidden/unauthorized for other requests
+  1. If it fails system response with forbidden/unauthorized for other requests
 2. Borrower creates auction.
 3. Lender gives offer with annual rate for chosen auction.
 4. Borrower chose and accepts offers.
 5. System creates loan.
-    1. System transfers cash from lender to borrower account
-    2. System creates installments for given with time frames and amount to pay
-    3. System checks whether installment was paid in time
-        1. If installment wasn’t paid in time system calculate fines and marks them as missed
+  1. System transfers cash from lender to borrower account
+  2. System creates installments for given with time frames and amount to pay
+  3. System checks whether installment was paid in time
+    1. If installment wasn’t paid in time system calculate fines and marks them as missed
 6. Borrower pay next installment
 7. Cash with interests and possible fine are transferred to lender
 8. Go to point 6 until all installments are paid
