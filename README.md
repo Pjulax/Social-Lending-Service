@@ -1,6 +1,24 @@
 # Welcome to Lend Tree api
 ## It is DevMountain aka Metis team Social Lending backend application.
 
+#### Our API goal
+Social Lending application has to proceed loans concluded between users,
+so API is divided to handle two types of users (of course one user has
+both of them) its borrower and lender. Borrower creates auctions for best loan
+and choose from list of offers. Lender can view other users auctions and submit
+offer to them with specified annual percentage rate. When borrower accept offer
+to auction application connects to bank api and check if lender has money on account,
+if he has borrower gets instant transfer of money so loan starts. At this point
+borrower can get his loans with installments informations and lender can get
+informations about his investments state (loan with installments). Borrower must
+pay manually for each installment, every day of delay is charged with fine.
+
+To use our api it is obligatory to create your own user and provide card data.
+Then at login execution you get JWT Token, which must be placed in Authorization
+header in format of *Bearer <JWT Token>*.
+These two steps are usecured with authentication. All other operations require token.
+
+
 At first step it would be nice to run application on your own docker.
 Here is instruction how to do it:
 1. Git clone our repository
