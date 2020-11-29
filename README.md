@@ -1,6 +1,5 @@
-
-#Welcome to Lend Tree api
-##It is DevMountain aka Metis team Social Lending backend application.
+# Welcome to Lend Tree api
+## It is DevMountain aka Metis team Social Lending backend application.
 
 At first step it would be nice to run application on your own docker.
 Here is instruction how to do it:
