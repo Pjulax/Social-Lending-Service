@@ -88,7 +88,8 @@ public class BorrowerControllerTests {
     public void shouldPayNextInstallment() throws Exception {
         doNothing().when(loanService).payNextInstallment(any());
         double amount = 100d;
-        this.mockMvc.perform(post("/api/borrower/loans/{1}/pay-next-installment?amount="+amount))
+        this.mockMvc.perform(post("/api/borrower/loans/1/pay-next-installment?amount="+amount))
+                .andDo(print())
                 .andExpect(status().isOk());
     }
     @Test
