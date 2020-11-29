@@ -14,9 +14,7 @@ import java.util.List;
 
 
 @Getter
-@Setter
 @Builder
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class LoanDTO {
     private final Long id;
     private final String borrower;
