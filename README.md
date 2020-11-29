@@ -39,7 +39,7 @@ This is regular application created via spring.io. Have a look at:
 * protect your ingress with basic auth credentials (using Traefik middleware)
 * in order to deploy application to production - use dedicated Jenkins job
 
-Application is available here: (username: example, password: example)
+Application is available here: 
 * SIT - https://metis-social-lending-service.metis-team.sit.fintechchallenge.pl/
 * UAT - https://metis-social-lending-service.metis-team.uat.fintechchallenge.pl/
 * PROD - https://metis-social-lending-service.metis-team.fintechchallenge.pl/

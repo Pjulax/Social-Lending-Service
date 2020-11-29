@@ -10,9 +10,9 @@
     </parent>
     <groupId>pl.fintech.metissociallending.metissociallendingservice</groupId>
     <artifactId>metis-social-lending-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.9.5</version>
     <name>metis-social-lending-service</name>
-    <description>Social lending platform API demo</description>
+    <description>Social lending platform API</description>
 
     <properties>
         <java.version>11</java.version>
@@ -141,7 +141,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <image>
-                        <name>devmtn.scllnd</name>
+                        <name>devmountain.sociallending</name>
                     </image>
                 </configuration>
             </plugin>
