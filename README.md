@@ -2,30 +2,32 @@
 ## DevMountain aka Metis team are authors of this Social Lending backend application.
 
 ### 1. Brief description how our API works
-Aplikacja ma służyć do pożyczania pieniędzy pomiędzy użytkownikami serwisu.
-Użytkownicy muszą stworzyć konto i mieć podpiętą kartę bankową. Każdy użytkownik ma
-funkcjonalności obu ról borrower i lender.
+The main purpose of this application is to allow the users to borrow or lend money to each other. The user may create an account and attach a bank card to it. Each user can function both as a borrower and a lender.
 
-#### User functionalities:
-* User może stworzyć konto z danymi karty.
-* User może zalogować się.
-* User może wpłacić pieniądze na konto w aplikacji.
-* User może wypłacić pieniądze z konta w aplikacji.
-* User może zobaczyć szczegóły o swoim koncie i historię transakcji.
+#### User Features:
+* Users can create an account with card details.
+* Users can login.
+* Users can deposit money into their account.
+* Users can withdraw money from their account.
+* Users can make external transfers from their account.
+* Users can see details about their account.
+* Users can view their transaction history.
 
-#### Borrower functionalities:
-* Borrower może stworzyć aukcję.
-* Borrower może zobaczyć swoje aukcje z ofertami.
-* Borrower może zaakceptować ofertę, która została złożona do jego aukcji.
-* Borrower może zobaczyć swoje pożyczki.
-* Borrower może zapłacić za ratę w pożyczce.
+#### Features of the User as a Borrower
+* Borrowers can create an auction.
+* Borrowers can see their auctions.
+* Borrowers can view offers for their auctions.
+* Borrower may accept an offer to their auction.
+* Borrowers can see their loans.
+* Borrowers can pay the installments of their loans.
 
-#### Lender functionalities:
-* Lender może zobaczyć dostępne aukcje.
-* Lender może złożyć ofertę do wybranej aukcji z dodatnią annual percentage rate.
-* Lender może wycofać ofertę z aukcji.
-* Lender może zobaczyć swoje złożone oferty.
-* Lender może zobaczyć udzielone przez siebie pożyczki.
+#### Features of the User as a Lender
+* Lenders can see the available auctions.
+* Lenders can place an offer for a selected auction.
+* Lenders can set an annual interest rate for their offer.
+* Lenders may cancel their offer from an auction.
+* Lenders can see their submitted offers.
+* Lenders can see the loans they have granted.
 
 #### API Security for users
 To use our api it is obligatory to create your own user and provide cards data.
