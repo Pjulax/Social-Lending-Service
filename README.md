@@ -1,7 +1,7 @@
 # Welcome to LendTree - The Social Lending App
 ## DevMountain aka Metis team are authors of this Social Lending backend application.
 
-#### Not so long description how our API works
+### Not so long description how our API works
 Social Lending application has to proceed loans concluded between users,
 so API is divided to handle two types of users (of course one user has
 both of them) its borrower and lender. Borrower creates auctions for best loan
@@ -19,7 +19,7 @@ header in format of *Bearer <JWT Token>*.
 These two steps are usecured with authentication. All other operations require token.
 
 
-#### How to run application on local machine?
+### How to run application on local machine?
 Here is instruction how to do this:
 1. Git clone our repository
 2. Open command line, git bash or whatever you use in repository folder
