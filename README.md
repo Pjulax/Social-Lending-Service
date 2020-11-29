@@ -64,29 +64,25 @@ Here are steps how to do this:
 ### 3. Application architecture
 Technologies used:
 * The application was written in Hexagonal architecture using the Command and Query interfaces.
-* Authentication and authorization have been resolved using JWT
+* Authentication and authorization have been resolved using Json Web Token
 * Hibernate
 * The database used depends on the profiles:
 	* At localhost H2 in memory database is used
   	* At Sit, Uat and Prod PostgreSQL database is used.
 * Feign Client connection to Bank Api
-* 
 * JUnit5 with Mockito for tests
 * Maven
+* SpringFox Swagger - api documentation
+* Lombok
 
+### 4. Context diagram
+  Diagram tells us how our API is placed in applications environment.
 ![Context diagram](https://confluence.fintechchallenge.pl/download/attachments/5996556/c4.drawio-Context%20Diagram.png)
   
+### 5. Component Diagram
+  This shows how 
 ![Component diagram](https://confluence.fintechchallenge.pl/download/attachments/5996556/c4.drawio-Container%20Diagram%20%282%29.png)
  ======================== WHAT TO DO ================================
- 0. Short description
- 1. How to run
- 1.1. How to test -> link + swaggur
- 1.2. How to Auth (Enter Bearer + token)
- 1.3. Have fun :)
- 2. How architecture of application is made (Hexagonal, Ports-adapters Command/Query communication, PostgreSQL/H2, JWT auth)
- 3. Context diagram (Components)
- 4. Container diagram <Optional>
- 5. Packages usability description
  6. Flow diagram
  7. What dependencies are need
 
