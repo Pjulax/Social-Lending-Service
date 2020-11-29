@@ -38,7 +38,7 @@ public class LenderServiceImplTests {
     private LenderServiceImpl lenderService;
 
     @ParameterizedTest
-    @CsvFileSource(resources = "/testData/lender-service-test-positive-annual-rate.csv")
+    @CsvFileSource(resources = "/testData/lenderServiceTestPositiveAnnualRate.csv")
     @WithMockUser(username = "user", password = "name")
     void shouldSubmitOffer(Double annualRate){
         Long auctionId = 1L;
@@ -123,7 +123,7 @@ public class LenderServiceImplTests {
 
 
     @ParameterizedTest
-    @CsvFileSource(resources = "/testData/lender-service-test-non-positive-annual-rate.csv")
+    @CsvFileSource(resources = "/testData/lenderServiceTestNonPositiveAnnualRate.csv")
     @WithMockUser(username = "user", password = "name")
     void shouldNotSubmitOfferWithNonPositiveAnnualRate(Double annualRate){
         Long auctionId = 1L;
@@ -276,7 +276,6 @@ public class LenderServiceImplTests {
     }
 
     @Test
-    //@CsvFileSource(resources = "/testData/lender-service-test-non-positive-annual-rate.csv")
     @WithMockUser(username = "user", password = "name")
     void shouldNotGetClosedOrLenderAuctions(){
         User lender = User.builder()
