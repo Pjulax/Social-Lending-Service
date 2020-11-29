@@ -2,7 +2,7 @@
 ## DevMountain aka Metis team are authors of this Social Lending backend application.
 
 ### Not so long description how our API works
-Social Lending application has to proceed loans concluded between users,
+Social Lending application proceeds loans concluded between users,
 so API is divided to handle two types of users, borrower and lender. User is 
 borrower and lender at the same moment. Borrower creates auctions for loans
 and choose from list of offers. Lender can get other users auctions and submit
@@ -12,13 +12,13 @@ if he has borrower gets instant transfer of money so loan starts. At this point
 borrower can get informations about his loans with installments and lender can get
 informations about his investments state (loans with installments at side of lender 
 have been named investments). Borrower must pay manually for each installment, 
-every day of delay is charged with fine.
+every month of delay is charged with fine.
 
 #### API Security for users
 To use our api it is obligatory to create your own user and provide card data.
 Then at login execution you get JWT Token, which must be placed in Authorization
 header in format of *Bearer <JWT Token>*.
-These two steps are usecured with authentication. All other operations require token.
+These two steps are unsecured with authentication. All other operations require token.
 
 ### How to run application on local machine?
 Here is instruction how to do this:
