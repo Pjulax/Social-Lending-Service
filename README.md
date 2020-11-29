@@ -50,7 +50,6 @@ Here are steps how to do this:
     ```
     docker build . -f Dockerfile.dev -t metissociallending
     ```
-    
 4. This command runs applications image (with ``--rm`` flag remove image on exit when you pass ``docker stop <container ID>``)
     ```
     docker run --rm -p 8080:8080/tcp <image name>:latest
@@ -60,7 +59,6 @@ Here are steps how to do this:
     ```
     docker run --rm -p 8080:8080/tcp sociallending:latest
     ```
-    
 5. Application will be exposed at localhost:8080.
 
 #### If service already started you can find API documentation under this link:
