@@ -19,8 +19,8 @@ header in format of *Bearer <JWT Token>*.
 These two steps are usecured with authentication. All other operations require token.
 
 
-At first step it would be nice to run application on your own docker.
-Here is instruction how to do it:
+#### How to run application on local machine?
+Here is instruction how to do this:
 1. Git clone our repository
 2. Open command line, git bash or whatever you use in repository folder
 3. Use this command to build image ( "sociallending" can be replaced with any else tag):
