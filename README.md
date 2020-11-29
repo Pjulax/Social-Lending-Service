@@ -88,7 +88,7 @@ Diagram tells us how our API is placed in applications environment.
 ![Context diagram](./readmeResources/context_diagram.png)
   
 ### 5. Component Diagram
-This diagram shows 
+This diagram shows components of our application.
 
 ![Component diagram](./readmeResources/container_diagram.png)
 
