@@ -1,8 +1,5 @@
 package pl.fintech.metissociallending.metissociallendingservice.domain.user;
 
-import org.springframework.http.ResponseEntity;
-import pl.fintech.metissociallending.metissociallendingservice.api.dto.AccountDTO;
-import pl.fintech.metissociallending.metissociallendingservice.api.dto.TransactionDTO;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.UserDetailsDTO;
 
 public interface UserService {
@@ -10,7 +7,6 @@ public interface UserService {
     String login(Query.Login login);
     User whoami();
     UserDetailsDTO getUserDetails();
-    AccountDTO getAccountDetailsFromBank();
     void depositToBank(Command.DepositToBank depositToBank);
     void withdrawFromBank(Command.WithdrawFromBank withdrawFromBank);
 
