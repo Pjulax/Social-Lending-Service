@@ -66,7 +66,7 @@ Here are steps how to do this:
     
     *For example:*
     ```
-    docker run --rm -p 8080:8080/tcp sociallending:latest
+    docker run --rm -p 8080:8080/tcp metissociallending:latest
     ```
 5. Application will be exposed at localhost:8080.
 
