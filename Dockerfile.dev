@@ -3,7 +3,7 @@ COPY mvnw .
 COPY .mvn .mvn
 COPY pom.xml .
 COPY src src
-RUN ./mvnw install
+RUN ./mvnw clean install
 
 FROM openjdk:11-jdk
 EXPOSE 8080
