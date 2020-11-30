@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("User with that username already exists");
 
         String account = bankService.createBankAccount(createUserCommand::getUsername);
-        LinkedList<Role> roles = new LinkedList<Role>();
+        LinkedList<Role> roles = new LinkedList<>();
         roles.add(Role.ROLE_CLIENT);
         User user = User.builder()
                 .username(createUserCommand.getUsername())

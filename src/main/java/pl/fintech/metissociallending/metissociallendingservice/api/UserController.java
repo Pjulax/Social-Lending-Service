@@ -1,4 +1,5 @@
 package pl.fintech.metissociallending.metissociallendingservice.api;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.*;
@@ -19,6 +20,7 @@ import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserS
  * @see UserDetailsDTO
  */
 @RestController
+@Api(tags = "User")
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class UserController {

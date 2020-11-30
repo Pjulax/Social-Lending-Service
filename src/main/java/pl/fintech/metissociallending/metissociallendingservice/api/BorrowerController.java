@@ -1,4 +1,5 @@
 package pl.fintech.metissociallending.metissociallendingservice.api;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -27,6 +28,7 @@ import java.util.List;
  */
 @Validated
 @RestController
+@Api(tags = "Borrower")
 @RequestMapping("/api/borrower")
 @RequiredArgsConstructor
 public class BorrowerController {

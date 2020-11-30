@@ -1,4 +1,5 @@
 package pl.fintech.metissociallending.metissociallendingservice.api;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ import java.util.List;
  * @see LoanService
  */
 @RestController
+@Api(tags = "Lender")
 @RequestMapping("/api/lender")
 @RequiredArgsConstructor
 public class LenderController {

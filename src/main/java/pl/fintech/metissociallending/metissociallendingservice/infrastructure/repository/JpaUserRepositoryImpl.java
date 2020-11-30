@@ -2,7 +2,6 @@ package pl.fintech.metissociallending.metissociallendingservice.infrastructure.r
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
-import pl.fintech.metissociallending.metissociallendingservice.domain.lender.Offer;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.UserRepository;
 
