@@ -16,7 +16,7 @@ public class ClockImpl implements Clock {
 
     @Override
     public long millis() {
-        final long dayLongs = 24 * 60 * 60 * 1000;
+        final long dayLongs = 24 * 60 * 60 * 1000L;
         return days* dayLongs +internalClock.millis();
     }
 

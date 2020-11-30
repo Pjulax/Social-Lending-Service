@@ -180,10 +180,10 @@ public class LoanServiceImpl implements LoanService {
         Loan loan = loanOptional.get();
         List<Installment> installments = loan.getInstallments();
         Installment nextInstallment = null;
-        for (Installment installment : installments) {                              //
-            if (!installment.getStatus().equals(InstallmentStatus.PAID)) {          //
+        for (Installment installment : installments) {
+            if (!installment.getStatus().equals(InstallmentStatus.PAID)) {
                 nextInstallment = installment;
-                break;                                                              //
+                break;
             }
         }
         if (nextInstallment == null)

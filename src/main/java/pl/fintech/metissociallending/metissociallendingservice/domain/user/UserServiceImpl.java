@@ -50,13 +50,13 @@ public class UserServiceImpl implements UserService {
     public void depositToBank(Command.DepositToBank depositToBank) {
         User user = whoami();
         bankService.depositToAccount(MyAccountRequest.builder().accountNumber(user.getAccount())
-                                                                     .amount(depositToBank.getAmount()).build());
+                .amount(depositToBank.getAmount()).build());
     }
     @Override
     public void withdrawFromBank(Command.WithdrawFromBank withdrawFromBank) {
         User user = whoami();
         bankService.withdrawFromAccount(MyAccountRequest.builder().accountNumber(user.getAccount())
-                                                                        .amount(withdrawFromBank.getAmount()).build());
+                .amount(withdrawFromBank.getAmount()).build());
     }
     @Override
     public String login(Query.Login login) {
