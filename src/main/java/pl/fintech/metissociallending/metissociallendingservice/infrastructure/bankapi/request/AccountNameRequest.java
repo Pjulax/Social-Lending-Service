@@ -6,5 +6,5 @@ import lombok.Getter;
 @Getter
 @Builder
 public class AccountNameRequest {
-    private String name;
+    private final String name;
 }

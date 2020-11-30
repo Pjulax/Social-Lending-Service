@@ -24,13 +24,12 @@ public class Installment {
     private InstallmentStatus status;
 
     // changes to missed if installment isn't paid before due time
-    public InstallmentStatus checkStatus(Date now){
+    public void checkStatus(Date now){
         if(!status.equals(InstallmentStatus.PAID)) {
             if(now.getTime() > due.getTime()) {
                status = InstallmentStatus.MISSED;
             }
         }
-        return status;
     }
 
     /**
@@ -67,7 +66,7 @@ public class Installment {
 
 
     //counts value of interests with given interest and difference between now and due
-    private BigDecimal countInterestValue(Date now, double loaninterest){
+    private BigDecimal countInterestValue(Date now, double loanInterest){
         Calendar calNow = Calendar.getInstance();
         calNow.setTime(now);
         Calendar calDue = Calendar.getInstance();
@@ -77,7 +76,7 @@ public class Installment {
         // months or years have to be greater than 0 but no can be less than 0
         if(years>=0&&months>=0||years>0) {
             double timeInYears = (double) years + (months+1.0d) / 12;
-            return amount.multiply(BigDecimal.valueOf(Math.pow((1+loaninterest),timeInYears))).subtract(amount);
+            return amount.multiply(BigDecimal.valueOf(Math.pow((1+loanInterest),timeInYears))).subtract(amount);
         }
         return BigDecimal.ZERO;
     }

@@ -1,4 +1,5 @@
 package pl.fintech.metissociallending.metissociallendingservice.api;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import pl.fintech.metissociallending.metissociallendingservice.domain.clock.ClockService;
@@ -18,6 +19,7 @@ import java.util.Date;
  * @see ClockService
  */
 @RestController
+@Api(tags = "Clock")
 @RequestMapping("/api/clock")
 @RequiredArgsConstructor
 public class ClockController {

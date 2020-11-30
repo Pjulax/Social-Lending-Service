@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.*;
-import java.util.NoSuchElementException;
 
 import io.micrometer.core.instrument.config.validate.ValidationException;
 import org.springframework.web.context.request.WebRequest;

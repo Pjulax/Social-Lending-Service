@@ -3,7 +3,6 @@ package pl.fintech.metissociallending.metissociallendingservice.domain.clock;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.fintech.metissociallending.metissociallendingservice.infrastructure.clock.Clock;
-import java.time.ZoneId;
 import java.util.Date;
 
 

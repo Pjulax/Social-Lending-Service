@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.Installment;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.InstallmentRepository;
-import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.Loan;
 
 @RequiredArgsConstructor
 public class JpaInstallmentRepositoryImpl implements InstallmentRepository {
