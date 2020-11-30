@@ -1,4 +1,5 @@
 package pl.fintech.metissociallending.metissociallendingservice.domain.borrower;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.fintech.metissociallending.metissociallendingservice.api.dto.AuctionWithOffersDTO;
@@ -11,6 +12,10 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ * Implementation of
+ * @see BorrowerService
+ */
 @RequiredArgsConstructor
 @Service
 public class BorrowerServiceImpl implements BorrowerService {

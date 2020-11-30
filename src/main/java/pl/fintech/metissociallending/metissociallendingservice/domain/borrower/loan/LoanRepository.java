@@ -1,7 +1,5 @@
 package pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan;
-
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
-
 import java.util.List;
 import java.util.Optional;
 

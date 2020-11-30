@@ -1,11 +1,8 @@
 package pl.fintech.metissociallending.metissociallendingservice.domain.borrower;
-
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.micrometer.core.instrument.util.StringUtils;
 import lombok.*;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
-
 import java.math.BigDecimal;
 import java.util.Date;
 

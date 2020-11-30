@@ -1,7 +1,8 @@
 package pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan;
-
-import lombok.*;
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Calendar;
@@ -19,11 +20,8 @@ public class Installment {
     private final BigDecimal interest; // counted in value not percentage
     private BigDecimal fine;
     private BigDecimal total; // amount + interest + fine
-    private BigDecimal left; // every month how much left from loan to payback
+    private final BigDecimal left; // every month how much left from loan to payback
     private InstallmentStatus status;
-
-
-
 
     // changes to missed if installment isn't paid before due time
     public InstallmentStatus checkStatus(Date now){
@@ -40,12 +38,10 @@ public class Installment {
      * @param now - time when we pay
      * @param fineInterest - annual fine interests count in rate ex 0.05 is 5%
      */
-    public boolean isInputAmountEqualToInstallmentAmount(Date now, double fineInterest, double amount){
+    public boolean isGivenAmountEqualToInstallmentAmount(Date now, double fineInterest, double amount){
         if(!status.equals(InstallmentStatus.PAID)) {
             countTotal(now, fineInterest);
-            if(total.setScale(2, RoundingMode.HALF_UP).doubleValue()==amount) {
-                return true;
-            }
+            return total.setScale(2, RoundingMode.HALF_UP).doubleValue() == amount;
         }
         return false;
     }

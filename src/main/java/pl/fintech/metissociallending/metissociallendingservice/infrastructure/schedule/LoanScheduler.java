@@ -6,6 +6,11 @@ import org.springframework.stereotype.Component;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.BorrowerService;
 import pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan.LoanService;
 
+/**
+ * Every 10 seconds system checks if installment
+ * is missed and calculates fines.
+ * Scheduler also checks whether auction is closed.
+ */
 @Component
 @RequiredArgsConstructor
 public class LoanScheduler {

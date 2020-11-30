@@ -1,8 +1,9 @@
 package pl.fintech.metissociallending.metissociallendingservice.domain.borrower.loan;
-
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import pl.fintech.metissociallending.metissociallendingservice.domain.user.User;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
